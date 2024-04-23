@@ -30,7 +30,7 @@
         }
         p1 {
             color: rgb(101, 60, 3);
-            font-size: 18px;
+            font-size: 14px;
             margin-bottom: 10px;
         }
     </style>
@@ -76,7 +76,7 @@
                         <!-- {{ updatePrice(item)}} -->
                         {{ updatedPrice[index] }}
                     </td>
-                    <td v-else>{{ item.price }}</td> <!-- If modifications are not applicable -->
+                    <td v-else>{{ updatedPrice2[index] }}</td> <!-- If modifications are not applicable -->
                     <td v-if="isSizeSelectable(item)">
                         <select v-model="item.size">
                             <option value="small">Small</option>
@@ -205,6 +205,21 @@
                 uniqueTypes() {
                     const types = this.item.map(item => item.type);
                     return [...new Set(types)];
+                },
+                updatedPrice2(){
+                    return this.paginatedItems.map(item => {
+                        if (this.isStudent) {
+                            if (item.type === "Fruits"){
+                                return "0.5";
+                            }
+                            else {
+                                return parseFloat(item.price) - 1.0;
+                            }
+                        }
+                        else if (!this.isStudent) {
+                            return parseFloat(item.price);
+                        }
+                    });
                 },
                 updatedPrice() {
                     return this.paginatedItems.map(item => {
