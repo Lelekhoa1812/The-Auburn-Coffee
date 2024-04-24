@@ -166,7 +166,11 @@
                         { "name": "Black Tea", "image": "blacktea.jpeg", "type" : "Teas", "pricelarge" : "5.0", "pricemedium" : "4.5", "pricesmall" : "4.0" },
                         { "name": "Lemon Iced Tea", "image": "lemonice.jpeg", "type" : "Teas", "pricelarge" : "5.5", "pricemedium" : "5.0", "pricesmall" : "4.5" },
                         { "name": "Green Apple", "image": "apple.jpeg", "type" : "Fruits", "price" : "1.0"},
-                        { "name": "Banana", "image": "banana.jpeg", "type" : "Fruits", "price" : "1.0"}
+                        { "name": "Banana", "image": "banana.jpeg", "type" : "Fruits", "price" : "1.0"},
+                        { "name": "Extra Shot", "image": "shot.png", "type" : "Extras", "price" : "0.5"},
+                        { "name": "Decaf", "image": "shot.png", "type" : "Extras", "price" : "0.5"},
+                        { "name": "Extra Syrup", "image": "syrup.jpeg", "type" : "Extras", "price" : "0.5"}
+
                     ],
                     pageSize: 10,
                     currentPage: 1,
@@ -210,6 +214,9 @@
                     return this.paginatedItems.map(item => {
                         if (this.isStudent) {
                             if (item.type === "Fruits"){
+                                return "0.5";
+                            }
+                            else if (item.type === "Extras"){
                                 return "0.5";
                             }
                             else {
