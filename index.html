@@ -187,7 +187,8 @@
                         { label: 'Vanilla Syrup', value: 'vanilla syrup' },
                         { label: 'Caramel Syrup', value: 'caramel syrup' },
                         { label: 'Almond Syrup', value: 'almond syrup' },
-                        { label: 'Honey', value: 'honey' }
+                        { label: 'Honey', value: 'honey' },
+                        { label: 'Equal Sweetener', value: 'sweetener' }
                     ],
                 }
             },
@@ -219,6 +220,9 @@
                             else if (item.type === "Extras"){
                                 return "0.5";
                             }
+                            else if (item.name === "Shin Noodle Cup" || item.name === "Fantastic Noodle Cup" || item.name === "Mi Goreng Cup"){
+                                return "3.0";
+                            }
                             else {
                                 return parseFloat(item.price) - 1.0;
                             }
@@ -232,7 +236,7 @@
                     return this.paginatedItems.map(item => {
                         if (this.isStudent) {
                             if ((item.milk === "oat milk" || item.milk === "soy milk" || item.milk === "almond milk" || item.milk === "lactose free") && 
-                                (item.syrup !== "vanilla syrup" && item.syrup !== "caramel syrup" && item.syrup !== "almond syrup" && item.syrup !== "honey")) {
+                                (item.syrup !== "vanilla syrup" && item.syrup !== "caramel syrup" && item.syrup !== "almond syrup" && item.syrup !== "honey" && item.syrup !== "sweetener")) {
                                 // If only milk, add 0.5
                                 switch (item.size) {
                                     case 'large':
@@ -245,7 +249,7 @@
                                         return parseFloat(item.price);
                                 }
                             }
-                            else if ((item.syrup === "vanilla syrup" || item.syrup === "caramel syrup" || item.syrup === "almond syrup" || item.syrup === "honey") &&
+                            else if ((item.syrup === "vanilla syrup" || item.syrup === "caramel syrup" || item.syrup === "almond syrup" || item.syrup === "honey"|| item.syrup === "sweetener") &&
                                     (item.milk !== "oat milk" && item.milk !== "soy milk" && item.milk !== "almond milk" && item.milk !== "lactose free")) {
                                 // If only syrups, add 0.5
                                 switch (item.size) {
@@ -259,7 +263,7 @@
                                         return parseFloat(item.price);
                                 }
                             }
-                            else if ((item.syrup === "vanilla syrup" || item.syrup === "caramel syrup" || item.syrup === "almond syrup" || item.syrup === "honey") &&
+                            else if ((item.syrup === "vanilla syrup" || item.syrup === "caramel syrup" || item.syrup === "almond syrup" || item.syrup === "honey"|| item.syrup === "sweetener") &&
                                     (item.milk === "oat milk" || item.milk === "soy milk" || item.milk === "almond milk" || item.milk === "lactose free")) {
                                 // If both milk and syrups, add 1.0
                                 switch (item.size) {
@@ -288,7 +292,7 @@
                         }
                         if (!this.isStudent) {
                             if ((item.milk === "oat milk" || item.milk === "soy milk" || item.milk === "almond milk" || item.milk === "lactose free") && 
-                                (item.syrup !== "vanilla syrup" && item.syrup !== "caramel syrup" && item.syrup !== "almond syrup" && item.syrup !== "honey")) {
+                                (item.syrup !== "vanilla syrup" && item.syrup !== "caramel syrup" && item.syrup !== "almond syrup" && item.syrup !== "honey" && item.syrup !== "sweetener")) {
                                 // If only milk, add 0.5
                                 switch (item.size) {
                                     case 'large':
@@ -301,7 +305,7 @@
                                         return parseFloat(item.price);
                                 }
                             }
-                            else if ((item.syrup === "vanilla syrup" || item.syrup === "caramel syrup" || item.syrup === "almond syrup" || item.syrup === "honey") &&
+                            else if ((item.syrup === "vanilla syrup" || item.syrup === "caramel syrup" || item.syrup === "almond syrup" || item.syrup === "honey" || item.syrup === "sweetener") &&
                                     (item.milk !== "oat milk" && item.milk !== "soy milk" && item.milk !== "almond milk" && item.milk !== "lactose free")) {
                                 // If only syrups, add 0.5
                                 switch (item.size) {
@@ -315,7 +319,7 @@
                                         return parseFloat(item.price);
                                 }
                             }
-                            else if ((item.syrup === "vanilla syrup" || item.syrup === "caramel syrup" || item.syrup === "almond syrup" || item.syrup === "honey") &&
+                            else if ((item.syrup === "vanilla syrup" || item.syrup === "caramel syrup" || item.syrup === "almond syrup" || item.syrup === "honey" || item.syrup === "sweetener") &&
                                     (item.milk === "oat milk" || item.milk === "soy milk" || item.milk === "almond milk" || item.milk === "lactose free")) {
                                 // If both milk and syrups, add 1.0
                                 switch (item.size) {
