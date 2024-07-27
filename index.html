@@ -244,27 +244,25 @@
                 },
                 updatedPrice() {
                     return this.paginatedItems.map(item => {
-                        if (item.name === "Dim Sum") {
-                            basePrice = this.isStudent ? item.pricesmall : item.price;
-                            if (item.size) {
-                                switch (item.size) {
-                                    case "2 pcs":
-                                        basePrice = this.isStudent ? item.price : item.pricesmall;
-                                        break;
-                                    case "4 pcs":
-                                        basePrice = this.isStudent ? item.pricemedium : item.pricelarge;
-                                        break;
-                                    case "6 pcs":
-                                        basePrice = this.isStudent ? item.pricelarge : item.pricexl;
-                                        break;
-                                    case "8 pcs":
-                                        basePrice = this.isStudent ? item.pricexl : item.pricexxl;
-                                        break;
+                        if (this.isStudent) {
+                            if (item.name === "Dim Sum") {
+                                let basePrice;
+                                    switch (item.size) {
+                                        case "2 pcs":
+                                            basePrice = price2;
+                                            break;
+                                        case "4 pcs":
+                                            basePrice = price4;
+                                            break;
+                                        case "6 pcs":
+                                            basePrice = price6;
+                                            break;
+                                        case "8 pcs":
+                                            basePrice = price8;
+                                            break;
+                                    return basePrice;
                                 }
                             }
-                            return basePrice;
-                        }
-                        if (this.isStudent) {
                             if ((item.milk === "oat milk" || item.milk === "soy milk" || item.milk === "almond milk" || item.milk === "lactose free") && 
                                 (item.syrup !== "vanilla syrup" && item.syrup !== "caramel syrup" && item.syrup !== "almond syrup" && item.syrup !== "honey" && item.syrup !== "sweetener")) {
                                 // If only milk, add 0.5
