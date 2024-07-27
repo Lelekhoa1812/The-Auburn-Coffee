@@ -248,20 +248,20 @@
                             //     }
                             // }
                             else {
-                                if (item.name == "Dim Sum"){
-                                    switch (item.size) {
-                                        case 'size2':
-                                            return item.price2;
-                                        case 'size4':
-                                            return item.price4;
-                                        case 'size6':
-                                            return item.price6;
-                                        case 'size8':
-                                            return item.price8;
-                                        default:
-                                            return item.price;
-                                    }
-                                }
+                                // if (item.name == "Dim Sum"){
+                                //     switch (item.size) {
+                                //         case 'size2':
+                                //             return item.price2;
+                                //         case 'size4':
+                                //             return item.price4;
+                                //         case 'size6':
+                                //             return item.price6;
+                                //         case 'size8':
+                                //             return item.price8;
+                                //         default:
+                                //             return item.price;
+                                //     }
+                                // }
                                 return parseFloat(item.price) - 1.0;
                             }
                         }
