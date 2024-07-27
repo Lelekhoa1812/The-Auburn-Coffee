@@ -84,7 +84,7 @@
                             <option value="large">Large</option>
                         </select>
                     </td>
-                    <td v-else-if="isSizeSelectable2(item)">
+                    <td v-if="isSizeSelectable2(item)">
                         <select v-model="item.size">
                             <option value="size2">2 pcs</option>
                             <option value="size4">4 pcs</option>
@@ -407,7 +407,7 @@
                 },
                 isSizeSelectable2(item) {
                     const type = item.name.toLowerCase();
-                    return ['dim sum'].includes(name);
+                    return ['dim sum'].includes(type);
                 },
                 isNotSizeSelected(item) {
                     return item.size != 'small' && item.size != 'medium' && item.size != 'large';
