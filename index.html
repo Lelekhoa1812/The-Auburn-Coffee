@@ -244,6 +244,23 @@
                 },
                 updatedPrice() {
                     return this.paginatedItems.map(item => {
+                        if (item.name === "Dim Sum") {
+                            switch (item.size) {
+                                case "2 pcs":
+                                    return parseFloat(item.price2);
+                                    break;
+                                case "4 pcs":
+                                    return parseFloat(item.price4);
+                                    break;
+                                case "6 pcs":
+                                    return parseFloat(item.price6);
+                                    break;
+                                case "8 pcs":
+                                    return parseFloat(item.price8);
+                                    break;
+                            return basePrice;
+                            }
+                        }
                         if (this.isStudent) {
                             if ((item.milk === "oat milk" || item.milk === "soy milk" || item.milk === "almond milk" || item.milk === "lactose free") && 
                                 (item.syrup !== "vanilla syrup" && item.syrup !== "caramel syrup" && item.syrup !== "almond syrup" && item.syrup !== "honey" && item.syrup !== "sweetener")) {
@@ -289,14 +306,14 @@
                             }
                             else {
                                 switch (item.size) {
-                                    case 'size2':
-                                        return item.price2 - 0.5;
-                                    case 'size4':
-                                        return item.price4 - 0.5;
-                                    case 'size6':
-                                        return item.price6 - 1.0;
-                                    case 'size8':
-                                        return item.price8 - 1.0;
+                                    // case 'size2':
+                                    //     return item.price2 - 0.5;
+                                    // case 'size4':
+                                    //     return item.price4 - 0.5;
+                                    // case 'size6':
+                                    //     return item.price6 - 1.0;
+                                    // case 'size8':
+                                    //     return item.price8 - 1.0;
                                     case 'large':
                                         return item.pricelarge - 1.0;
                                     case 'medium':
