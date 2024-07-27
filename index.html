@@ -252,20 +252,6 @@
                             }
                         }
                         else if (!this.isStudent) {
-                            if (item.name == "Dim Sum"){
-                                switch (item.size) {
-                                    case 'size2':
-                                        return item.price2;
-                                    case 'size4':
-                                        return item.price4;
-                                    case 'size6':
-                                        return item.price6;
-                                    case 'size8':
-                                        return item.price8;
-                                    default:
-                                        return item.price;
-                                }
-                            }
                             return parseFloat(item.price);
                         }
                     });
@@ -406,8 +392,8 @@
                     return ['coffee', 'chocolate drinks', 'teas'].includes(type);
                 },
                 isSizeSelectable2(item) {
-                    const type = item.name.toLowerCase();
-                    return ['dim sum'].includes(type);
+                    const name = item.name.toLowerCase();
+                    return ['dim sum'].includes(name);
                 },
                 isNotSizeSelected(item) {
                     return item.size != 'small' && item.size != 'medium' && item.size != 'large';
