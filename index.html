@@ -76,10 +76,10 @@
                         <!-- {{ updatePrice(item)}} -->
                         {{ updatedPrice[index] }}
                     </td>
-                    <td v-else>{{ updatedPrice2[index] }}</td> <!-- If modifications are not applicable -->
-                    <td v-if="isPriceSelectableDimSum(item)"> 
+                    <td v-else-if="isPriceSelectableDimSum(item)"> 
                         {{ updatedPriceDimSum[index] }}
                     </td>
+                    <td v-else>{{ updatedPrice2[index] }}</td> <!-- If modifications are not applicable -->
                     <td v-if="isSizeSelectable(item)">
                         <select v-model="item.size">
                             <option value="small">Small</option>
