@@ -236,11 +236,41 @@
                             else if (item.name === "Shin Noodle Cup" || item.name === "Fantastic Noodle Cup" || item.name === "Mi Goreng Cup"){
                                 return "3.0";
                             }
+                            else if (item.name == "Dim Sum") {
+                                switch (item.size) {
+                                        case 'size2':
+                                            return item.price2 - 0.5;
+                                        case 'size4':
+                                            return item.price4 - 0.5;
+                                        case 'size6':
+                                            return item.price6 - 1.0;
+                                        case 'size8':
+                                            return item.price8 - 1.0;
+                                        default:
+                                            return item.price2; 
+                                        break;
+                                }
+                            }
                             else {
                                 return parseFloat(item.price) - 1.0;
                             }
                         }
                         else if (!this.isStudent) {
+                            if (item.name == "Dim Sum") {
+                                switch (item.size) {
+                                        case 'size2':
+                                            return item.price2;
+                                        case 'size4':
+                                            return item.price4;
+                                        case 'size6':
+                                            return item.price6;
+                                        case 'size8':
+                                            return item.price8;
+                                        default:
+                                            return item.price2;                                      break;
+                                        break;
+                                }
+                            }
                             return parseFloat(item.price);
                         }
                     });
@@ -298,14 +328,14 @@
                                         return item.pricemedium- 1.0;
                                     case 'small':
                                         return item.pricesmall- 1.0;
-                                    case 'size2':
-                                        return item.price2 - 0.5;
-                                    case 'size4':
-                                        return item.price4 - 0.5;
-                                    case 'size6':
-                                        return item.price6 - 1.0;
-                                    case 'size8':
-                                        return item.price8 - 1.0;
+                                    // case 'size2':
+                                    //     return item.price2 - 0.5;
+                                    // case 'size4':
+                                    //     return item.price4 - 0.5;
+                                    // case 'size6':
+                                    //     return item.price6 - 1.0;
+                                    // case 'size8':
+                                    //     return item.price8 - 1.0;
                                     default:
                                         return item.price;
                                 }
@@ -362,14 +392,14 @@
                                         return item.pricemedium;
                                     case 'small':
                                         return item.pricesmall;
-                                    case 'size2':
-                                        return item.price2;
-                                    case 'size4':
-                                        return item.price4;
-                                    case 'size6':
-                                        return item.price6;
-                                    case 'size8':
-                                        return item.price8;
+                                    // case 'size2':
+                                    //     return item.price2;
+                                    // case 'size4':
+                                    //     return item.price4;
+                                    // case 'size6':
+                                    //     return item.price6;
+                                    // case 'size8':
+                                    //     return item.price8;
                                     default:
                                         return item.price;
                                 }
@@ -413,9 +443,9 @@
                 },
                 isPriceSelectable(item) {
                     const type = item.type.toLowerCase();
-                    if (item.name.toLowerCase() == "dim sum") {
-                        return ['dim sum'].includes(name);
-                    }
+                    // if (item.name.toLowerCase() == "dim sum") {
+                    //     return ['dim sum'].includes(name);
+                    // }
                     return ['coffee', 'chocolate drinks', 'teas'].includes(type);
                 }
                 // isPriceSelectableDimSum(item) {
