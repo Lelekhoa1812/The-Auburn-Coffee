@@ -76,9 +76,9 @@
                         <!-- {{ updatePrice(item)}} -->
                         {{ updatedPrice[index] }}
                     </td>
-                    <td v-else-if="isPriceSelectableDimSum(item)"> 
+<!--                     <td v-else-if="isPriceSelectableDimSum(item)"> 
                         {{ updatedPriceDimSum[index] }}
-                    </td>
+                    </td> -->
                     <td v-else>{{ updatedPrice2[index] }}</td> <!-- If modifications are not applicable -->
                     <td v-if="isSizeSelectable(item)">
                         <select v-model="item.size">
@@ -245,43 +245,6 @@
                         }
                     });
                 },
-                updatedPriceDimSum(){
-                    return this.paginatedItems.map(item => {
-                        if (this.isStudent) {
-                            switch (item.size) {
-                                case "2 pcs":
-                                    return parseFloat(item.price2) - 0.5;
-                                    break;
-                                case "4 pcs":
-                                    return parseFloat(item.price4) - 0.5;
-                                    break;
-                                case "6 pcs":
-                                    return parseFloat(item.price6) - 1.0;
-                                    break;
-                                case "8 pcs":
-                                    return parseFloat(item.price8) - 1.0;
-                                    break;
-                            return basePrice;
-                            }
-                        }
-                        else if (!this.isStudent) {
-                            switch (item.size) {
-                                case "2 pcs":
-                                    return parseFloat(item.price2);
-                                    break;
-                                case "4 pcs":
-                                    return parseFloat(item.price4);
-                                    break;
-                                case "6 pcs":
-                                    return parseFloat(item.price6);
-                                    break;
-                                case "8 pcs":
-                                    return parseFloat(item.price8);
-                                    break;
-                            return basePrice;
-                            }                        }
-                    });
-                },
                 updatedPrice() {
                     return this.paginatedItems.map(item => {
                         if (this.isStudent) {
@@ -335,6 +298,14 @@
                                         return item.pricemedium- 1.0;
                                     case 'small':
                                         return item.pricesmall- 1.0;
+                                    case 'size2':
+                                        return item.price2 - 0.5;
+                                    case 'size4':
+                                        return item.price4 - 0.5;
+                                    case 'size6':
+                                        return item.price6 - 1.0;
+                                    case 'size8':
+                                        return item.price8 - 1.0;
                                     default:
                                         return item.price;
                                 }
@@ -391,6 +362,14 @@
                                         return item.pricemedium;
                                     case 'small':
                                         return item.pricesmall;
+                                    case 'size2':
+                                        return item.price2;
+                                    case 'size4':
+                                        return item.price4;
+                                    case 'size6':
+                                        return item.price6;
+                                    case 'size8':
+                                        return item.price8;
                                     default:
                                         return item.price;
                                 }
@@ -434,12 +413,15 @@
                 },
                 isPriceSelectable(item) {
                     const type = item.type.toLowerCase();
+                    if (item.name.toLowerCase() == "dim sum") {
+                        return ['dim sum'].includes(name);
+                    }
                     return ['coffee', 'chocolate drinks', 'teas'].includes(type);
-                },
-                isPriceSelectableDimSum(item) {
-                    const name = item.name.toLowerCase();
-                    return ['dim sum'].includes(name);
                 }
+                // isPriceSelectableDimSum(item) {
+                //     const name = item.name.toLowerCase();
+                //     return ['dim sum'].includes(name);
+                // }
             }
         });
         app.mount("#app"); 
