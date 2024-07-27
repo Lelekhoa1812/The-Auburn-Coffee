@@ -77,6 +77,9 @@
                         {{ updatedPrice[index] }}
                     </td>
                     <td v-else>{{ updatedPrice2[index] }}</td> <!-- If modifications are not applicable -->
+                    <td v-if="isPriceSelectableDimSum(item)"> 
+                        {{ updatedPriceDimSum[index] }}
+                    </td>
                     <td v-if="isSizeSelectable(item)">
                         <select v-model="item.size">
                             <option value="small">Small</option>
@@ -165,7 +168,7 @@
                         { "name": "Babycino", "image": "hotchoco.webp", "type" : "Chocolate Drinks", "pricelarge" : "4.0", "pricemedium" : "3.5", "pricesmall" : "3.0" },
                         { "name": "Meat Pie", "image": "meatpie.jpeg", "type" : "Meals", "price" : "6.0"},
                         { "name": "Chicken Pie", "image": "chickenpie.jpeg", "type" : "Meals", "price" : "6.0"},
-                        { "name": "Dim Sum", "image": "dimsum.jpeg", "type" : "Meals", "price2" : "2.5", "price4" : "4.5", "price6" : "5.5", "price8" : "6.5"},
+                        { "name": "Dim Sum", "image": "dimsum.jpeg", "type" : "Meals", "pricesmall" : "2.5", "pricemedium" : "4.5", "pricelarge" : "5.5", "priceextralarge" : "6.5"},
                         { "name": "Shin Noodle Cup", "image": "shin.jpg", "type" : "Meals", "price" : "3.5"},
                         { "name": "Fantastic Noodle Cup", "image": "fantastic.webp", "type" : "Meals", "price" : "3.5"},
                         { "name": "Mi Goreng Cup", "image": "goreng.jpeg", "type" : "Meals", "price" : "3.5"},
@@ -242,9 +245,26 @@
                         }
                     });
                 },
-                updatedPrice() {
+                updatedPriceDimSum(){
                     return this.paginatedItems.map(item => {
-                        if (item.name === "Dim Sum") {
+                        if (this.isStudent) {
+                            switch (item.size) {
+                                case "2 pcs":
+                                    return parseFloat(item.price2) - 0.5;
+                                    break;
+                                case "4 pcs":
+                                    return parseFloat(item.price4) - 0.5;
+                                    break;
+                                case "6 pcs":
+                                    return parseFloat(item.price6) - 1.0;
+                                    break;
+                                case "8 pcs":
+                                    return parseFloat(item.price8) - 1.0;
+                                    break;
+                            return basePrice;
+                            }
+                        }
+                        else if (!this.isStudent) {
                             switch (item.size) {
                                 case "2 pcs":
                                     return parseFloat(item.price2);
@@ -259,8 +279,11 @@
                                     return parseFloat(item.price8);
                                     break;
                             return basePrice;
-                            }
-                        }
+                            }                        }
+                    });
+                },
+                updatedPrice() {
+                    return this.paginatedItems.map(item => {
                         if (this.isStudent) {
                             if ((item.milk === "oat milk" || item.milk === "soy milk" || item.milk === "almond milk" || item.milk === "lactose free") && 
                                 (item.syrup !== "vanilla syrup" && item.syrup !== "caramel syrup" && item.syrup !== "almond syrup" && item.syrup !== "honey" && item.syrup !== "sweetener")) {
@@ -306,14 +329,6 @@
                             }
                             else {
                                 switch (item.size) {
-                                    // case 'size2':
-                                    //     return item.price2 - 0.5;
-                                    // case 'size4':
-                                    //     return item.price4 - 0.5;
-                                    // case 'size6':
-                                    //     return item.price6 - 1.0;
-                                    // case 'size8':
-                                    //     return item.price8 - 1.0;
                                     case 'large':
                                         return item.pricelarge - 1.0;
                                     case 'medium':
@@ -376,14 +391,6 @@
                                         return item.pricemedium;
                                     case 'small':
                                         return item.pricesmall;
-                                    // case 'size2':
-                                    //     return item.price2;
-                                    // case 'size4':
-                                    //     return item.price4;
-                                    // case 'size6':
-                                    //     return item.price6;
-                                    // case 'size8':
-                                    //     return item.price8;
                                     default:
                                         return item.price;
                                 }
@@ -428,6 +435,10 @@
                 isPriceSelectable(item) {
                     const type = item.type.toLowerCase();
                     return ['coffee', 'chocolate drinks', 'teas'].includes(type);
+                },
+                isPriceSelectableDimSum(item) {
+                    const name = item.name.toLowerCase();
+                    return ['dim sum'].includes(name);
                 }
             }
         });
