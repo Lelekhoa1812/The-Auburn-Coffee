@@ -84,6 +84,14 @@
                             <option value="large">Large</option>
                         </select>
                     </td>
+                    <td v-else-if="isSizeSelectable2(item)">
+                        <select v-model="item.size">
+                            <option value="size2">2 pcs</option>
+                            <option value="size4">4 pcs</option>
+                            <option value="size6">6 pcs</option>
+                            <option value="size8">8 pcs</option>
+                        </select>
+                    </td>
                     <td v-if="isMilkSelectable(item)">
                         <select v-model="item.milk" @change="updatedPrice[index]">
                             <option v-for="milk in milks" :value="milk.value">{{ milk.label }}</option>
@@ -157,6 +165,7 @@
                         { "name": "Babycino", "image": "hotchoco.webp", "type" : "Chocolate Drinks", "pricelarge" : "4.0", "pricemedium" : "3.5", "pricesmall" : "3.0" },
                         { "name": "Meat Pie", "image": "meatpie.jpeg", "type" : "Meals", "price" : "6.0"},
                         { "name": "Chicken Pie", "image": "chickenpie.jpeg", "type" : "Meals", "price" : "6.0"},
+                        { "name": "Dim Sum", "image": "dimsum.jpeg", "type" : "Meals", "price2" : "2.5", "price4" : "4.5", "price6" : "5.5", "price8" : "6.5"},
                         { "name": "Shin Noodle Cup", "image": "shin.jpg", "type" : "Meals", "price" : "3.5"},
                         { "name": "Fantastic Noodle Cup", "image": "fantastic.webp", "type" : "Meals", "price" : "3.5"},
                         { "name": "Mi Goreng Cup", "image": "goreng.jpeg", "type" : "Meals", "price" : "3.5"},
@@ -367,6 +376,10 @@
                 isSizeSelectable(item) {
                     const type = item.type.toLowerCase();
                     return ['coffee', 'chocolate drinks', 'teas'].includes(type);
+                },
+                isSizeSelectable2(item) {
+                    const type = item.name.toLowerCase();
+                    return ['dim sum'].includes(name);
                 },
                 isNotSizeSelected(item) {
                     return item.size != 'small' && item.size != 'medium' && item.size != 'large';
