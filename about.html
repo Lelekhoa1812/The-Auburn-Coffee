@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <title>About The Auburn Coffee</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: rgb(255, 242, 179); /* background */
+            margin: 20px;
+        }
+        .navbar {
+            display: flex;
+            padding: 22px 0;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            justify-content: space-between;
+        }
+        .navbar .logo {
+            gap: 10px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .navbar .logo img {
+            width: 100px;
+            border-radius: 50%;
+        }
+        .navbar .links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .navbar .links a {
+            color: rgb(144, 100, 18);
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.1s ease;
+        }
+        .navbar .links a:hover {
+            color: rgb(18, 129, 144);
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin: auto;
+            max-width: 800px;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            flex-direction: column; /* Stack children vertically */
+        }
+        .img {
+            width: 40%;
+            height: auto;
+            border-radius: 8px;
+        }     
+        h1, h2 {
+            text-align: center;
+            color: rgb(144, 100, 18);
+        }
+        p {
+            text-align: justify;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: rgb(52, 37, 0);
+        }
+        .image-caption {
+            font-weight: bold;
+            text-align: center;
+            margin-top: 5px;
+        }
+        .highlight {
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <img src="products/auburn.jpg" alt="logo">
+                <h1>The Auburn Coffee</h1>
+            </a>
+            <ul class="links">
+                <li><a href="index.html">Home Menu</a></li>  <!-- To home page -->
+                <li><a href="#">About Us</a></li>
+                <li><a href="ingredient.html">Our Ingredients</a></li> <!-- To ingredient page -->
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Welcome to The Auburn Coffee</h1>
+        <p>
+            Located at <span class="highlight">Auburn Station, Hawthorn East VIC 3123</span>, <strong>The Auburn Coffee</strong> is your local café dedicated to serving commuters and the local community with exceptional coffee on the go. As a bustling coffee takeaway business, we are positioned ideally for Auburn locals and public train transportation users seeking a quick, delicious boost to start an energetic day.
+        </p>
+        <img src="products/auburn2.jpg" alt="Auburn Station" class="img">
+        <p class="image-caption">The station where we are</p>
+        <img src="products/auburn4.jpg" alt="Auburn Station Night" class="img">
+        <p class="image-caption">It come cozy at night too!</p>
+        <h2>Our Commitment to Quality</h2>
+        <p>
+            At The Auburn Coffee, we believe that a great day starts with a great cup of coffee. That’s why we are committed to using only the <span class="highlight">best ingredients</span>—sourcing high-quality Arabica beans and premium accompaniments to ensure every cup we serve is as good as it gets. Our goal is to enhance your morning and provide the energy you need to tackle the day.
+        </p>
+        <img src="products/cup.webp" alt="Quality" class="img">
+        <p class="image-caption">Quality is a guarantee ^^</p>
+        <h2>Friendly Local Business</h2>
+        <p>
+            More than just a coffee shop, we pride ourselves on being a <span class="highlight">friendly face</span> in the community. We delight in meeting new people and greeting familiar faces each day, contributing to the vibrant atmosphere of Auburn Station.
+        </p>
+        <h2>Trading Hours</h2>
+        <p>
+            Join us for your morning coffee from <span class="highlight">7:00 AM to 10:00 AM</span>. On Thursdays, we extend our hours to accommodate the afternoon rush, reopening from <span class="highlight">4:00 PM to 6:00 PM</span>. Whether it’s your morning start or a late-day pick-me-up, we’re here to serve you when you need it most.
+        </p>
+        <img src="products/auburn3.jpg" alt="Our Store" class="img">
+        <p class="image-caption">Here we are at Auburn</p>
+    </div>
+    <!-- Bootstrap JavaScript reference -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

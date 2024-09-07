@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <title>Ingredients at The Auburn Coffee</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: rgb(255, 242, 179); /* background */
+            margin: 20px;
+        }
+        .navbar {
+            display: flex;
+            padding: 22px 0;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            justify-content: space-between;
+        }
+        .navbar .logo {
+            gap: 10px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .navbar .logo img {
+            width: 100px;
+            border-radius: 50%;
+        }
+        .navbar .links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .navbar .links a {
+            color: rgb(144, 100, 18);
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.1s ease;
+        }
+        .navbar .links a:hover {
+            color: rgb(18, 129, 144);
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin: auto;
+            max-width: 800px;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            flex-direction: column; /* Stack children vertically */
+        }
+        .imagemilkmain {
+            width: 20%;
+            height: auto;
+            border-radius: 8px;
+        } 
+        .imagemilk {
+            width: 40%;
+            height: auto;
+            border-radius: 8px;
+        }     
+        .imagecoffee {
+            width: 70%;
+            height: auto;
+            border-radius: 8px;
+            justify-content: center;
+        }
+        h1, h2 {
+            text-align: center;
+            color: rgb(144, 100, 18);
+        }
+        p {
+            text-align: justify;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: rgb(52, 37, 0);
+        }
+        .image-caption {
+            font-weight: bold;
+            text-align: center;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">
+                <img src="products/auburn.jpg" alt="logo">
+                <h1>The Auburn Coffee</h1>
+            </a>
+            <ul class="links">
+                <li><a href="index.html">Home Menu</a></li>
+                <li><a href="about.html">About Us</a></li> <!-- To about page -->
+                <li><a href="#">Our Ingredients</a></li> <!-- To ingredient page -->
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1>Discover Our Ingredients</h1>
+        <p>
+            Welcome to The Auburn Coffee, where each cup of coffee comes with a promise of quality and freshness. We're dedicated to selecting the finest ingredients to ensure a superior taste that celebrates the art of coffee making.
+        </p>
+        <h2>Arabica Coffee Beans</h2>
+        <img src="products/arabicabean.jpg" alt="Arabica Coffee Beans" class="imagecoffee">
+        <p class="image-caption">Freshly Roasted Arabica Beans from Australia</p>
+        <p>
+            We serve our freshly ground and roasted Arabica bean everydays.
+        </p>
+        <h2>Mainstream Milks</h2>
+        <img src="products/devondalefullcream.png" alt="Devondale Full Cream Milk" class="imagemilkmain">
+        <p class="image-caption">Devondale Full Cream Milk</p>
+        <img src="products/devondaleskinnymilk.webp" alt="Devondale Skinny Milk" class="imagemilk">
+        <p class="image-caption">Devondale Skinny Milk</p>
+
+        <h2>Alternative Milks</h2>
+        <img src="products/soybonsoymilk.png" alt="Bonsoy Soy Milk" class="imagemilkmain">
+        <p class="image-caption">Bonsoy Soy Milk</p>
+        <img src="products/almondbonsoymilk.jpeg" alt="Bonsoy Almond Milk" class="imagemilkmain">
+        <p class="image-caption">Bonsoy Almond Milk</p>
+        <img src="products/almondmilklab.webp" alt="MilkLab Almond Milk" class="imagemilk">
+        <p class="image-caption">MilkLab Almond Milk</p>
+        <img src="products/oatly.jpg" alt="Oat-Ly Oat Milk" class="imagemilk">
+        <p class="image-caption">Oat-Ly Oat Milk</p>
+        <img src="products/lactosefreecoles.webp" alt="Coles Lactose Free Milk" class="imagemilk">
+        <p class="image-caption">Coles Lactose Free Milk</p>
+
+        <h2>Flavored Syrups</h2>
+        <img src="products/arkadiasyrups.webp" alt="Arkadia Flavored Syrups" class="imagecoffee">
+        <p class="image-caption">Arkadia Syrups with Caramel, Vanilla, and Hazelnut Flavors</p>
+
+        <h2>Barista Powders</h2>
+        <img src="products/arkadiachai.webp" alt="Arkadia Chai Powder" class="imagemilkmain">
+        <p class="image-caption">Arkadia Chai Powder</p>
+        <img src="products/arkadiachocolate.webp" alt="Arkadia Chocolate Powder" class="imagemilk">
+        <p class="image-caption">Arkadia Chocolate Powder</p>
+        <p>
+            We choose one of the best option on barista powder to serve our customers hot cups of Chai latte and Hot Chocolate everydays.
+        </p>
+    </div>
+    <!-- Bootstrap JavaScript reference -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
