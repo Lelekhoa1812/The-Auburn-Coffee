@@ -12,6 +12,41 @@
             background-color: rgb(255, 242, 179); /* background */
             font-family: Arial, sans-serif;
         }
+        .navbar {
+            display: flex;
+            padding: 22px 0;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            justify-content: space-between;
+        }
+        .navbar .logo {
+            gap: 10px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .navbar .logo img {
+            width: 100px;
+            border-radius: 50%;
+        }
+        .navbar .links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .navbar .links a {
+            color: rgb(144, 100, 18);
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.1s ease;
+        }
+        .navbar .links a:hover {
+            color: rgb(18, 129, 144);
+        }
         h1 {
             color: rgb(144, 100, 18);
         }
@@ -37,7 +72,19 @@
 </head>
 <body>
     <div id="app" class="container">
-        <h1>The Auburn Coffee</h1>
+        <header>
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <img src="products/auburn.jpg" alt="logo">
+                    <h1>The Auburn Coffee</h1>
+                </a>
+                <ul class="links">
+                    <li><a href="#">Home Menu</a></li>
+                    <li><a href="about.html">About Us</a></li> <!-- To about page -->
+                    <li><a href="ingredient.html">Our Ingredients</a></li> <!-- To ingredient page -->
+                </ul>
+            </nav>
+        </header>
         <p1>This is the homepage to our coffee shop, locates at the Auburn station.</p1>
         <p1> We are welcome to serve Victorian public transport users, our Melbourne's Arabica bean coffee, freshly roasted and grounded everydays.</p1>
         <div class="row">
