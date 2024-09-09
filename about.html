@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
     <link rel="website icon" type="png" href="image/icon.png" >
+    <!-- Font Awesome Icon Library, usage for ratting function -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>About The Auburn Coffee</title>
     <style>
         body {
@@ -82,6 +84,94 @@
             font-weight: bold;
             color: #555;
         }
+        .rating-button {
+            position: fixed;
+            right: 10px;
+            bottom: 20px;
+            background-color: rgb(144, 100, 18);
+            color: rgb(255, 238, 207);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .rating-button:hover {
+            background-color: rgb(209, 182, 133);
+            color: rgb(66, 43, 1);
+        }
+        /* Modal box for feedback */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Fixed position */
+            z-index: 1; /* On top of everything else */
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; /* Enable scroll */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black with opacity */
+        }
+        .modal-content {
+            background-color: rgb(204, 188, 158);
+            margin: 15% auto; /* 15% from top, centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        /* Star rating styles */
+        .stars {
+            display: flex;
+            justify-content: center;
+        }
+        .fa-star {
+            font-size: 36px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .fa-star:hover {
+            color: orange;
+        }
+        .checked { 
+            color: orange;
+        }
+        .feedback-message {
+            color: rgb(73, 48, 1);;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .rating-message {
+            color: rgb(161, 124, 45);
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .submitFeedback-button {
+            position: center;
+            margin-top: 20px;
+            background-color: rgb(144, 100, 18);
+            color: rgb(1, 18, 37);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .submitFeedback-button:hover {
+            background-color: rgb(248, 195, 96);
+        }
     </style>
 </head>
 <body>
@@ -109,7 +199,7 @@
         <p class="image-caption">It come cozy at night too!</p>
         <h2>Our Commitment to Quality</h2>
         <p>
-            At The Auburn Coffee, we believe that a great day starts with a great cup of coffee. That’s why we are committed to using only the <span class="highlight">best ingredients</span> sourcing high-quality Arabica beans and premium accompaniments to ensure every cup we serve is as good as it gets. Our goal is to enhance your morning and provide the energy you need to tackle the day.
+            At The Auburn Coffee, we believe that a great day starts with a great cup of coffee. That’s why we are committed to using only the <span class="highlight">best ingredients</span>—sourcing high-quality Arabica beans and premium accompaniments to ensure every cup we serve is as good as it gets. Our goal is to enhance your morning and provide the energy you need to tackle the day.
         </p>
         <img src="products/cup.webp" alt="Quality" class="img">
         <p class="image-caption">Quality is a guarantee ^^</p>
@@ -124,6 +214,89 @@
         <img src="products/auburn3.jpg" alt="Our Store" class="img">
         <p class="image-caption">Here we are at Auburn</p>
     </div>
+
+    <button class="rating-button" onclick="openRatingModal()">Rate Us</button>
+    <!-- Rating content, references from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_star_rating -->
+    <!-- Modal box, references from https://www.w3schools.com/howto/howto_css_modals.asp -->
+    <div id="ratingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRatingModal()">&times;</span>  <!-- close modal box upon clicking to x -->
+            <h2>Rate Us</h2>
+            <div class="stars">  <!-- display star and set mouseover position on star -->
+                <span class="fa fa-star" onmouseover="toggleStars(1)"></span>
+                <span class="fa fa-star" onmouseover="toggleStars(2)"></span>
+                <span class="fa fa-star" onmouseover="toggleStars(3)"></span>
+                <span class="fa fa-star" onmouseover="toggleStars(4)"></span>
+                <span class="fa fa-star" onmouseover="toggleStars(5)"></span>
+            </div>
+            <button class="submitFeedback-button" onclick="acquireFeedback()">Submit Feedback</button>
+            <div id="feedbackMessage" class="feedback-message"></div>
+            <div id="feedbackRating" class="rating-message"></div>
+        </div>
+    </div>
+    <script>
+        // Function to open the rating modal
+        function openRatingModal() {
+            document.getElementById('ratingModal').style.display = 'block';
+        }
+
+        // Function to close the rating modal
+        function closeRatingModal() {
+            document.getElementById('ratingModal').style.display = 'none';
+        }
+
+        // Function to send message accquiring feedback
+        function acquireFeedback() {
+            const stars = document.querySelectorAll('.fa-star.checked').length; // Checking number of star acquired, therefore set feedback message upon ratting type
+            const feedbackMessage = document.getElementById('feedbackMessage');
+            if (stars >= 3) {
+                feedbackMessage.textContent = "Thank you, we are more than happy with your " + stars + " stars feedback!";
+            } else {
+                feedbackMessage.textContent = "Thank you for your " + stars + " stars feedback, please let our staff members know how to improve in the future!";
+            }
+            obtainFeedback();
+        }
+
+        // Function to saved ratting type per attempt and send message obtaining feedback count (with increment)
+        function obtainFeedback() {
+            const stars = document.querySelectorAll('.fa-star.checked').length;
+            // Array to store counts for each star rating, reference from https://www.geeksforgeeks.org/what-is-the-most-efficient-way-to-create-a-zero-filled-array-in-javascript/
+            // Get current website ratings from localStorage
+            let websiteRatings = JSON.parse(localStorage.getItem('website_ratings')) || [0, 0, 0, 0, 0];
+            // Increment the count for the selected star rating
+            websiteRatings[stars - 1]++;
+            // Update website ratings in localStorage
+            localStorage.setItem('website_ratings', JSON.stringify(websiteRatings));
+
+            // Display the feedback counts
+            const feedbackRating = document.getElementById('feedbackRating');
+            feedbackRating.innerHTML = `
+                Number of 5 stars rating: ${websiteRatings[4]}<br>
+                Number of 4 stars rating: ${websiteRatings[3]}<br>
+                Number of 3 stars rating: ${websiteRatings[2]}<br>
+                Number of 2 stars rating: ${websiteRatings[1]}<br>
+                Number of 1 stars rating: ${websiteRatings[0]}<br>
+            `;
+        }
+
+        // Function to handle rating
+        function rate(stars) {
+            // Close the modal after rating
+            closeRatingModal();
+        }
+
+         // Function to toggle star colors based on mouseover
+         function toggleStars(num) {
+            const stars = document.querySelectorAll('.fa-star');
+            for (let i = 0; i < stars.length; i++) { // Per mouseover, it set all star to the left toggled
+                if (i < num) {
+                    stars[i].classList.add('checked');
+                } else {
+                    stars[i].classList.remove('checked');
+                }
+            }
+        }
+    </script>
     <!-- Bootstrap JavaScript reference -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
