@@ -7,9 +7,6 @@
     <link rel="website icon" type="png" href="image/icon.png" >
     <!-- Font Awesome Icon Library, usage for ratting function -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- Script tags to Firebase App SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js"></script>
     <title>About The Auburn Coffee</title>
     <style>
         body {
@@ -254,7 +251,12 @@
             <div id="feedbackRating" class="rating-message"></div>
         </div>
     </div>
+    <!-- Script tags to Firebase App SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js"></script>
+    <!-- Module Script for Firebase Initialization -->
     <script type="module" src="firebaseInit.js"></script>
+    <!-- Application Script -->
     <script type="module">
         // Import db
         import db from './firebaseInit.js';
