@@ -294,6 +294,7 @@
 
         // Acquire feedback and interact with Firebase
         window.acquireFeedback = async function() {
+            console.log('DB Object acquireFeedback:', db);  // Check what db actually contains
             const stars = document.querySelectorAll('.fa-star.checked').length; // Checking number of star acquired, therefore set feedback message upon ratting type
             const feedbackMessage = document.getElementById('feedbackMessage');
             if (stars >= 3) {
@@ -315,6 +316,7 @@
 
         // Update rating count display
         async function updateRatingCount() {
+            console.log('DB Object updateRatingCount:', db);  // Check what db actually contains
             const snapshot = await db.collection("ratings").get();
             const ratings = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
             snapshot.forEach(doc => {
