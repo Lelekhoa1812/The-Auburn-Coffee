@@ -258,7 +258,8 @@
             } else {
                 feedbackMessage.textContent = "Thank you for your " + stars + " stars feedback, please let our staff members know how to improve in the future!";
             }
-            obtainFeedback();
+            // obtainFeedback(); // Function deprecated since we are not using localStorage method!
+              await saveRating(stars);
         }
 
         // // Change approach not to use localStorage but instead integrating Firebase app storage
