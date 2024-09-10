@@ -7,6 +7,9 @@
     <link rel="website icon" type="png" href="image/icon.png" >
     <!-- Font Awesome Icon Library, usage for ratting function -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Script tags to Firebase App SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js"></script>
     <title>About The Auburn Coffee</title>
     <style>
         body {
@@ -234,6 +237,7 @@
             <div id="feedbackRating" class="rating-message"></div>
         </div>
     </div>
+    <script type="module" src="firebaseInit.js"></script>
     <script>
         // Function to open the rating modal
         function openRatingModal() {
@@ -245,8 +249,8 @@
             document.getElementById('ratingModal').style.display = 'none';
         }
 
-        // Function to send message accquiring feedback
-        function acquireFeedback() {
+        // Function to send message accquiring feedback (switched to use Firebase storage, hence use async fun)
+        async function acquireFeedback() {
             const stars = document.querySelectorAll('.fa-star.checked').length; // Checking number of star acquired, therefore set feedback message upon ratting type
             const feedbackMessage = document.getElementById('feedbackMessage');
             if (stars >= 3) {
@@ -257,27 +261,58 @@
             obtainFeedback();
         }
 
-        // Function to saved ratting type per attempt and send message obtaining feedback count (with increment)
-        function obtainFeedback() {
-            const stars = document.querySelectorAll('.fa-star.checked').length;
-            // Array to store counts for each star rating, reference from https://www.geeksforgeeks.org/what-is-the-most-efficient-way-to-create-a-zero-filled-array-in-javascript/
-            // Get current website ratings from localStorage
-            let websiteRatings = JSON.parse(localStorage.getItem('website_ratings')) || [0, 0, 0, 0, 0];
-            // Increment the count for the selected star rating
-            websiteRatings[stars - 1]++;
-            // Update website ratings in localStorage
-            localStorage.setItem('website_ratings', JSON.stringify(websiteRatings));
+        // // Change approach not to use localStorage but instead integrating Firebase app storage
+        // // Function to saved ratting type per attempt and send message obtaining feedback count (with increment)
+        // function obtainFeedback() {
+        //     const stars = document.querySelectorAll('.fa-star.checked').length;
+        //     // Array to store counts for each star rating, reference from https://www.geeksforgeeks.org/what-is-the-most-efficient-way-to-create-a-zero-filled-array-in-javascript/
+        //     // Get current website ratings from localStorage
+        //     let websiteRatings = JSON.parse(localStorage.getItem('website_ratings')) || [0, 0, 0, 0, 0];
+        //     // Increment the count for the selected star rating
+        //     websiteRatings[stars - 1]++;
+        //     // Update website ratings in localStorage
+        //     localStorage.setItem('website_ratings', JSON.stringify(websiteRatings));
 
-            // Display the feedback counts
+        //     // Display the feedback counts
+        //     const feedbackRating = document.getElementById('feedbackRating');
+        //     feedbackRating.innerHTML = `
+        //         Number of 5 stars rating: ${websiteRatings[4]}<br>
+        //         Number of 4 stars rating: ${websiteRatings[3]}<br>
+        //         Number of 3 stars rating: ${websiteRatings[2]}<br>
+        //         Number of 2 stars rating: ${websiteRatings[1]}<br>
+        //         Number of 1 stars rating: ${websiteRatings[0]}<br>
+        //     `;
+        // }
+
+        async function saveRating(stars) {
+            try {
+                await db.collection("ratings").add({
+                stars: stars,
+                timestamp: new Date()
+                });
+                console.log("Rating saved!");
+                updateRatingCount();
+            } catch (error) {
+                console.error("Error writing document: ", error);
+            }
+            }
+
+            async function updateRatingCount() {
+            const snapshot = await db.collection("ratings").get();
+            const ratings = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                ratings[data.stars]++;
+            });
             const feedbackRating = document.getElementById('feedbackRating');
             feedbackRating.innerHTML = `
-                Number of 5 stars rating: ${websiteRatings[4]}<br>
-                Number of 4 stars rating: ${websiteRatings[3]}<br>
-                Number of 3 stars rating: ${websiteRatings[2]}<br>
-                Number of 2 stars rating: ${websiteRatings[1]}<br>
-                Number of 1 stars rating: ${websiteRatings[0]}<br>
+                Number of 5 stars rating: ${ratings[5]}<br>
+                Number of 4 stars rating: ${ratings[4]}<br>
+                Number of 3 stars rating: ${ratings[3]}<br>
+                Number of 2 stars rating: ${ratings[2]}<br>
+                Number of 1 stars rating: ${ratings[1]}<br>
             `;
-        }
+            }
 
         // Function to handle rating
         function rate(stars) {
