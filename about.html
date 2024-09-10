@@ -262,8 +262,7 @@
     <!-- Application Script -->
     <script type="module">
     // Import db
-    import db from './firebaseInit.js';
-
+    import { db } from './firebaseInit.js';
     document.addEventListener('DOMContentLoaded', function() {
         const rateButton = document.getElementById('rateButton');
         rateButton.addEventListener('click', openRatingModal);
