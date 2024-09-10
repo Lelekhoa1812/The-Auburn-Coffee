@@ -261,19 +261,21 @@
     <script type="module" src="firebaseInit.js"></script>
     <!-- Application Script -->
     <script type="module">
-    // Import db
-    import { db } from './firebaseInit.js';
-    document.addEventListener('DOMContentLoaded', function() {
-        const rateButton = document.getElementById('rateButton');
-        rateButton.addEventListener('click', openRatingModal);
-
-        const submitFeedbackButton = document.getElementById('submitFeedbackButton');
-        submitFeedbackButton.addEventListener('click', acquireFeedback);
-
-        const closeButton = document.querySelector('.close');
-        closeButton.addEventListener('click', closeRatingModal);
+        // TODO: Resolve the error that firebaseInit.js can't be accessed at default, otherwise, comment out the db import
+        // Import db
+        import { db } from './firebaseInit.js';
         
-        document.querySelectorAll('.fa-star').forEach(star => {
+        document.addEventListener('DOMContentLoaded', function() {
+            const rateButton = document.getElementById('rateButton');
+            rateButton.addEventListener('click', openRatingModal);
+    
+            const submitFeedbackButton = document.getElementById('submitFeedbackButton');
+            submitFeedbackButton.addEventListener('click', acquireFeedback);
+    
+            const closeButton = document.querySelector('.close');
+            closeButton.addEventListener('click', closeRatingModal);
+            
+            document.querySelectorAll('.fa-star').forEach(star => {
                 star.addEventListener('mouseover', function() {
                     toggleStars(parseInt(this.dataset.rate));
                 });
