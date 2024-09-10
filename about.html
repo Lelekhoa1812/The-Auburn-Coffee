@@ -303,6 +303,7 @@
                 feedbackMessage.textContent = "Thank you for your " + stars + " stars feedback, please let our staff members know how to improve in the future!";
             }
             try {
+                console.log('DB Object acquireFeedback collection:', db.collection);  // Check what db actually contains
                 await db.collection("ratings").add({
                     stars: stars,
                     timestamp: new Date()
