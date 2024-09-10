@@ -10,6 +10,7 @@
     <!-- Script tags to Firebase App SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js"></script>
+    <script type="module" src="firebaseInit.js"></script>
     <title>About The Auburn Coffee</title>
     <style>
         body {
@@ -237,7 +238,6 @@
             <div id="feedbackRating" class="rating-message"></div>
         </div>
     </div>
-    <script type="module" src="firebaseInit.js"></script>
     <script>
         // Function to open the rating modal
         function openRatingModal() {
@@ -249,6 +249,9 @@
             document.getElementById('ratingModal').style.display = 'none';
         }
 
+        // Import db
+        import db from './firebaseInit.js';
+
         // Function to send message accquiring feedback (switched to use Firebase storage, hence use async fun)
         async function acquireFeedback() {
             const stars = document.querySelectorAll('.fa-star.checked').length; // Checking number of star acquired, therefore set feedback message upon ratting type
@@ -258,8 +261,8 @@
             } else {
                 feedbackMessage.textContent = "Thank you for your " + stars + " stars feedback, please let our staff members know how to improve in the future!";
             }
-            // obtainFeedback(); // Function deprecated since we are not using localStorage method!
-              await saveRating(stars);
+            // obtainFeedback();
+            await saveRating(stars);
         }
 
         // // Change approach not to use localStorage but instead integrating Firebase app storage
