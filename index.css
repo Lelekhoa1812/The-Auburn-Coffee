@@ -58,6 +58,84 @@ p1 {
     font-size: 12px;
     margin-bottom: 10px;
 }
+p2 {
+  color: rgb(101, 60, 3);
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.promotion-button {
+  position: fixed;
+  left: 10px;
+  bottom: 20px;
+  background-color: rgb(144, 100, 18);
+  color: rgb(255, 238, 207);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.promotion-button:hover {
+  background-color: rgb(209, 182, 133);
+  color: rgb(66, 43, 1);
+}
+
+/* Modal box for promotion */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Fixed position */
+  justify-content: center;
+  z-index: 1; /* On top of everything else */
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; /* Enable scroll */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black with opacity */
+}
+.modal-content {
+  background-color: rgb(204, 188, 158);
+  margin: 15% auto; /* 15% from top, centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; 
+}
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+#promotionimg {
+  display: block; /* Ensures the image is treated as a block-level element */
+  margin: 20px auto; /* Centers the image horizontally */
+  width: 60%; /* Adjust size */
+  max-width: 350px; /* Limit the size */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 8px;
+}
+.submitPromotion-button {
+  position: center;
+  margin-top: 20px;
+  background-color: rgb(144, 100, 18);
+  color: rgb(1, 18, 37);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.submitPromotion-button:hover {
+  background-color: rgb(248, 195, 96);
+}
 
 /* For checkboxes */
 .student-checkbox {
