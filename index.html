@@ -80,7 +80,7 @@
                         <!-- {{ updatePrice(item)}} -->
                         {{ updatedPrice[index] }}
                     </td>
-<!--                     <td v-else-if="isPriceSelectableDimSum(item)"> 
+                    <!--<td v-else-if="isPriceSelectableDimSum(item)"> 
                         {{ updatedPriceDimSum[index] }}
                     </td> -->
                     <td v-else>{{ updatedPrice2[index] }}</td> <!-- If modifications are not applicable -->
@@ -125,12 +125,125 @@
                 </li>
             </ul>
         </nav>
+        <!-- Free Coffee Promotion Button -->
+        <button class="promotion-button" id="promotionButton">Get Your Free Coffee</button>
+        <!-- First Modal: Promotion -->
+        <div id="promotionModal1" class="modal">
+            <div class="modal-content">
+                <span class="close1">&times;</span>
+                <p2>We are running a Free Coffee campaign from 7.30 to 8.00 AM, Monday to Friday this week!</p2>
+                <p2>Complete this short survey and get a free drink from us!</p2>
+                <button class="submitPromotion-button" id="submitPromotionButton1">Proceed to Survey</button>
+            </div>
+        </div>
+        <!-- Second Modal: Survey -->
+        <div id="promotionModal2" class="modal">
+            <div class="modal-content">
+                <span class="close2">&times;</span>
+                <h1>Survey</h1>
+                <p2>What's your name?</p2>
+                <input type="text" id="customerName" class="form-control" placeholder="Enter your name">
+                <p2>Which type of coffee/drink do you usually have?</p2>
+                <select id="customerCoffee" class="form-select">
+                    <option>Latte</option>
+                    <option>Cappuccino</option>
+                    <option>Flat White</option>
+                    <option>Chai Latte</option>
+                    <option>Long Black</option>
+                    <option>Mocha</option>
+                    <option>Espresso</option>
+                    <option>Macchiato</option>
+                    <option>Dirty Chai</option>
+                    <option>Piccolo</option>
+                </select>
+                <p2>Which type of milk (if applicable) do you prefer?</p2>
+                <select id="customerMilk" class="form-select">
+                    <option>None</option>
+                    <option>Full Cream</option>
+                    <option>Skinny Milk</option>
+                    <option>Oat Milk</option>
+                    <option>Soy Milk</option>
+                    <option>Almond Milk</option>
+                    <option>Lactose Free</option>
+                </select>
+                <button class="submitPromotion-button" id="submitPromotionButton2">Submit Survey</button>
+            </div>
+        </div>
+        <!-- Third Modal: Reward -->
+        <div id="promotionModal3" class="modal">
+            <div class="modal-content">
+                <span class="close3">&times;</span>
+                <p2 id="promotionMessage" class="promotion-message"></p2>
+                <img src="image/icon.png" alt="Free Coffee Icon" id="promotionimg">
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap JavaScript reference -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- VueJS Script -->
     <script src="vue.js"></script>
+    <!-- Free coffee reward scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const promotionButton = document.getElementById('promotionButton');
+            const submitPromotionButton1 = document.getElementById('submitPromotionButton1');
+            const submitPromotionButton2 = document.getElementById('submitPromotionButton2');
+            const closeButton1 = document.querySelector('.close1');
+            const closeButton2 = document.querySelector('.close2');
+            const closeButton3 = document.querySelector('.close3');
+
+            const customer = {};
+
+            // Open Modal 1 (Promotion)
+            promotionButton.addEventListener('click', function() {
+                document.getElementById('promotionModal1').style.display = 'block';
+            });
+
+            // Close Modal 1
+            closeButton1.addEventListener('click', function() {
+                document.getElementById('promotionModal1').style.display = 'none';
+            });
+
+            // Open Modal 2 (Survey) and close Modal 1
+            submitPromotionButton1.addEventListener('click', function() {
+                document.getElementById('promotionModal1').style.display = 'none';
+                document.getElementById('promotionModal2').style.display = 'block';
+            });
+
+            // Close Modal 2
+            closeButton2.addEventListener('click', function() {
+                document.getElementById('promotionModal2').style.display = 'none';
+            });
+
+            // Open Modal 3 (Reward) and close Modal 2 if survey completed
+            submitPromotionButton2.addEventListener('click', function() {
+                // Capture user input
+                customer.name = document.getElementById('customerName').value;
+                customer.coffee = document.getElementById('customerCoffee').value;
+                customer.milk = document.getElementById('customerMilk').value === 'None' ? '' : document.getElementById('customerMilk').value;
+                if ((customer.name).length > 0)
+                {
+                    // Hide modal 2
+                    document.getElementById('promotionModal2').style.display = 'none';
+                    // Display the reward message in Modal 3
+                    const promotionMessage = `Thank you, ${customer.name} for completing this survey, please show this to our staff and get your ${customer.milk} ${customer.coffee} for free this morning!`;
+                    document.getElementById('promotionMessage').textContent = promotionMessage;
+
+                    document.getElementById('promotionModal3').style.display = 'block';
+                }
+                else {  // Deny open Modal 3 (Reward) and close Modal 2 if survey not completed
+                    alert("Please complete your survey!");
+                }
+            });
+
+            // Close Modal 3
+            closeButton3.addEventListener('click', function() {
+                document.getElementById('promotionModal3').style.display = 'none';
+            });
+        });
+    </script>
+    <!-- App scripts -->
     <script>
         const app = Vue.createApp({
             data() {
@@ -271,7 +384,7 @@
                                         case 'size8':
                                             return item.price8;
                                         default:
-                                            return item.price2;                                      break;
+                                            return item.price2;
                                         break;
                                 }
                             }
