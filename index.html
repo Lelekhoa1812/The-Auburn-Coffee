@@ -125,14 +125,17 @@
                 </li>
             </ul>
         </nav>
-        <!-- Free Coffee Promotion Button -->
+        <!-- Free Coffee Promotion Button (disable when finish campaign) -->
         <button class="promotion-button" id="promotionButton">Get Your Free Coffee</button>
+        <!-- Staff Hiring - Employment Button (disable when not used) -->
+        <button class="employment-button" id="employmentButton">Our Employment</button>
+
+        <!-- Modal windows content for promotion campaign, disable when having another campaign or campaign no longer exist -->
         <!-- First Modal: Promotion -->
         <div id="promotionModal1" class="modal">
             <div class="modal-content">
                 <span class="close1">&times;</span>
-<!--                 <p2>We are running a Free Coffee campaign from 7.30 to 8.00 AM, Monday to Friday this week!</p2> -->
-                <p2>We are running a Free Coffee campaign from 7.30 to 8.00 AM, Tuesday to Friday this week!</p2>
+                <p2>We are running a Free Coffee campaign from 7.30 to 8.00 AM, Monday to Friday this week!</p2>
                 <p2>Complete this short survey and get a free drink from us!</p2>
                 <button class="submitPromotion-button" id="submitPromotionButton1">Proceed to Survey</button>
             </div>
@@ -180,399 +183,31 @@
         </div>
     </div>
 
+    <!-- Hiring Staff Modal content, linking to the business owner's email -->
+    <div id="employmentModal" class="modal">
+        <div class="modal-content">
+            <span class="close4">&times;</span>
+            <h1>Interested in working at Auburn Coffee?</h1>
+            <p2>We are currently hiring staffs on:</p2>
+            <ul>
+                <li>Monday morning</li>
+                <li>Monday evening</li>
+                <li>Tuesday evening</li>
+                <li>Wednesday evening</li>
+                <li>Friday evening</li>
+            </ul>
+            <p2>If you are eligible and would like to be with us, please contact us</p2>
+            <button class="submitEmployment-button" id="submitEmploymentButton" onclick="window.location.href='mailto:waynepreston999@gmail.com'">Explore More</button>
+        </div>
+    </div>
+
     <!-- Bootstrap JavaScript reference -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- VueJS Script -->
     <script src="vue.js"></script>
     <!-- Free coffee reward scripts -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const promotionButton = document.getElementById('promotionButton');
-            const submitPromotionButton1 = document.getElementById('submitPromotionButton1');
-            const submitPromotionButton2 = document.getElementById('submitPromotionButton2');
-            const closeButton1 = document.querySelector('.close1');
-            const closeButton2 = document.querySelector('.close2');
-            const closeButton3 = document.querySelector('.close3');
-
-            const customer = {};
-
-            // Open Modal 1 (Promotion)
-            promotionButton.addEventListener('click', function() {
-                document.getElementById('promotionModal1').style.display = 'block';
-            });
-
-            // Close Modal 1
-            closeButton1.addEventListener('click', function() {
-                document.getElementById('promotionModal1').style.display = 'none';
-            });
-
-            // Open Modal 2 (Survey) and close Modal 1
-            submitPromotionButton1.addEventListener('click', function() {
-                document.getElementById('promotionModal1').style.display = 'none';
-                document.getElementById('promotionModal2').style.display = 'block';
-            });
-
-            // Close Modal 2
-            closeButton2.addEventListener('click', function() {
-                document.getElementById('promotionModal2').style.display = 'none';
-            });
-
-            // Open Modal 3 (Reward) and close Modal 2 if survey completed
-            submitPromotionButton2.addEventListener('click', function() {
-                // Capture user input
-                customer.name = document.getElementById('customerName').value;
-                customer.coffee = document.getElementById('customerCoffee').value;
-                customer.milk = document.getElementById('customerMilk').value === 'None' ? '' : document.getElementById('customerMilk').value;
-                if ((customer.name).length > 0)
-                {
-                    // Hide modal 2
-                    document.getElementById('promotionModal2').style.display = 'none';
-                    // Display the reward message in Modal 3
-                    const promotionMessage = `Thank you, ${customer.name} for completing this survey, please show this to our staff and get your ${customer.milk} ${customer.coffee} for free this morning!`;
-                    document.getElementById('promotionMessage').textContent = promotionMessage;
-
-                    document.getElementById('promotionModal3').style.display = 'block';
-                }
-                else {  // Deny open Modal 3 (Reward) and close Modal 2 if survey not completed
-                    alert("Please complete your survey!");
-                }
-            });
-
-            // Close Modal 3
-            closeButton3.addEventListener('click', function() {
-                document.getElementById('promotionModal3').style.display = 'none';
-            });
-        });
-    </script>
+    <script src="modal.js"></script>
     <!-- App scripts -->
-    <script>
-        const app = Vue.createApp({
-            data() {
-                return { 
-                    selectType: [],
-                    selectedSize: [],
-                    selectedMilk: [],
-                    selectedSyrup: [],
-                    item: [
-                        { "name": "Latte", "image": "latte.webp", "type" : "Coffee", "pricelarge" : "5.5", "pricemedium" : "5.0", "pricesmall" : "4.5" },
-                        { "name": "Cappuccino", "image": "cappuccino.jpeg", "type" : "Coffee", "pricelarge" : "5.5", "pricemedium" : "5.0", "pricesmall" : "4.5" },
-                        { "name": "Flat White", "image": "flatwhite.jpeg", "type" : "Coffee", "pricelarge" : "5.5", "pricemedium" : "5.0", "pricesmall" : "4.5" },
-                        { "name": "Long Black", "image": "longblack.webp", "type" : "Coffee", "pricelarge" : "5.5", "pricemedium" : "5.0", "pricesmall" : "4.5" },
-                        { "name": "Mocha", "image": "mocha.webp", "type" : "Coffee", "pricelarge" : "5.5", "pricemedium" : "5.0", "pricesmall" : "4.5" },
-                        { "name": "Espresso", "image": "espresso.jpeg", "type" : "Coffee", "pricelarge" : "5.5", "pricemedium" : "5.0", "pricesmall" : "4.5" },
-                        { "name": "Macchiato", "image": "macchiato.webp", "type" : "Coffee", "pricelarge" : "5.5", "pricemedium" : "5.0", "pricesmall" : "4.5" },
-                        { "name": "Dirty Chai", "image": "dirtychai.jpeg", "type" : "Coffee", "pricelarge" : "6.0", "pricemedium" : "5.5", "pricesmall" : "5.0" },
-                        { "name": "Piccolo", "image": "piccolo.jpeg", "type" : "Coffee", "pricelarge" : "5.5", "pricemedium" : "5.0", "pricesmall" : "4.5" },
-                        { "name": "Iced Coffee", "image": "iced.jpeg", "type" : "Coffee", "pricelarge" : "6.0", "pricemedium" : "5.5", "pricesmall" : "5.0" },
-                        { "name": "Hot Vietnamese Coffee", "image": "hotvn.jpeg", "type" : "Coffee", "pricelarge" : "6.5", "pricemedium" : "6.0", "pricesmall" : "5.5" },
-                        { "name": "Iced Vietnamese Coffee", "image": "icevn.jpeg", "type" : "Coffee", "pricelarge" : "7.0", "pricemedium" : "6.5", "pricesmall" : "6.0" },
-                        { "name": "Muffin", "image": "muffin.jpg", "type" : "Snacks", "price" : "4.5"},
-                        { "name": "Lemon Tart", "image": "tart.jpg", "type" : "Snacks", "price" : "3.0"},
-                        { "name": "Gippsland Yogurt", "image": "yogurt.jpeg", "type" : "Snacks", "price" : "4.5"},
-                        { "name": "Cheesy Crackers", "image": "cracker.jpeg", "type" : "Snacks", "price" : "4.5"},
-                        { "name": "Mint", "image": "mint.jpeg", "type" : "Snacks", "price" : "4.0"},
-                        { "name": "Gum", "image": "gum.jpeg", "type" : "Snacks", "price" : "4.0"},
-                        { "name": "Carman Nut Bars", "image": "nutbar.jpg", "type" : "Snacks", "price" : "4.5"},
-                        { "name": "Chocolate Bar", "image": "choco.jpeg", "type" : "Snacks", "price" : "3.0"},
-                        { "name": "Sparkling Water", "image": "sparkling.jpeg", "type" : "Cans", "price" : "4.0"},
-                        { "name": "Coke", "image": "Coke.webp", "type" : "Cans", "price" : "3.0"},
-                        { "name": "Fanta", "image": "fanta.jpeg", "type" : "Cans", "price" : "3.0"},
-                        { "name": "Sprite", "image": "sprite.jpeg", "type" : "Cans", "price" : "3.0"},
-                        { "name": "Redbull Energy", "image": "redbull.jpeg", "type" : "Cans", "price" : "4.0"},
-                        { "name": "V Energy", "image": "venergy.jpeg", "type" : "Cans", "price" : "4.0"},
-                        { "name": "Water Bottle", "image": "water.jpeg", "type" : "Cans", "price" : "2.0"},
-                        { "name": "Hot Chocolate", "image": "hotchoco.webp", "type" : "Chocolate Drinks", "pricelarge" : "5.5", "pricemedium" : "5.0", "pricesmall" : "4.5" },
-                        { "name": "Cold Chocolate", "image": "coldchoco.jpeg", "type" : "Chocolate Drinks", "pricelarge" : "6.0", "pricemedium" : "5.5", "pricesmall" : "5.0" },
-                        { "name": "Babycino", "image": "hotchoco.webp", "type" : "Chocolate Drinks", "pricelarge" : "4.0", "pricemedium" : "3.5", "pricesmall" : "3.0" },
-                        { "name": "Meat Pie", "image": "meatpie.jpeg", "type" : "Meals", "price" : "6.0"},
-                        { "name": "Chicken Pie", "image": "chickenpie.jpeg", "type" : "Meals", "price" : "6.0"},
-                        { "name": "Dim Sum", "image": "dimsum.jpeg", "type" : "Meals", "price2" : "2.5", "price4" : "4.5", "price6" : "5.5", "price8" : "6.5"},
-                        { "name": "Shin Noodle Cup", "image": "shin.jpg", "type" : "Meals", "price" : "3.5"},
-                        { "name": "Fantastic Noodle Cup", "image": "fantastic.webp", "type" : "Meals", "price" : "3.5"},
-                        { "name": "Mi Goreng Cup", "image": "goreng.jpeg", "type" : "Meals", "price" : "3.5"},
-                        { "name": "Chai", "image": "chai.webp", "type" : "Teas", "pricelarge" : "5.5", "pricemedium" : "5.0", "pricesmall" : "4.5" },
-                        { "name": "Earl Grey Tea", "image": "earlgray.jpeg", "type" : "Teas", "pricelarge" : "5.0", "pricemedium" : "4.5", "pricesmall" : "4.0" },
-                        { "name": "English Breakfast Tea", "image": "englishbreakfast.jpeg", "type" : "Teas", "pricelarge" : "5.0", "pricemedium" : "4.5", "pricesmall" : "4.0" },
-                        { "name": "Green Tea", "image": "greentea.jpeg", "type" : "Teas", "pricelarge" : "5.0", "pricemedium" : "4.5", "pricesmall" : "4.0" },
-                        { "name": "Black Tea", "image": "blacktea.jpeg", "type" : "Teas", "pricelarge" : "5.0", "pricemedium" : "4.5", "pricesmall" : "4.0" },
-                        { "name": "Lemon Iced Tea", "image": "lemonice.jpeg", "type" : "Teas", "pricelarge" : "5.5", "pricemedium" : "5.0", "pricesmall" : "4.5" },
-                        { "name": "Green Apple", "image": "apple.jpeg", "type" : "Fruits", "price" : "1.0"},
-                        { "name": "Banana", "image": "banana.jpeg", "type" : "Fruits", "price" : "1.0"},
-                        { "name": "Extra Shot", "image": "shot.png", "type" : "Extras", "price" : "0.5"},
-                        { "name": "Decaf Coffee", "image": "shot.png", "type" : "Extras", "price" : "0.5"},
-                        { "name": "Extra Syrup", "image": "syrup.jpeg", "type" : "Extras", "price" : "0.5"}
-
-                    ],
-                    pageSize: 10,
-                    currentPage: 1,
-                    milks: [
-                        { label: 'Full Cream', value: 'full cream' },
-                        { label: 'Skinny Milk', value: 'skinny milk' },
-                        { label: 'Oat Milk', value: 'oat milk' },
-                        { label: 'Soy Milk', value: 'soy milk' },
-                        { label: 'Almond Milk', value: 'almond milk' },
-                        { label: 'Lactose Free', value: 'lactose free' }
-                    ],
-                    syrups: [
-                        { label: 'No', value: 'no' },
-                        { label: 'Vanilla Syrup', value: 'vanilla syrup' },
-                        { label: 'Caramel Syrup', value: 'caramel syrup' },
-                        { label: 'Almond Syrup', value: 'almond syrup' },
-                        { label: 'Honey', value: 'honey' },
-                        { label: 'Equal Sweetener', value: 'sweetener' }
-                    ],
-                }
-            },
-            computed: {
-                totalPages() {
-                    return Math.ceil(this.filteredItems.length / this.pageSize);
-                },
-                paginatedItems() {
-                    const start = (this.currentPage - 1) * this.pageSize;
-                    const end = start + this.pageSize;
-                    return this.filteredItems.slice(start, end);
-                },
-                filteredItems() {
-                    if (this.selectType.length > 0) {
-                        return this.item.filter(item => this.selectType.includes(item.type));
-                    } 
-                    return this.item;
-                },
-                uniqueTypes() {
-                    const types = this.item.map(item => item.type);
-                    return [...new Set(types)];
-                },
-                updatedPrice2(){
-                    return this.paginatedItems.map(item => {
-                        if (this.isStudent) {
-                            if (item.type === "Fruits"){
-                                return "0.5";
-                            }
-                            else if (item.type === "Extras"){
-                                return "0.5";
-                            }
-                            else if (item.name === "Shin Noodle Cup" || item.name === "Fantastic Noodle Cup" || item.name === "Mi Goreng Cup"){
-                                return "3.0";
-                            }
-                            else if (item.name == "Dim Sum") {
-                                switch (item.size) {
-                                        case 'size2':
-                                            return item.price2 - 0.5;
-                                        case 'size4':
-                                            return item.price4 - 0.5;
-                                        case 'size6':
-                                            return item.price6 - 1.0;
-                                        case 'size8':
-                                            return item.price8 - 1.0;
-                                        default:
-                                            return item.price2; 
-                                        break;
-                                }
-                            }
-                            else {
-                                return parseFloat(item.price) - 1.0;
-                            }
-                        }
-                        else if (!this.isStudent) {
-                            if (item.name == "Dim Sum") {
-                                switch (item.size) {
-                                        case 'size2':
-                                            return item.price2;
-                                        case 'size4':
-                                            return item.price4;
-                                        case 'size6':
-                                            return item.price6;
-                                        case 'size8':
-                                            return item.price8;
-                                        default:
-                                            return item.price2;
-                                        break;
-                                }
-                            }
-                            return parseFloat(item.price);
-                        }
-                    });
-                },
-                updatedPrice() {
-                    return this.paginatedItems.map(item => {
-                        if (this.isStudent) {
-                            if ((item.milk === "oat milk" || item.milk === "soy milk" || item.milk === "almond milk" || item.milk === "lactose free") && 
-                                (item.syrup !== "vanilla syrup" && item.syrup !== "caramel syrup" && item.syrup !== "almond syrup" && item.syrup !== "honey" && item.syrup !== "sweetener")) {
-                                // If only milk, add 0.5
-                                switch (item.size) {
-                                    case 'large':
-                                        return parseFloat(item.pricelarge) - 0.5;
-                                    case 'medium':
-                                        return parseFloat(item.pricemedium) - 0.5;
-                                    case 'small':
-                                        return parseFloat(item.pricesmall) - 0.5;
-                                    default:
-                                        return parseFloat(item.price);
-                                }
-                            }
-                            else if ((item.syrup === "vanilla syrup" || item.syrup === "caramel syrup" || item.syrup === "almond syrup" || item.syrup === "honey"|| item.syrup === "sweetener") &&
-                                    (item.milk !== "oat milk" && item.milk !== "soy milk" && item.milk !== "almond milk" && item.milk !== "lactose free")) {
-                                // If only syrups, add 0.5
-                                switch (item.size) {
-                                    case 'large':
-                                        return parseFloat(item.pricelarge) - 0.5;
-                                    case 'medium':
-                                        return parseFloat(item.pricemedium) - 0.5;
-                                    case 'small':
-                                        return parseFloat(item.pricesmall) - 0.5;
-                                    default:
-                                        return parseFloat(item.price);
-                                }
-                            }
-                            else if ((item.syrup === "vanilla syrup" || item.syrup === "caramel syrup" || item.syrup === "almond syrup" || item.syrup === "honey"|| item.syrup === "sweetener") &&
-                                    (item.milk === "oat milk" || item.milk === "soy milk" || item.milk === "almond milk" || item.milk === "lactose free")) {
-                                // If both milk and syrups, add 1.0
-                                switch (item.size) {
-                                    case 'large':
-                                        return parseFloat(item.pricelarge);
-                                    case 'medium':
-                                        return parseFloat(item.pricemedium);
-                                    case 'small':
-                                        return parseFloat(item.pricesmall);
-                                    default:
-                                        return parseFloat(item.price);
-                                }
-                            }
-                            else {
-                                switch (item.size) {
-                                    case 'large':
-                                        return item.pricelarge - 1.0;
-                                    case 'medium':
-                                        return item.pricemedium- 1.0;
-                                    case 'small':
-                                        return item.pricesmall- 1.0;
-                                    // case 'size2':
-                                    //     return item.price2 - 0.5;
-                                    // case 'size4':
-                                    //     return item.price4 - 0.5;
-                                    // case 'size6':
-                                    //     return item.price6 - 1.0;
-                                    // case 'size8':
-                                    //     return item.price8 - 1.0;
-                                    default:
-                                        return item.price;
-                                }
-                            }
-                        }
-                        if (!this.isStudent) {
-                            if ((item.milk === "oat milk" || item.milk === "soy milk" || item.milk === "almond milk" || item.milk === "lactose free") && 
-                                (item.syrup !== "vanilla syrup" && item.syrup !== "caramel syrup" && item.syrup !== "almond syrup" && item.syrup !== "honey" && item.syrup !== "sweetener")) {
-                                // If only milk, add 0.5
-                                switch (item.size) {
-                                    case 'large':
-                                        return parseFloat(item.pricelarge) + 0.5;
-                                    case 'medium':
-                                        return parseFloat(item.pricemedium) + 0.5;
-                                    case 'small':
-                                        return parseFloat(item.pricesmall) + 0.5;
-                                    default:
-                                        return parseFloat(item.price);
-                                }
-                            }
-                            else if ((item.syrup === "vanilla syrup" || item.syrup === "caramel syrup" || item.syrup === "almond syrup" || item.syrup === "honey" || item.syrup === "sweetener") &&
-                                    (item.milk !== "oat milk" && item.milk !== "soy milk" && item.milk !== "almond milk" && item.milk !== "lactose free")) {
-                                // If only syrups, add 0.5
-                                switch (item.size) {
-                                    case 'large':
-                                        return parseFloat(item.pricelarge) + 0.5;
-                                    case 'medium':
-                                        return parseFloat(item.pricemedium) + 0.5;
-                                    case 'small':
-                                        return parseFloat(item.pricesmall) + 0.5;
-                                    default:
-                                        return parseFloat(item.price);
-                                }
-                            }
-                            else if ((item.syrup === "vanilla syrup" || item.syrup === "caramel syrup" || item.syrup === "almond syrup" || item.syrup === "honey" || item.syrup === "sweetener") &&
-                                    (item.milk === "oat milk" || item.milk === "soy milk" || item.milk === "almond milk" || item.milk === "lactose free")) {
-                                // If both milk and syrups, add 1.0
-                                switch (item.size) {
-                                    case 'large':
-                                        return parseFloat(item.pricelarge) + 1.0;
-                                    case 'medium':
-                                        return parseFloat(item.pricemedium) + 1.0;
-                                    case 'small':
-                                        return parseFloat(item.pricesmall) + 1.0;
-                                    default:
-                                        return parseFloat(item.price);
-                                }
-                            }
-                            else {
-                                switch (item.size) {
-                                    case 'large':
-                                        return item.pricelarge;
-                                    case 'medium':
-                                        return item.pricemedium;
-                                    case 'small':
-                                        return item.pricesmall;
-                                    // case 'size2':
-                                    //     return item.price2;
-                                    // case 'size4':
-                                    //     return item.price4;
-                                    // case 'size6':
-                                    //     return item.price6;
-                                    // case 'size8':
-                                    //     return item.price8;
-                                    default:
-                                        return item.price;
-                                }
-                            }
-                        }
-                    });
-                }
-            },
-            methods: {
-                changePage(page) {
-                    this.currentPage = page;
-                },
-                prevPage() {
-                    if (this.currentPage > 1) {
-                        this.currentPage--;
-                    }
-                },
-                nextPage() {
-                    if (this.currentPage < this.totalPages) {
-                        this.currentPage++;
-                    }
-                },
-                isSizeSelectable(item) {
-                    const type = item.type.toLowerCase();
-                    return ['coffee', 'chocolate drinks', 'teas'].includes(type);
-                },
-                isSizeSelectableDimSum(item) {
-                    const name = item.name.toLowerCase();
-                    return ['dim sum'].includes(name);
-                },
-                isNotSizeSelected(item) {
-                    return item.size != 'small' && item.size != 'medium' && item.size != 'large';
-                },
-                isMilkSelectable(item) {
-                    const type = item.type.toLowerCase();
-                    return ['coffee', 'chocolate drinks'].includes(type);
-                },
-                isSyrupSelectable(item) {
-                    const type = item.type.toLowerCase();
-                    return ['coffee', 'chocolate drinks'].includes(type);
-                },
-                isPriceSelectable(item) {
-                    const type = item.type.toLowerCase();
-                    // if (item.name.toLowerCase() == "dim sum") {
-                    //     return ['dim sum'].includes(name);
-                    // }
-                    return ['coffee', 'chocolate drinks', 'teas'].includes(type);
-                }
-                // isPriceSelectableDimSum(item) {
-                //     const name = item.name.toLowerCase();
-                //     return ['dim sum'].includes(name);
-                // }
-            }
-        });
-        app.mount("#app"); 
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
