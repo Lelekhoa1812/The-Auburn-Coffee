@@ -1,6 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+<<<<<<< HEAD
 // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
+=======
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
+>>>>>>> 2cea342 (Update pricing 2025)
 
 const firebaseConfig = {
     apiKey: "AIzaSyDM2V0ydr3kFL3UP1vqjIGl3o8mMS2mjYw",
@@ -13,5 +17,9 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+<<<<<<< HEAD
 // const analytics = getAnalytics(app);
+=======
+const analytics = getAnalytics(app);
+>>>>>>> 2cea342 (Update pricing 2025)
 export const db = getFirestore(app);
