@@ -1,5 +1,4 @@
 const draggableCircle = document.getElementById("draggableCircle");
-const circleLink = document.getElementById("circleLink");
 const tooltip = document.getElementById("tooltip");
 
 let isDragging = false;
@@ -30,6 +29,11 @@ const updateTooltipPosition = () => {
     }
 };
 
+// Handle double-click for redirect
+draggableCircle.addEventListener("dblclick", () => {
+    window.location.href = "pre-order.html"; // Redirect to pre-order page
+});
+
 // Handle mouse down (start holding)
 draggableCircle.addEventListener("mousedown", (e) => {
     holdTimeout = setTimeout(() => {
@@ -39,7 +43,7 @@ draggableCircle.addEventListener("mousedown", (e) => {
         offsetX = e.clientX - rect.left;
         offsetY = e.clientY - rect.top;
         draggableCircle.style.cursor = "grabbing";
-    }, 400); // 400ms delay to differentiate between click and drag
+    }, 200); // 200ms delay to differentiate between click and drag
 });
 
 // Handle mouse move (dragging)
@@ -63,9 +67,6 @@ document.addEventListener("mouseup", () => {
     if (isDragging) {
         isDragging = false;
         draggableCircle.style.cursor = "grab";
-    } else if (!isHolding) {
-        // If not dragging and released quickly, allow link redirection
-        circleLink.click();
     }
     isHolding = false;
 });
