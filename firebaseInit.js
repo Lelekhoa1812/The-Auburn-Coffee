@@ -1,11 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
-<<<<<<< HEAD
 // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
-=======
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-analytics.js";
->>>>>>> 2cea342 (Update pricing 2025)
-
+// All Firebase configs 
 const firebaseConfig = {
     apiKey: "AIzaSyDM2V0ydr3kFL3UP1vqjIGl3o8mMS2mjYw",
     authDomain: "the-auburn-coffee.firebaseapp.com",
@@ -15,11 +11,9 @@ const firebaseConfig = {
     appId: "1:522423593553:web:20b9cfbd18df09e22a6670",
     measurementId: "G-1TY2HBT6W7"
 };
-
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-<<<<<<< HEAD
-// const analytics = getAnalytics(app);
-=======
-const analytics = getAnalytics(app);
->>>>>>> 2cea342 (Update pricing 2025)
-export const db = getFirestore(app);
+// Get Firestore instance
+const db = getFirestore(app);
+// Export
+export { db };

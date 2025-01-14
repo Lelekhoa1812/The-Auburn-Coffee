@@ -1,0 +1,35 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Keeps the container at the top while centering horizontally */
+    height: 100vh;
+    font-family: 'Raleway', sans-serif;
+    background-image: url('image/coffee_motion.gif');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: rgb(144, 100, 18);
+}
+
+.redirect-container {
+    text-align: center; /* Center-align text horizontally */
+    width: auto;
+    max-width: 90%; /* Ensures responsiveness on smaller screens */
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    padding: 20px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 100px; /* Keeps the top margin intact */
+    word-wrap: break-word; /* Wraps text properly */
+    display: flex; /* Flexbox for alignment */
+    flex-direction: column; /* Stack items vertically */
+}
+
+.redirect-text {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2rem;
+    color: rgb(144, 100, 18);
+    line-height: 1.4; /* Adds spacing between lines for better readability */
+}
