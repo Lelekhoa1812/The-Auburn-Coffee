@@ -237,6 +237,61 @@ p2 {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+/* Pagination */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+.pagination .page-item {
+  margin: 0 5px;
+  transition: transform 0.3s ease;
+}
+.pagination .page-link {
+  background-color: rgb(144, 100, 18); /* Coffee brown */
+  color: rgb(255, 238, 207); /* Creamy white */
+  font-size: 16px;
+  font-family: 'Times New Roman', serif;
+  padding: 8px 16px;
+  border: 1px solid rgb(128, 85, 17); /* Darker coffee brown */
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all 0.3s ease, transform 0.3s ease;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for a vintage look */
+}
+.pagination .page-link:hover {
+  background-color: rgb(209, 182, 133); /* Lighter brown */
+  color: rgb(66, 43, 1); /* Darker text for contrast */
+  cursor: pointer;
+  transform: scale(1.1); /* Hover scaling effect */
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+.pagination .page-item.active .page-link {
+  background-color: rgb(128, 85, 17); /* Darker brown */
+  color: rgb(255, 255, 255); /* White text */
+  font-weight: bold;
+  font-size: 18px; /* Slightly larger text for current page */
+  transform: scale(1.1); /* Larger size for current page */
+  border: 2px solid rgb(144, 100, 18); /* Slightly thicker border */
+  cursor: default;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3); /* Enhanced shadow for emphasis */
+}
+.pagination .page-item.disabled .page-link {
+  background-color: rgb(199, 171, 129); /* Muted brown */
+  color: rgba(255, 255, 255, 0.5); /* Faded white for disabled */
+  cursor: not-allowed;
+  box-shadow: none; /* No shadow for disabled */
+}
+.pagination .page-item.active {
+  transform: scale(1.2); /* Make the active page item larger */
+}
+.pagination .page-item:hover {
+  transform: scale(1.1); /* Slight scaling effect on hover for all items */
+  background-color: rgb(209, 182, 133); /* Lighter brown */
+  color: rgb(66, 43, 1); /* Darker text for contrast */
+}
 /* Modal box for Employment */
 .submitEmployment-button:hover {
   background-color: rgb(133, 178, 246);
