@@ -55,7 +55,7 @@ table {
 }
 th {
   background-color: #6b4226; /* Coffee brown */
-  color: white;
+  color: rgb(52, 34, 0);
   font-size: 16px;
   padding: 10px;
   border: 2px solid #e6d5ba; /* Lighter coffee brown */
