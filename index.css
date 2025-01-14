@@ -1,5 +1,6 @@
 body {
-    background-color: rgb(255, 242, 179); /* background */
+    /* background-color: rgb(255, 242, 179); */
+    background: url('image/coffee-beans-background.png') repeat center;
     font-family: 'Times New Roman', Times, serif;
 }
 /* Nav bar */
@@ -27,7 +28,6 @@ body {
     list-style: none;
     align-items: center;
 }
-
 .navbar .links a {
     color: rgb(144, 100, 18);
     font-size: 1.1rem;
@@ -37,13 +37,6 @@ body {
 }
 .navbar .links a:hover {
     color: rgb(18, 129, 144);
-}
-h1 {
-    color: rgb(144, 100, 18);
-}
-.h2 {
-  color: rgb(144, 100, 18);
-  font-size: 20px;
 }
 /* Styling for the table */
 table {
@@ -109,10 +102,11 @@ td img:hover {
   border-color: #6b4226;
 }
 .form-check-input::after {
-  content: '\u2713'; /* Checkmark */
+  content: '\2713'; /* Checkmark */
   color: white;
   font-size: 14px;
   position: absolute;
+  font-family: 'Times New Roman', Times, serif;
   top: 1px;
   left: 4px;
   display: none;
@@ -122,7 +116,7 @@ td img:hover {
 }
 /* Add vintage background image */
 .col-md-4 {
-  background: url('image/coffee-beans-pattern.png') no-repeat center;
+  background: url('image/coffee-beans-pattern.jpg') no-repeat center;
   background-size: cover;
   padding: 20px;
   border-radius: 8px;
@@ -134,15 +128,28 @@ img {
     height: 80px;
 }
 /* Text content */
+h1 {
+  color: rgb(144, 100, 18);
+}
+h1:hover {
+  color: rgb(18, 129, 144);
+}
+.h2 {
+color: rgb(79, 57, 6);
+font-size: 20px;
+}
 p1 {
-    color: rgb(101, 60, 3);
-    font-size: 12px;
+    color: rgb(42, 35, 26);
+    font-size: 20px;
     margin-bottom: 10px;
 }
 p2 {
   color: rgb(101, 60, 3);
   font-size: 20px;
   margin-bottom: 10px;
+}
+.form-check-label {
+  color: rgb(120, 83, 32);;
 }
 /* Side button for extra content */
 .promotion-button {
