@@ -101,6 +101,22 @@
             background-color: rgb(209, 182, 133);
             color: rgb(66, 43, 1);
         }
+        .feedback-button {
+            position: fixed;
+            left: 10px;
+            bottom: 20px;
+            background-color: rgb(144, 100, 18);
+            color: rgb(255, 238, 207);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .feedback-button:hover {
+            background-color: rgb(209, 182, 133);
+            color: rgb(66, 43, 1);
+        }
         /* Modal box for feedback */
         .modal {
             display: none; /* Hidden by default */
@@ -121,15 +137,21 @@
             border: 1px solid #888;
             width: 80%; 
         }
-        .close {
-            color: #aaa;
+        .close1, .close2 {
+            color: rgb(74, 57, 0);
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
-        .close:hover,
-        .close:focus {
-            color: black;
+        .close1:hover,
+        .close1:focus {
+            color: rgb(101, 2, 2);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .close2:hover,
+        .close2:focus {
+            color: rgb(101, 2, 2);
             text-decoration: none;
             cursor: pointer;
         }
@@ -217,10 +239,11 @@
     </div>
     <!-- Rate Us Button -->
     <button class="rating-button" id="rateButton">Rate Us</button>
+    <button class="feedback-button" id="feedbackButton">Give us a feedback</button>
     <!-- Rating Modal -->
     <div id="ratingModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeRatingModal()">&times;</span>
+            <span class="close1" onclick="closeRatingModal()">&times;</span>
             <h2>Rate Us</h2>
             <div class="stars">
                 <span class="fa fa-star" data-rate="1"></span>
@@ -233,12 +256,29 @@
             <div id="feedbackMessage" class="feedback-message"></div>
         </div>
     </div>
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <span class="close2" onclick="closeFeedbackModal()">&times;</span>
+            <h2>We value your feedback</h2>
+            <p>Please share your thoughts with us:</p>
+            <label for="feedbackName">Your Name:</label>
+            <input type="text" id="feedbackName" placeholder="Enter your name" required style="width: 100%; padding: 8px; margin: 10px 0;">
+
+            <label for="feedbackMessage">Your Feedback:</label>
+            <textarea id="feedbackMessageInput" rows="4" placeholder="Enter your feedback" required style="width: 100%; padding: 8px;"></textarea>
+
+            <button class="submitFeedback-button" onclick="submitFeedback()">Submit Feedback</button>
+            <div id="feedbackResponseMessage" class="feedback-message"></div>
+        </div>
+    </div>
     <!-- Firebase and App Scripts -->
     <script type="module">
         // Load Firebase configs
         import { db } from './firebaseInit.js';
         // Necessary functions for query
         import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+        //***Rating Section***// 
         // Listener and loading content
         document.addEventListener('DOMContentLoaded', () => {
             const rateButton = document.getElementById('rateButton');
@@ -295,6 +335,40 @@
         // Close the rating modal upon on click
         const closeRatingModal = () => {
             document.getElementById('ratingModal').style.display = 'none';
+        };
+        //***Rating Section***// 
+        //***Feedback Section***// 
+        document.addEventListener('DOMContentLoaded', () => {
+        const feedbackButton = document.getElementById('feedbackButton');
+        feedbackButton.addEventListener('click', openFeedbackModal);
+        });
+        const openFeedbackModal = () => {
+            document.getElementById('feedbackModal').style.display = 'block';
+        };
+        const closeFeedbackModal = () => {
+            document.getElementById('feedbackModal').style.display = 'none';
+        };
+        window.submitFeedback = async () => {
+            const feedbackName = document.getElementById('feedbackName').value.trim();
+            const feedbackMessage = document.getElementById('feedbackMessageInput').value.trim();
+            const feedbackResponseMessage = document.getElementById('feedbackResponseMessage');
+            if (!feedbackName || !feedbackMessage) {
+                feedbackResponseMessage.textContent = 'Please provide both your name and feedback.';
+                return;
+            }
+            try {
+                await addDoc(collection(db, 'feedbacks'), {
+                    name: feedbackName,
+                    message: feedbackMessage,
+                    timestamp: new Date(),
+                });
+                feedbackResponseMessage.textContent = `Thank you, ${feedbackName}! Your feedback has been recorded.`;
+                document.getElementById('feedbackName').value = '';
+                document.getElementById('feedbackMessageInput').value = '';
+            } catch (error) {
+                console.error('Error saving feedback:', error);
+                feedbackResponseMessage.textContent = 'There was an issue submitting your feedback. Please try again.';
+            }
         };
     </script>
     <!-- Bootstrap JavaScript reference -->
