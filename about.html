@@ -278,15 +278,24 @@
         import { db } from './firebaseInit.js';
         // Necessary functions for query
         import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
-        //***Rating Section***// 
-        // Listener and loading content
+        // DOM Elements
+        const rateButton = document.getElementById('rateButton');
+        const feedbackButton = document.getElementById('feedbackButton');
+        const ratingModal = document.getElementById('ratingModal');
+        const feedbackModal = document.getElementById('feedbackModal');
+        const closeRatingButton = document.querySelector('.close1');
+        const closeFeedbackButton = document.querySelector('.close2');
+        // Open/Close Modals
+        const openModal = (modal) => (modal.style.display = 'block');
+        const closeModal = (modal) => (modal.style.display = 'none');
+        // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
-            const rateButton = document.getElementById('rateButton');
-            rateButton.addEventListener('click', openRatingModal);
-    
-            document.querySelectorAll('.fa-star').forEach(star => {
-                star.addEventListener('mouseover', () => toggleStars(star.dataset.rate));
-            });
+            // Open Modals
+            rateButton.addEventListener('click', () => openModal(ratingModal));
+            feedbackButton.addEventListener('click', () => openModal(feedbackModal));
+            // Close Modals
+            closeRatingButton.addEventListener('click', () => closeModal(ratingModal));
+            closeFeedbackButton.addEventListener('click', () => closeModal(feedbackModal));
         });
         // Sample connection test
         const testConnection = async () => {
@@ -299,6 +308,16 @@
             }
         };
         testConnection();
+        //***Rating Section***// 
+        // Star Rating Hover Effect
+        document.querySelectorAll('.fa-star').forEach((star) => {
+                star.addEventListener('mouseover', () => {
+                    const rate = star.dataset.rate;
+                    document.querySelectorAll('.fa-star').forEach((s, i) => {
+                        s.classList.toggle('checked', i < rate);
+                    });
+                });
+            });
         // Toggle star count on mouseover from user side
         const toggleStars = rate => {
             document.querySelectorAll('.fa-star').forEach((star, i) => {
@@ -328,11 +347,9 @@
                 feedbackMessage.textContent = 'Please select a star rating before submitting!';
             }
         };
-        // Open the rating modal upon on click
         const openRatingModal = () => {
             document.getElementById('ratingModal').style.display = 'block';
         };
-        // Close the rating modal upon on click
         const closeRatingModal = () => {
             document.getElementById('ratingModal').style.display = 'none';
         };
@@ -370,6 +387,7 @@
                 feedbackResponseMessage.textContent = 'There was an issue submitting your feedback. Please try again.';
             }
         };
+        //***Feedback Section***// 
     </script>
     <!-- Bootstrap JavaScript reference -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
