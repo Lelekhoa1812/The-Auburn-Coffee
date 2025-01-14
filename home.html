@@ -11,11 +11,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <title>The Auburn Coffee</title>
-    <!-- <link rel="stylesheet" href="styles.css"> -->
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="draggable.css">
 </head>
 <body>
     <div id="app" class="container">
+        <!-- Draggable circle to pre-order page -->
+        <div class="draggable-circle" id="draggableCircle">
+            <a href="pre-order.html" id="circleLink">
+                <img src="image/coffee_buy.gif" alt="Order Coffee" class="circle-image">
+                <div class="tooltip" id="tooltip">Pre-order your coffee here!</div>
+            </a>
+        </div>
+        <!-- Header logo and navbar -->
         <header>
             <nav class="navbar">
                 <a href="#" class="logo">
@@ -29,8 +37,10 @@
                 </ul>
             </nav>
         </header>
+        <!-- Description -->
         <p1>This is the homepage to our coffee shop, locates at the Auburn station.</p1>
         <p1> We are welcome to serve Victorian public transport users, our Melbourne's Arabica bean coffee, freshly roasted and grounded everydays.</p1>
+        <!-- Body -->
         <div class="row">
             <div class="col-md-4">
                 <div class="student-checkbox">
@@ -209,5 +219,6 @@
     <script src="modal.js"></script>
     <!-- App scripts -->
     <script src="app.js"></script>
+    <script src="draggable.js"></script>
 </body>
 </html>

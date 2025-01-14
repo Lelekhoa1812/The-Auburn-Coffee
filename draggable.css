@@ -1,0 +1,71 @@
+.draggable-circle {
+    position: fixed;
+    bottom: 150px;
+    right: 40px;
+    width: 60px;
+    height: 60px;
+    background-color: rgb(62, 41, 1); /* Background color */
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: grab; /* Draggable cursor */
+    z-index: 1000; /* Bring to front */
+    transition: box-shadow 0.3s ease;
+}
+
+.draggable-circle:hover {
+    background-color: rgb(255, 238, 207); /* Background color */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Enhanced shadow on hover */
+}
+
+.draggable-circle .circle-image {
+    width: 50px; /* Adjust size of the gif */
+    height: 50px;
+    pointer-events: none; /* Allow drag without selecting the image */
+}
+
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7); /* Dark background */
+    color: white;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.draggable-circle:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip.top-left {
+    bottom: 100%;
+    left: 0;
+    transform: translateY(-8px), translateX(12px);
+}
+
+.tooltip.bottom-left {
+    top: 100%;
+    left: 0;
+    transform: translateY(8px), translateX(12px);
+}
+
+.tooltip.top-right {
+    bottom: 100%;
+    right: 0;
+    transform: translateY(-8px), translateX(-12px);
+}
+
+.tooltip.bottom-right {
+    top: 100%;
+    right: 0;
+    transform: translateY(8px), translateX(-12px);
+}
