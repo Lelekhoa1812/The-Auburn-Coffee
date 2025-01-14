@@ -2,6 +2,7 @@ body {
     background-color: rgb(255, 242, 179); /* background */
     font-family: 'Times New Roman', Times, serif;
 }
+/* Nav bar */
 .navbar {
     display: flex;
     padding: 22px 0;
@@ -40,19 +41,99 @@ body {
 h1 {
     color: rgb(144, 100, 18);
 }
+.h2 {
+  color: rgb(144, 100, 18);
+  font-size: 20px;
+}
+/* Styling for the table */
 table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #f4e8d5; /* Light coffee beige */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
+th {
+  background-color: #6b4226; /* Coffee brown */
+  color: white;
+  font-size: 16px;
+  padding: 10px;
+  border: 2px solid #e6d5ba; /* Lighter coffee brown */
 }
+td {
+  padding: 10px;
+  text-align: center;
+  border: 2px solid #e6d5ba;
+}
+tr:nth-child(even) {
+  background-color: #f9f2e7; /* Alternating row background for visibility */
+}
+tr:hover {
+  background-color: #e6d5ba; /* Highlight on hover */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+/* Styling for the table images */
+td img {
+  border-radius: 5px;
+  width: 80px;
+  height: 80px;
+  transition: transform 0.3s ease; /* Add zoom effect */
+}
+td img:hover {
+  transform: scale(1.1); /* Enlarge slightly on hover */
+}
+/* Styling for the checkboxes */
+.form-check {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #6b4226; /* Coffee brown */
+  cursor: pointer;
+}
+.form-check-input {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #6b4226;
+  border-radius: 3px;
+  outline: none;
+  background-color: white;
+  cursor: pointer;
+  position: relative;
+  margin-right: 10px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.form-check-input:checked {
+  background-color: #6b4226; /* Checked color */
+  border-color: #6b4226;
+}
+.form-check-input::after {
+  content: '\u2713'; /* Checkmark */
+  color: white;
+  font-size: 14px;
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  display: none;
+}
+.form-check-input:checked::after {
+  display: block;
+}
+/* Add vintage background image */
+.col-md-4 {
+  background: url('image/coffee-beans-pattern.png') no-repeat center;
+  background-size: cover;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+/* Logo image */
 img {
     width: 90px;
     height: 80px;
 }
+/* Text content */
 p1 {
     color: rgb(101, 60, 3);
     font-size: 12px;
@@ -63,6 +144,7 @@ p2 {
   font-size: 20px;
   margin-bottom: 10px;
 }
+/* Side button for extra content */
 .promotion-button {
   position: fixed;
   left: 10px;
@@ -128,7 +210,7 @@ p2 {
   text-decoration: none;
   cursor: pointer;
 }
-/*  */
+/* Promotion */
 #promotionimg {
   display: block; /* Ensures the image is treated as a block-level element */
   margin: 20px auto; /* Centers the image horizontally */
@@ -173,17 +255,35 @@ ul li:hover {
   background-color: rgb(133, 178, 246);
   width:fit-content;
 }
-/* For checkboxes */
+/* General transition and hover effect for buttons and inputs */
+button, select, input {
+  transition: all 0.3s ease;
+}
+button:hover, select:hover, input:hover {
+  transform: translateY(-2px); /* Slight hover lift */
+}
+/* Customize select dropdowns */
+select {
+  border: 2px solid #6b4226;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: #f9f2e7;
+  color: #6b4226;
+}
+select:focus {
+  outline: none;
+  border-color: #6b4226;
+  box-shadow: 0 0 5px rgba(107, 66, 38, 0.5);
+}
+/* For customized and motion effect student checkbox */
 .student-checkbox {
   display: flex;
   align-items: center; /* Center-align vertically */
   gap: 10px; /* Space between the label and checkbox */
 }
-
 .checkbox-wrapper-30 {
   margin-top: 0; /* Adjust margin if necessary */
 }
-
 .checkbox-wrapper-30 {
     height: 10px;
     display: grid;
