@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-    <link rel="website icon" type="png" href="image/icon.png" >
+    <link rel="website icon" type="png" href="image/icon.png">
     <title>Feedback Statistics</title>
     <style>
         body {
@@ -14,50 +14,109 @@
         .container {
             margin: 50px auto;
             max-width: 600px;
-            background-color: white;
+            background-color: rgb(56, 39, 0);
             padding: 20px;
             border-radius: 5px;
         }
         h1 {
             text-align: center;
-            color: rgb(144, 100, 18);
+            color: rgb(206, 189, 158);
         }
         p {
             text-align: center;
-            color: rgb(52, 37, 0);
+            color: rgb(255, 248, 230);
+        }
+        .filter-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .filter-container label {
+            color: rgb(206, 189, 158);
+            margin-right: 10px;
+        }
+        .filter-container input:checked + label {
+            color: rgb(255, 248, 230);
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Feedback Statistics</h1>
+        <div class="filter-container">
+            <input type="radio" id="today" name="filter" value="today" checked>
+            <label for="today">Today</label>
+            <input type="radio" id="thisWeek" name="filter" value="thisWeek">
+            <label for="thisWeek">This Week</label>
+            <input type="radio" id="thisMonth" name="filter" value="thisMonth">
+            <label for="thisMonth">This Month</label>
+            <input type="radio" id="all" name="filter" value="all">
+            <label for="all">All</label>
+        </div>
         <p id="feedbackStats">Loading...</p>
     </div>
 
     <!-- Firebase Scripts -->
     <script type="module">
         import { db } from './firebaseInit.js';
+        import { collection, getDocs, query, where, Timestamp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
+        // Feedback stars and filters
         const feedbackStats = document.getElementById('feedbackStats');
+        const filters = document.querySelectorAll('input[name="filter"]');
 
-        const fetchStats = async () => {
-            const snapshot = await db.collection('ratings').get();
-            const ratings = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-            snapshot.forEach(doc => {
-                const { stars } = doc.data();
-                ratings[stars]++;
-            });
-
-            feedbackStats.innerHTML = `
-                Number of 5-star ratings: ${ratings[5]}<br>
-                Number of 4-star ratings: ${ratings[4]}<br>
-                Number of 3-star ratings: ${ratings[3]}<br>
-                Number of 2-star ratings: ${ratings[2]}<br>
-                Number of 1-star ratings: ${ratings[1]}<br>
-            `;
+        const getDateRange = (filter) => {
+            const now = new Date();
+            const start = new Date();
+            if (filter === 'today') {
+                start.setHours(0, 0, 0, 0);
+            } else if (filter === 'thisWeek') {
+                start.setDate(now.getDate() - now.getDay()); // Start of week
+                start.setHours(0, 0, 0, 0);
+            } else if (filter === 'thisMonth') {
+                start.setDate(1); // Start of month
+                start.setHours(0, 0, 0, 0);
+            }
+            return { start, end: now };
         };
 
-        fetchStats();
+        const fetchStats = async (filter) => {
+            try {
+                let ratingsRef = collection(db, 'ratings');
+                // Apply date range filter
+                if (filter !== 'all') {
+                    const { start, end } = getDateRange(filter);
+                    ratingsRef = query(ratingsRef, where('timestamp', '>=', Timestamp.fromDate(start)), where('timestamp', '<=', Timestamp.fromDate(end)));
+                }
+                const snapshot = await getDocs(ratingsRef);
+                // Initialize rating counts
+                const ratings = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+                // Count the ratings
+                snapshot.forEach(doc => {
+                    const { stars } = doc.data();
+                    if (stars >= 1 && stars <= 5) {
+                        ratings[stars]++;
+                    }
+                });
+                // Display the statistics
+                feedbackStats.innerHTML = `
+                    Number of 5-star ratings: ${ratings[5]}<br>
+                    Number of 4-star ratings: ${ratings[4]}<br>
+                    Number of 3-star ratings: ${ratings[3]}<br>
+                    Number of 2-star ratings: ${ratings[2]}<br>
+                    Number of 1-star ratings: ${ratings[1]}<br>
+                `;
+            } catch (error) {
+                console.error("Error fetching ratings: ", error);
+                feedbackStats.textContent = "Failed to load feedback statistics. Please try again later.";
+            }
+        };
+        // Fetch stats on filter change
+        filters.forEach(filter => {
+            filter.addEventListener('change', (e) => fetchStats(e.target.value));
+        });
+        // Initial fetch for "Today"
+        fetchStats('today');
     </script>
 </body>
 </html>

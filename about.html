@@ -235,7 +235,10 @@
     </div>
     <!-- Firebase and App Scripts -->
     <script type="module">
+        // Load Firebase configs
         import { db } from './firebaseInit.js';
+        // Necessary functions for query
+        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
         // Listener and loading content
         document.addEventListener('DOMContentLoaded', () => {
             const rateButton = document.getElementById('rateButton');
@@ -248,12 +251,11 @@
         // Sample connection test
         const testConnection = async () => {
             try {
-                const docRef = await db.collection('test').add({
-                    testField: 'testValue',
-                });
-                console.log('Test document written with ID: ', docRef.id);
+                const testRef = collection(db, 'test');
+                const docRef = await addDoc(testRef, { testField: 'testValue' });
+                console.log('Test document written with ID:', docRef.id);
             } catch (error) {
-                console.error('Error adding document: ', error);
+                console.error('Error adding document:', error);
             }
         };
         testConnection();
@@ -263,7 +265,6 @@
                 star.classList.toggle('checked', i < rate);
             });
         };
-        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
         // Check index for the number of star given, prepare message
         window.submitRating = async () => {
             const stars = document.querySelectorAll('.fa-star.checked').length;
