@@ -5,5 +5,10 @@ We are happy to serve Victorian transport commuters as always and everyday, see 
 
 ---
 
-Liam, barista staff contribute to this.
+**Liam**, barista staff contribute to this.  
 Accessible via: https://lelekhoa1812.github.io/The-Auburn-Coffee/
+
+---
+**Direct Access to Vercel server:**
+[Main Page](https://the-auburn-coffee.vercel.app/)  
+[For Rating and Feedback Statistics](https://the-auburn-coffee.vercel.app/statistics.html)  

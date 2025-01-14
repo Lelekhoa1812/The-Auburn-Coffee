@@ -71,54 +71,53 @@
     <script type="module">
         import { db } from './firebaseInit.js';
         import { collection, getDocs, query, where, Timestamp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
-
-        // Elements
         const feedbackStats = document.getElementById('feedbackStats');
         const feedbackList = document.getElementById('feedbackList');
         const filters = document.querySelectorAll('input[name="filter"]');
-        // Filtration method by date range
+        // Apply filtration on date range
         const getDateRange = (filter) => {
             const now = new Date();
             const start = new Date();
             if (filter === 'today') {
                 start.setHours(0, 0, 0, 0);
             } else if (filter === 'thisWeek') {
-                start.setDate(now.getDate() - now.getDay()); // Start of week
+                start.setDate(now.getDate() - now.getDay());
                 start.setHours(0, 0, 0, 0);
             } else if (filter === 'thisMonth') {
-                start.setDate(1); // Start of month
+                start.setDate(1);
                 start.setHours(0, 0, 0, 0);
             }
             return { start, end: now };
         };
-        // Prepare body of ratings content with filtration and message      
-        try {
-            let ratingsRef = collection(db, 'ratings');
-            if (filter !== 'all') {
-                const { start, end } = getDateRange(filter);
-                ratingsRef = query(ratingsRef, where('timestamp', '>=', Timestamp.fromDate(start)), where('timestamp', '<=', Timestamp.fromDate(end)));
-            }
-            const snapshot = await getDocs(ratingsRef);
-            const ratings = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-            snapshot.forEach(doc => {
-                const { stars } = doc.data();
-                if (stars >= 1 && stars <= 5) {
-                    ratings[stars]++;
+        // Async fetching with rating, prepare body with message and filtration
+        const fetchRating = async (filter) => {
+            try {
+                let ratingsRef = collection(db, 'ratings');
+                if (filter !== 'all') {
+                    const { start, end } = getDateRange(filter);
+                    ratingsRef = query(ratingsRef, where('timestamp', '>=', Timestamp.fromDate(start)), where('timestamp', '<=', Timestamp.fromDate(end)));
                 }
-            });
-            feedbackStats.innerHTML = `
-                Number of 5-star ratings: ${ratings[5]}<br>
-                Number of 4-star ratings: ${ratings[4]}<br>
-                Number of 3-star ratings: ${ratings[3]}<br>
-                Number of 2-star ratings: ${ratings[2]}<br>
-                Number of 1-star ratings: ${ratings[1]}<br>
-            `;
-        } catch (error) {
-            console.error("Error fetching ratings: ", error);
-            feedbackStats.textContent = "Failed to load feedback statistics. Please try again later.";
-        }
-
-        // Prepare body of feedback content with filtration and message
+                const snapshot = await getDocs(ratingsRef);
+                const ratings = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+                snapshot.forEach(doc => {
+                    const { stars } = doc.data();
+                    if (stars >= 1 && stars <= 5) {
+                        ratings[stars]++;
+                    }
+                });
+                feedbackStats.innerHTML = `
+                    Number of 5-star ratings: ${ratings[5]}<br>
+                    Number of 4-star ratings: ${ratings[4]}<br>
+                    Number of 3-star ratings: ${ratings[3]}<br>
+                    Number of 2-star ratings: ${ratings[2]}<br>
+                    Number of 1-star ratings: ${ratings[1]}<br>
+                `;
+            } catch (error) {
+                console.error("Error fetching ratings:", error);
+                feedbackStats.textContent = "Failed to load rating statistics. Please try again later.";
+            }
+        };
+        // Async fetching with feedback, prepare body with message and filtration
         const fetchFeedback = async (filter) => {
             try {
                 let feedbackRef = collection(db, 'feedbacks');
@@ -138,20 +137,20 @@
                     feedbackList.innerHTML += `<li>${name} (${date}): ${message}</li>`;
                 });
             } catch (error) {
-                console.error("Error fetching feedback: ", error);
+                console.error("Error fetching feedback:", error);
                 feedbackList.innerHTML = '<li>Failed to load customer feedback. Please try again later.</li>';
             }
         };
-        // Fetch data from Firebase
+        // Fetch statistics with applied filtration
         const fetchStatistics = (filter) => {
-            fetchStats(filter);
+            fetchRating(filter);
             fetchFeedback(filter);
         };
-        // Event listener for filter changes
+        // Method to toggle changing on radio button for filtration
         filters.forEach(filter => {
             filter.addEventListener('change', (e) => fetchStatistics(e.target.value));
         });
-        // Initial fetch for "Today"
+        // Default fetching today data
         fetchStatistics('today');
     </script>
 </body>
