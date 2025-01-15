@@ -104,24 +104,24 @@
 
 .tooltip.top-left {
     bottom: 100%;
-    left: 0;
+    right: 20%;
     transform: translateY(-8px), translateX(12px);
 }
 
 .tooltip.bottom-left {
     top: 100%;
-    left: 0;
+    right: 20%;
     transform: translateY(8px), translateX(12px);
 }
 
 .tooltip.top-right {
     bottom: 100%;
-    right: 0;
+    left: 20%;
     transform: translateY(-8px), translateX(-12px);
 }
 
 .tooltip.bottom-right {
     top: 100%;
-    right: 0;
+    left: 20%;
     transform: translateY(8px), translateX(-12px);
 }
