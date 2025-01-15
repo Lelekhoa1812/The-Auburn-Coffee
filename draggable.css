@@ -18,7 +18,6 @@
     user-select: none; /* Disable text selection */
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* Internet Explorer/Edge */
-    touch-action: none; /* Prevent default touch actions */
 }
 
 /* At initial state, the circle is expanded */

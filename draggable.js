@@ -4,7 +4,7 @@ const preOrderButton = document.getElementById("preOrderButton");
 const browsingButton = document.getElementById("browsingButton");
 
 let isExpanded = true; // Initially expanded
-let isInitial = true   // Initial state flag
+let isInitial = true; // Initial state flag
 let isDragging = false;
 let isHolding = false;
 let holdTimeout;
@@ -35,87 +35,86 @@ const updateTooltipPosition = () => {
 
 // Set initial expanded state
 const setInitialExpandedState = () => {
-    if (isInitial)
-    {
+    if (isInitial) {
         draggableCircle.classList.add("expanded");
         tooltip.style.visibility = "hidden"; // Hide tooltip initially
-        isInitial = false
+        isInitial = false;
     }
 };
 
-// Toggle expanded state (Handling expand and collapse, with tooltip visibility)
+// Toggle expanded state
 const toggleExpand = () => {
-    console.log("isExpanded State", isExpanded)
     if (!isExpanded) {
         draggableCircle.classList.add("expanded");
         tooltip.style.visibility = "hidden"; // Hide tooltip
-        isExpanded = true; // Toggle state
+        isExpanded = true;
     } else {
         draggableCircle.classList.remove("expanded");
         tooltip.style.visibility = "visible"; // Show tooltip
-        isExpanded = false; // Toggle state
+        isExpanded = false;
     }
 };
 
-// Handle double-click for redirect
-draggableCircle.addEventListener("dblclick", () => {
-    if (!isExpanded)
-    {
-        indow.location.href = "pre-order.html"; // Redirect to pre-order page
-    }
-});
-
-// Handle mouse down (start holding to drag)
-draggableCircle.addEventListener("mousedown", (e) => {
+// Common logic for start of drag
+const startDrag = (x, y) => {
     if (isExpanded) return; // Disable dragging when expanded
-    e.preventDefault();
     holdTimeout = setTimeout(() => {
         isDragging = true;
         isHolding = true;
         const rect = draggableCircle.getBoundingClientRect();
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
+        offsetX = x - rect.left;
+        offsetY = y - rect.top;
         draggableCircle.style.cursor = "grabbing";
-    }, 200); // 200ms delay to differentiate between click and drag
-});
-draggableCircle.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-});
+    }, 200); // 200ms delay
+};
 
-// Handle mouse move (dragging)
-document.addEventListener("mousemove", (e) => {
-    if (isDragging && !isExpanded) {
-        const x = e.clientX - offsetX;
-        const y = e.clientY - offsetY;
+// Common logic for dragging
+const drag = (x, y) => {
+    if (isDragging) {
         const maxX = window.innerWidth - draggableCircle.offsetWidth;
         const maxY = window.innerHeight - draggableCircle.offsetHeight;
-        // Compute position upon dragging
-        draggableCircle.style.left = Math.min(maxX, Math.max(0, x)) + "px";
-        draggableCircle.style.top = Math.min(maxY, Math.max(0, y)) + "px";
-        updateTooltipPosition(); // Update tooltip dynamically
+        draggableCircle.style.left = Math.min(maxX, Math.max(0, x - offsetX)) + "px";
+        draggableCircle.style.top = Math.min(maxY, Math.max(0, y - offsetY)) + "px";
+        updateTooltipPosition();
     }
-});
+};
 
-// Handle mouse up (end holding or dragging)
-document.addEventListener("mouseup", () => {
+// Common logic for end of drag
+const endDrag = () => {
     clearTimeout(holdTimeout);
     if (isDragging) {
         isDragging = false;
         draggableCircle.style.cursor = "grab";
     }
     isHolding = false;
+};
+
+// Mouse events
+draggableCircle.addEventListener("mousedown", (e) => startDrag(e.clientX, e.clientY));
+document.addEventListener("mousemove", (e) => drag(e.clientX, e.clientY));
+document.addEventListener("mouseup", endDrag);
+
+// Touch events
+draggableCircle.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    startDrag(touch.clientX, touch.clientY);
 });
+document.addEventListener("touchmove", (e) => {
+    const touch = e.touches[0];
+    drag(touch.clientX, touch.clientY);
+});
+document.addEventListener("touchend", endDrag);
 
 // Handle pre-order button click
-preOrderButton.addEventListener("click", function (e) {
-    e.stopPropagation(); // Prevent event from propagating to draggableCircle (i.e. handling function twice simultaneously)
+preOrderButton.addEventListener("click", (e) => {
+    e.stopPropagation();
     window.location.href = "pre-order.html";
 });
 
 // Handle browsing button click
-browsingButton.addEventListener("click", function (e) {
-    e.stopPropagation(); // Prevent event from propagating to draggableCircle (i.e. handling function twice simultaneously)
-    toggleExpand(); // Collapse back to draggable state
+browsingButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleExpand();
 });
 
 // Handle circle click to expand
