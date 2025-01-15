@@ -1,3 +1,4 @@
+/* At collapse state, the circle is draggable */
 .draggable-circle {
     position: fixed;
     bottom: 150px;
@@ -15,21 +16,72 @@
     transition: box-shadow 0.3s ease;
 }
 
+/* At initial state, the circle is expanded */
+.draggable-circle.expanded {
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 238, 207);
+    justify-content: center;
+    align-items: center;
+    cursor: default;
+    transition: all 0.5s ease; /* Smooth morph animation */
+}
+
+/* All hover */
 .draggable-circle:hover {
     background-color: rgb(255, 238, 207); /* Background color */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Enhanced shadow on hover */
 }
 
+/* Collapse state display */
 .draggable-circle .circle-image {
     width: 50px; /* Adjust size of the gif */
     height: 50px;
     pointer-events: none; /* Allow drag without selecting the image */
 }
 
+/* Expanded state display */
+.draggable-circle.expanded .circle-image {
+    width: 150px;
+    height: 150px;
+}
+.draggable-circle .expanded-content {
+    display: none;
+    text-align: center;
+}
+.draggable-circle.expanded .expanded-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+.draggable-circle .expanded-content h2 {
+    font-size: 24px;
+    color: rgb(62, 41, 1);
+}
+.draggable-circle .expanded-content button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: rgb(62, 41, 1);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.draggable-circle .expanded-content button:hover {
+    background-color: rgb(95, 61, 2);
+}
+
+/* Description by tooltip */
 .tooltip {
     visibility: hidden;
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.7); /* Dark background */
+    background-color: rgba(48, 32, 1, 0.7); /* Dark brown background */
     color: white;
     text-align: center;
     padding: 5px 10px;

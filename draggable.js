@@ -1,6 +1,10 @@
 const draggableCircle = document.getElementById("draggableCircle");
 const tooltip = document.getElementById("tooltip");
+const preOrderButton = document.getElementById("preOrderButton");
+const browsingButton = document.getElementById("browsingButton");
 
+let isExpanded = true; // Initially expanded
+let isInitial = true   // Initial state flag
 let isDragging = false;
 let isHolding = false;
 let holdTimeout;
@@ -29,13 +33,41 @@ const updateTooltipPosition = () => {
     }
 };
 
+// Set initial expanded state
+const setInitialExpandedState = () => {
+    if (isInitial)
+    {
+        draggableCircle.classList.add("expanded");
+        tooltip.style.visibility = "hidden"; // Hide tooltip initially
+        isInitial = false
+    }
+};
+
+// Toggle expanded state (Handling expand and collapse, with tooltip visibility)
+const toggleExpand = () => {
+    console.log("isExpanded State", isExpanded)
+    if (!isExpanded) {
+        draggableCircle.classList.add("expanded");
+        tooltip.style.visibility = "hidden"; // Hide tooltip
+        isExpanded = true; // Toggle state
+    } else {
+        draggableCircle.classList.remove("expanded");
+        tooltip.style.visibility = "visible"; // Show tooltip
+        isExpanded = false; // Toggle state
+    }
+};
+
 // Handle double-click for redirect
 draggableCircle.addEventListener("dblclick", () => {
-    window.location.href = "pre-order.html"; // Redirect to pre-order page
+    if (!isExpanded)
+    {
+        indow.location.href = "pre-order.html"; // Redirect to pre-order page
+    }
 });
 
-// Handle mouse down (start holding)
+// Handle mouse down (start holding to drag)
 draggableCircle.addEventListener("mousedown", (e) => {
+    if (isExpanded) return; // Disable dragging when expanded
     holdTimeout = setTimeout(() => {
         isDragging = true;
         isHolding = true;
@@ -48,15 +80,14 @@ draggableCircle.addEventListener("mousedown", (e) => {
 
 // Handle mouse move (dragging)
 document.addEventListener("mousemove", (e) => {
-    if (isDragging) {
+    if (isDragging && !isExpanded) {
         const x = e.clientX - offsetX;
         const y = e.clientY - offsetY;
         const maxX = window.innerWidth - draggableCircle.offsetWidth;
         const maxY = window.innerHeight - draggableCircle.offsetHeight;
-
+        // Compute position upon dragging
         draggableCircle.style.left = Math.min(maxX, Math.max(0, x)) + "px";
         draggableCircle.style.top = Math.min(maxY, Math.max(0, y)) + "px";
-
         updateTooltipPosition(); // Update tooltip dynamically
     }
 });
@@ -70,6 +101,28 @@ document.addEventListener("mouseup", () => {
     }
     isHolding = false;
 });
+
+// Handle pre-order button click
+preOrderButton.addEventListener("click", function (e) {
+    e.stopPropagation(); // Prevent event from propagating to draggableCircle (i.e. handling function twice simultaneously)
+    window.location.href = "pre-order.html";
+});
+
+// Handle browsing button click
+browsingButton.addEventListener("click", function (e) {
+    e.stopPropagation(); // Prevent event from propagating to draggableCircle (i.e. handling function twice simultaneously)
+    toggleExpand(); // Collapse back to draggable state
+});
+
+// Handle circle click to expand
+draggableCircle.addEventListener("click", () => {
+    if (!isDragging && !isExpanded) {
+        toggleExpand();
+    }
+});
+
+// Set initial expanded state on page load
+setInitialExpandedState();
 
 // Initial tooltip position
 updateTooltipPosition();
