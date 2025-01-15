@@ -27,7 +27,6 @@ body {
     gap: 35px;
     list-style: none;
     align-items: center;
-    pointer-events: none; 
 }
 .navbar .links a {
     color: rgb(144, 100, 18);

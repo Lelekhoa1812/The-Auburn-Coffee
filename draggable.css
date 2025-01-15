@@ -14,12 +14,17 @@
     cursor: grab; /* Draggable cursor */
     z-index: 1000; /* Bring to front */
     transition: box-shadow 0.3s ease;
+    /* Text select disabled to prevent mismatch in grabbing and copy text feature on mobile devices */
+    user-select: none; /* Disable text selection */
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    touch-action: none; /* Prevent default touch actions */
 }
 
 /* At initial state, the circle is expanded */
 .draggable-circle.expanded {
-    width: 600px;
-    height: 600px;
+    width: 500px;
+    height: 500px;
     border-radius: 50%;
     top: 50%;
     left: 50%;

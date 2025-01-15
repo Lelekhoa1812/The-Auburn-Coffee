@@ -68,6 +68,7 @@ draggableCircle.addEventListener("dblclick", () => {
 // Handle mouse down (start holding to drag)
 draggableCircle.addEventListener("mousedown", (e) => {
     if (isExpanded) return; // Disable dragging when expanded
+    e.preventDefault();
     holdTimeout = setTimeout(() => {
         isDragging = true;
         isHolding = true;
@@ -76,6 +77,9 @@ draggableCircle.addEventListener("mousedown", (e) => {
         offsetY = e.clientY - rect.top;
         draggableCircle.style.cursor = "grabbing";
     }, 200); // 200ms delay to differentiate between click and drag
+});
+draggableCircle.addEventListener("touchstart", (e) => {
+    e.preventDefault();
 });
 
 // Handle mouse move (dragging)
