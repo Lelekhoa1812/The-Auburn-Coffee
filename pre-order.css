@@ -1,0 +1,194 @@
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background: url('image/coffee-beans-background.png') repeat center;
+    margin: 20px;
+}
+/* Top NavBar */
+.navbar {
+    display: flex;
+    padding: 22px 0;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    justify-content: space-between;
+}
+.navbar .logo {
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+.navbar .logo img {
+    width: 100px;
+    border-radius: 50%;
+}
+/* Side NavBar */
+h1, h4 {
+    color: rgb(144, 100, 18);
+}
+h1:hover {
+    color: rgb(18, 129, 144);
+}
+.nav-link {
+    color: #5a3315;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: #5a3315;
+    z-index: 0;
+    transition: left 0.3s ease-in-out;
+}
+.nav-link:hover::before {
+    left: 0;
+}
+.nav-link:hover {
+    color: white;
+    z-index: 1;
+}
+.nav-link.active {
+    background-color: #e0c3a3;
+    color: rgb(18, 129, 144);
+}
+/* Body */
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    margin: auto;
+    max-width: 800px;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    flex-direction: column; /* Stack children vertically */
+}
+.col-md-4 {
+    margin-bottom: 20px;
+    height: 480px;
+}
+/* Each item tags */
+.menu-item img {
+    border-radius: 5px;
+    width: 100px;
+    position: center;
+    margin-bottom: 20px;
+    height: 100px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+.menu-item img:hover {
+    transform: scale(1.3) translateX(25px); /* Zoom and move */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.menu-item select,
+.menu-item input[type="number"] {
+    margin: 5px 0;
+    background-color: #f7e7d6;
+    color: #8b4513;
+    border: 1px solid #8b4513;
+    border-radius: 5px;
+    padding: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.menu-item select:hover,
+.menu-item input[type="number"]:hover {
+    background-color: #e0c3a3;
+    color: #5a3315;
+}
+/* Add this item btn */
+.btn-primary {
+    color: #fff;
+    height: 50px;
+    background-color: #8b4513;
+    border-color: #e0c3a3;
+    display: flex;
+    justify-content: center; /* Center children horizontally */
+    overflow: hidden; /* Prevent child animations spilling out */
+    gap: 10px; /* Set initial gap between icon and text */
+}
+.btn-primary:hover {
+    color: #281100;
+    background-color: #e0c3a3;
+    border-color: #8b4513;
+}
+/* Image styling */
+#plus {
+    width: 35px;
+    height: 35px;
+    transition: transform 0.3s ease-in-out;
+}
+/* Text styling */
+#additemtext {
+    display: inline-block;
+    font-family: 'Times New Roman', serif;
+    font-size: 18px;
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    color: #fff;
+}
+/* Add hover effect for the parent container */
+.btn-primary:hover #additemtext {
+    transform: translateX(-45px); /* Text moves left */
+    color: #621307; /* Text color changes */
+}
+.btn-primary:hover #plus {
+    transform: scale(1.2) translateX(90px); /* Zoom and move */
+}
+/* Pagination */
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+.pagination .page-item {
+    margin: 0 5px;
+    transition: transform 0.3s ease;
+}
+.pagination .page-link {
+    background-color: rgb(144, 100, 18); /* Coffee brown */
+    color: rgb(255, 238, 207); /* Creamy white */
+    font-size: 16px;
+    font-family: 'Times New Roman', serif;
+    padding: 8px 16px;
+    border: 1px solid rgb(128, 85, 17); /* Darker coffee brown */
+    border-radius: 5px;
+    text-decoration: none;
+    transition: all 0.3s ease, transform 0.3s ease;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+.pagination .page-link:hover {
+    background-color: rgb(209, 182, 133);
+    color: rgb(66, 43, 1);
+    transform: scale(1.1);
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+}
+.pagination .page-item.active .page-link {
+    background-color: rgb(128, 85, 17);
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transform: scale(1.1);
+    border: 2px solid rgb(144, 100, 18);
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+}
+.pagination .page-item.disabled .page-link {
+    background-color: rgb(199, 171, 129);
+    color: rgba(255, 255, 255, 0.5);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.pagination .page-item:hover {
+    transform: scale(1.1);
+    background-color: rgb(209, 182, 133);
+    color: rgb(66, 43, 1);
+}

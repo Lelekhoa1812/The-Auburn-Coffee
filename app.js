@@ -5,7 +5,8 @@ const app = Vue.createApp({
             selectedSize: [],
             selectedMilk: [],
             selectedSyrup: [],
-            item: [
+            item: 
+            [
                 { "name": "Latte", "image": "latte.webp", "type" : "Coffee", "pricelarge" : "6.0", "pricemedium" : "5.5", "pricesmall" : "4.7" },
                 { "name": "Cappuccino", "image": "cappuccino.jpeg", "type" : "Coffee", "pricelarge" : "6.0", "pricemedium" : "5.5", "pricesmall" : "4.7" },
                 { "name": "Flat White", "image": "flatwhite.jpeg", "type" : "Coffee", "pricelarge" : "6.0", "pricemedium" : "5.5", "pricesmall" : "4.7" },
@@ -53,7 +54,6 @@ const app = Vue.createApp({
                 { "name": "Extra Shot", "image": "shot.png", "type" : "Extras", "price" : "0.5"},
                 { "name": "Decaf Coffee", "image": "shot.png", "type" : "Extras", "price" : "0.5"},
                 { "name": "Extra Syrup", "image": "syrup.jpeg", "type" : "Extras", "price" : "0.5"}
-
             ],
             pageSize: 10,
             currentPage: 1,
@@ -198,14 +198,6 @@ const app = Vue.createApp({
                                 return item.pricemedium- 1.0;
                             case 'small':
                                 return item.pricesmall- 1.0;
-                            // case 'size2':
-                            //     return item.price2 - 0.5;
-                            // case 'size4':
-                            //     return item.price4 - 0.5;
-                            // case 'size6':
-                            //     return item.price6 - 1.0;
-                            // case 'size8':
-                            //     return item.price8 - 1.0;
                             default:
                                 return item.price;
                         }
@@ -262,14 +254,6 @@ const app = Vue.createApp({
                                 return item.pricemedium;
                             case 'small':
                                 return item.pricesmall;
-                            // case 'size2':
-                            //     return item.price2;
-                            // case 'size4':
-                            //     return item.price4;
-                            // case 'size6':
-                            //     return item.price6;
-                            // case 'size8':
-                            //     return item.price8;
                             default:
                                 return item.price;
                         }
@@ -279,6 +263,14 @@ const app = Vue.createApp({
         }
     },
     methods: {
+        // async fetchMenuItems() {
+        //     try {
+        //         const response = await fetch('/item.json'); // Fetch from item.json
+        //         this.items = await response.json();
+        //     } catch (error) {
+        //         console.error('Error fetching menu items:', error);
+        //     }
+        // },
         changePage(page) {
             this.currentPage = page;
         },
@@ -313,15 +305,11 @@ const app = Vue.createApp({
         },
         isPriceSelectable(item) {
             const type = item.type.toLowerCase();
-            // if (item.name.toLowerCase() == "dim sum") {
-            //     return ['dim sum'].includes(name);
-            // }
             return ['coffee', 'chocolate drinks', 'teas'].includes(type);
         }
-        // isPriceSelectableDimSum(item) {
-        //     const name = item.name.toLowerCase();
-        //     return ['dim sum'].includes(name);
-        // }
-    }
+    },
+    // mounted() {
+    //     this.fetchMenuItems(); // Fetch menu items on load
+    // }
 });
 app.mount("#app"); 
