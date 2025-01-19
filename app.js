@@ -118,7 +118,6 @@ const app = Vue.createApp({
                                     return item.price8 - 1.0;
                                 default:
                                     return item.price2; 
-                                break;
                         }
                     }
                     else {
@@ -138,7 +137,6 @@ const app = Vue.createApp({
                                     return item.price8;
                                 default:
                                     return item.price2;
-                                break;
                         }
                     }
                     return parseFloat(item.price);

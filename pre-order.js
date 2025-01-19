@@ -118,45 +118,50 @@ const app = Vue.createApp({
         isMilkandSyrupSelectableChai(item) {
             return item.name === 'Chai';
         },
-        calculateItemPrice(item, quantity) {
-            let basePrice = 0;
-
-            // Dim Sum Special Pricing
-            if (item.name === 'Dim Sum') {
-                switch (item.size) {
-                    case 'size2': basePrice = item.price2; break;
-                    case 'size4': basePrice = item.price4; break;
-                    case 'size6': basePrice = item.price6; break;
-                    case 'size8': basePrice = item.price8; break;
-                    default: basePrice = item.price2; break;
-                }
-            } else if (item.size) {
-                // Standard Sizes
-                switch (item.size) {
-                    case 'large': basePrice = item.pricelarge; break;
-                    case 'medium': basePrice = item.pricemedium; break;
-                    case 'small': basePrice = item.pricesmall; break;
+        // Calculate general prices
+        updatedPrice(item) {
+            if (this.isStudent) {
+                // Student Discounts
+                if (item.type === "Fruits" || item.type === "Extras") {
+                    return 0.5; // Fixed price for these types
+                } else if (["Shin Noodle Cup", "Fantastic Noodle Cup", "Mi Goreng Cup"].includes(item.name)) {
+                    return 3.0; // Fixed price for these items
+                } else if (item.name === "Dim Sum") {
+                    switch (item.size) {
+                        case "size2": return item.price2 - 0.5;
+                        case "size4": return item.price4 - 0.5;
+                        case "size6": return item.price6 - 1.0;
+                        case "size8": return item.price8 - 1.0;
+                        default: return item.price2;
+                    }
+                } else {
+                    let basePrice = parseFloat(item.price || item.pricelarge || 0) - 1.0;
+                    return this.adjustMilkSyrupPrice(item, basePrice);
                 }
             } else {
-                // No size
-                basePrice = item.price || 0;
+                // Non-student Pricing
+                if (item.name === "Dim Sum") {
+                    switch (item.size) {
+                        case "size2": return item.price2;
+                        case "size4": return item.price4;
+                        case "size6": return item.price6;
+                        case "size8": return item.price8;
+                        default: return item.price2;
+                    }
+                }
+                let basePrice = parseFloat(item.price || item.pricelarge || 0);
+                return this.adjustMilkSyrupPrice(item, basePrice);
             }
-
-            // Apply Student Discount
-            const total = basePrice * quantity;
-            return this.isStudent ? total - quantity : total;
+        },
+        adjustMilkSyrupPrice(item, basePrice) {
+            // Adjust price based on milk and syrup combinations
+            const milkExtra = ["oat milk", "soy milk", "almond milk", "lactose free"].includes(item.milk) ? 0.5 : 0.0;
+            const syrupExtra = ["vanilla syrup", "caramel syrup", "almond syrup", "honey", "sweetener"].includes(item.syrup) ? 0.5 : 0.0;
+            return basePrice + milkExtra + syrupExtra;
         },
         addItemToOrder(item) {
             // Alerts 
-            if (((item.type === 'Coffee' || item.type === 'Chocolate Drinks' || item.name === 'Chai') && !item.milk)) {
-                alert(`Please select milk option for ${item.name}.`);
-                return;
-            }
-            if (((item.type === 'Coffee' || item.type === 'Chocolate Drinks' || item.name === 'Chai') && !item.syrups)) {
-                alert(`Please select syrup option for ${item.name}.`);
-                return;
-            }
-            if (!item.size) {
+            if ((item.type === 'Coffee' || item.type === 'Chocolate Drinks' || item.type === 'Teas') && !item.size) {
                 alert(`Please select a size for ${item.name}.`);
                 return;
             }
@@ -164,7 +169,15 @@ const app = Vue.createApp({
                 alert('Please specify a valid quantity.');
                 return;
             }
-            const price = this.calculateItemPrice(item, item.quantity);
+            if (((item.type === 'Coffee' || item.type === 'Chocolate Drinks' || item.name === 'Chai') && !item.milk)) {
+                alert(`Please select milk option for ${item.name}.`);
+                return;
+            }
+            if (((item.type === 'Coffee' || item.type === 'Chocolate Drinks' || item.name === 'Chai') && !item.syrup)) {
+                alert(`Please select syrup option for ${item.name}.`);
+                return;
+            }
+            const price = this.updatedPrice(item);
             this.order.push({
                 ...item,
                 item_price: price,
