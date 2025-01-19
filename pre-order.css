@@ -192,3 +192,88 @@ h1:hover {
     background-color: rgb(209, 182, 133);
     color: rgb(66, 43, 1);
 }
+/* Form controls */
+.header-form-control {
+    display: block;
+    width: 270px;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: rgb(66, 43, 1);
+    background-color: rgb(240, 232, 215);
+    background-clip: padding-box;
+    border: 1px solid rgb(144, 100, 18);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.search-form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: rgb(66, 43, 1);
+    background-color: rgb(240, 232, 215);
+    background-clip: padding-box;
+    border: 1px solid rgb(144, 100, 18);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+/* Order Summary section */
+.order-summary-container {
+    margin-top: 20px;
+    background: #fdf3e6;
+    border: 2px solid #b88357;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    max-width: 600px;
+    margin: auto;
+}
+.order-summary-container:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+.order-summary-title {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #8b4513;
+    margin-bottom: 10px;
+}
+.order-summary-instruction {
+    text-align: center;
+    font-size: 1rem;
+    color: #4f3100;
+    margin-bottom: 20px;
+}
+.order-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+.order-summary-table th,
+.order-summary-table td {
+    border: 1px solid #b88357;
+    padding: 8px;
+    text-align: center;
+    font-family: 'Times New Roman', serif;
+}
+.order-summary-total {
+    text-align: right;
+    font-size: 1.2rem;
+    color: #5a3315;
+}
+.order-summary-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}

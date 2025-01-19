@@ -5,6 +5,7 @@ const app = Vue.createApp({
             selectedSize: [],
             selectedMilk: [],
             selectedSyrup: [],
+            searchQuery: '', // User's input for search
             items: 
             [
                 { "name": "Latte", "image": "latte.webp", "type" : "Coffee", "pricelarge" : "6.0", "pricemedium" : "5.5", "pricesmall" : "4.7" },
@@ -90,10 +91,18 @@ const app = Vue.createApp({
             return this.filteredItems.slice(start, end);
         },
         filteredItems() {
+            const query = this.searchQuery.toLowerCase();
+            console.log("Query: ", query)
+            let items = this.items;
+            // Filter by side navbar
             if (this.selectType.length > 0) {
-                return this.items.filter(item => this.selectType.includes(item.type));
+                items = items.filter(item => this.selectType.includes(item.type));
             }
-            return this.items;
+            // Filter with searchbar query
+            if (query) {
+                items = items.filter(item => item.name.toLowerCase().includes(query));
+            }
+            return items;
         },
         uniqueTypes() {
             return [...new Set(this.items.map(item => item.type))];
@@ -138,11 +147,20 @@ const app = Vue.createApp({
             return this.isStudent ? total - quantity : total;
         },
         addItemToOrder(item) {
-            if (!item.size || !item.quantity || ((item.type === 'Coffee' || item.type === 'Chocolate Drinks' || item.name === 'Chai') && !item.milk && !item.syrup)) {
+            // Alerts 
+            if (((item.type === 'Coffee' || item.type === 'Chocolate Drinks' || item.name === 'Chai') && !item.milk)) {
+                alert(`Please select milk option for ${item.name}.`);
+                return;
+            }
+            if (((item.type === 'Coffee' || item.type === 'Chocolate Drinks' || item.name === 'Chai') && !item.syrups)) {
+                alert(`Please select syrup option for ${item.name}.`);
+                return;
+            }
+            if (!item.size) {
                 alert(`Please select a size for ${item.name}.`);
                 return;
             }
-            if (item.quantity <= 0) {
+            if (item.quantity <= 0 || !item.quantity ) {
                 alert('Please specify a valid quantity.');
                 return;
             }
@@ -166,6 +184,9 @@ const app = Vue.createApp({
                 this.currentPage = page;
             }
         },
+        // filterItemsBySearch() {
+        //     this.currentPage = 1; // Reset to the first page on new search
+        // },
         async completeOrder() {
             const totalPrice = this.order.reduce((acc, item) => acc + item.total_price, 0);
             const orderData = {
