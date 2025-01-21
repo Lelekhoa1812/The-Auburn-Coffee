@@ -1,7 +1,8 @@
 body {
     font-family: 'Times New Roman', Times, serif;
     background: url('image/coffee-beans-background.png') repeat center;
-    margin: 20px;
+    margin: 0; /* Remove margin for consistent scaling */
+    padding: 0; /* Remove padding for consistent scaling */
 }
 /* Top NavBar */
 .navbar {
@@ -19,7 +20,8 @@ body {
     text-decoration: none;
 }
 .navbar .logo img {
-    width: 100px;
+    width: 50px;
+    max-width: fit-content;
     border-radius: 50%;
 }
 /* Side NavBar */
@@ -30,43 +32,51 @@ h1:hover {
     color: rgb(18, 129, 144);
 }
 .nav-link {
-    color: #5a3315;
+    color: #5a3315; /* Default text color */
     font-weight: bold;
     padding: 5px 10px;
     border-radius: 5px;
     position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    overflow: hidden; /* Required for the pseudo-element to stay within the bounds */
+    z-index: 1; /* Text should remain above the pseudo-element */
+    transition: color 0.3s ease; /* Smooth color transition */
 }
 .nav-link::before {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 100%;
+    left: 0; /* Start at the left edge */
+    width: 0; /* Start with no width */
     height: 100%;
-    background-color: #5a3315;
-    z-index: 0;
-    transition: left 0.3s ease-in-out;
+    background: url('image/coffeepattern.jpg') repeat; /* Coffee pattern */
+    background-size: cover;
+    z-index: -1; /* Place behind the text */
+    transition: width 0.6s ease-in-out; /* Smoothly increase width */
 }
-.nav-link:hover::before {
-    left: 0;
-}
+/* Hover effect for text */
 .nav-link:hover {
-    color: white;
-    z-index: 1;
+    color: rgb(18, 129, 144); /* Custom hover font color */
+}
+/* Hover effect for background (optional if hover effect needs the same pattern) */
+.nav-link:hover::before {
+    background: rgba(0, 0, 0, 0.1); /* Add a light hover effect background if desired */
+    left: 0; /* Slide in */
+}
+/* Active state: gradually fill from left */
+.nav-link.active::before {
+    width: 100%; /* Expand to cover the entire element */
 }
 .nav-link.active {
-    background-color: #e0c3a3;
-    color: rgb(18, 129, 144);
+    color: white; /* Change text color to white for contrast */
+    z-index: 2; /* Keep text above the pseudo-element */
 }
 /* Body */
 .container {
     background-color: white;
     padding: 20px;
+    max-width: 800px;
     border-radius: 5px;
     margin: auto;
-    max-width: 800px;
     display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
@@ -80,9 +90,9 @@ h1:hover {
 .menu-item img {
     border-radius: 5px;
     width: 100px;
+    height: 100px;
     position: center;
     margin-bottom: 20px;
-    height: 100px;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 .menu-item img:hover {
@@ -210,9 +220,16 @@ h1:hover {
     border-radius: .25rem;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
+.searchtext {
+    font-size: 12px;
+    color: rgb(144, 100, 18);
+    white-space: nowrap; /* Prevent the label from wrapping */
+    margin-bottom: 0; /* Remove any default margin */
+}
 .search-form-control {
     display: block;
     width: 100%;
+    flex: 1; /* Allow the input to take up remaining space */
     padding: .375rem .75rem;
     font-size: 1rem;
     font-weight: 400;
@@ -368,4 +385,155 @@ margin-top: 0; /* Adjust margin if necessary */
     display: block;
     height: 43%;
     width: 43%;
+}
+
+
+/* Responsive Styles for Tablet Screens (768px to 1024px) */
+@media (max-width: 1024px) {
+    .menu-item {
+        width: 40%; /* Slightly smaller for better alignment */
+        height: 100%;
+        margin: 1.5%;
+    }
+    .menu-item img {
+        width: 100px;
+        height: 100px;
+    }
+    .container {
+        padding: 10px;
+    }
+    .pagination .page-link {
+        font-size: 14px; /* Adjust pagination font size */
+        padding: 6px 12px;
+    }
+}
+
+
+/* Responsive Styles for Mobile Screens (Up to 767px) */
+@media (max-width: 767px) {
+    .container {
+        padding: 10px;
+    }
+    .mt-3 {
+        margin-top: 0px;
+    }
+    .row {
+        flex-wrap: wrap; /* Allow wrapping for multiple items */
+        justify-content: center; /* Center items horizontally */
+    }
+    .col-md-3, .col-md-9 {
+        flex: 0 0 100%; /* Take full width */
+        max-width: 100%;
+    }
+    /* Adjust menu items for two columns */
+    .menu-item {
+        width: 48%; /* Two items per row */
+        margin: 1%;
+        text-align: center;
+    }
+    .menu-item img {
+        width: 80px; /* Adjust size for better fit */
+        height: 80px;
+    }
+    .menu-item select,
+    .menu-item input[type="number"],
+    .btn-primary {
+        width: 90%; /* Stretch controls to fit */
+        margin: 0 auto; /* Center-align form controls */
+    }
+    #additemtext {
+        font-size: 16px;
+    }
+    #plus {
+        width: 30px;
+        height: 30px;
+    }
+    /* Center-align the search bar and header inputs */
+    .search-bar {
+        width: 90%; /* Match the width of other inputs */
+        margin: 0 auto 10px; /* Center it and add spacing below */
+    }
+    .searchtext {
+        font-size: 14px;
+        text-align: center;
+    }
+    .header-form-control {
+        width: 90%; /* Match the search bar width */
+        margin: 0 auto 10px; /* Center-align and add spacing below */
+    }
+    /* Pagination buttons */
+    .pagination {
+        flex-wrap: wrap; /* Stack buttons */
+    }
+    .pagination .page-link {
+        font-size: 10px; /* Smaller font for buttons */
+        padding: 5px 10px;
+    }
+    /* Adjust student checkbox */
+    .student-checkbox {
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    /* Order summary adjustments */
+    .order-summary-container {
+        width: 95%; /* Fit within the screen */
+        margin: 0 auto; /* Center-align */
+    }
+    .order-summary-table th,
+    .order-summary-table td {
+        font-size: 12px; /* Smaller text for tables */
+    }
+}
+
+/* Small Mobile Screens (Up to 480px) */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.2rem; /* Smaller header font */
+    }
+    .mt-3 {
+        margin-top: 0px;
+    }
+    .menu-item img {
+        width: 80px; /* Adjust size for better fit */
+        height: 80px;
+    }
+    .menu-item h5 {
+        font-size: 20px; /* Adjust item name font */
+    }
+    .menu-item select,
+    .menu-item input[type="number"],
+    .btn-primary {
+        width: 95%; /* Full width for small screens */
+        margin: 0 auto; /* Center-align */
+    }
+    .btn-primary {
+        height: 40px; /* Adjust button size */
+        font-size: 12px; /* Smaller font */
+    }
+    #additemtext {
+        font-size: 16px;
+    }
+    #plus {
+        width: 30px;
+        height: 30px;
+    }
+    .search-bar {
+        width: 190px; /* Center the search bar */
+        margin-bottom: 10px; /* Add spacing below */
+    }
+    .searchtext {
+        font-size: 14px;
+        text-align: center;
+    }
+    .header-form-control {
+        width: 95%; /* Match the search bar width */
+    }
+    /* Pagination buttons */
+    .pagination {
+        flex-wrap: wrap; /* Stack buttons */
+    }
+    .pagination .page-link {
+        font-size: 9px; /* Smaller font for buttons */
+        padding: 5px 10px;
+    }
 }

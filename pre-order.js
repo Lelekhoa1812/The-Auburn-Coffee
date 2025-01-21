@@ -61,7 +61,7 @@ const app = Vue.createApp({
             etaInput: '',
             orderNotice: '',
             isStudent: false,
-            pageSize: 9,
+            pageSize: 6,
             currentPage: 1,
             milks: [
                 { label: 'Full Cream', value: 'full cream' },
@@ -185,12 +185,17 @@ const app = Vue.createApp({
             });
         },
         toggleType(type) {
-            const index = this.selectType.indexOf(type);
-            if (index === -1) {
-                this.selectType.push(type);
+            if (this.selectType.includes(type)) {
+                this.selectType = this.selectType.filter((t) => t !== type);
             } else {
-                this.selectType.splice(index, 1);
+                this.selectType.push(type);
             }
+        },
+        addHoverEffect(type) {
+            this.hoverType = type; // Trigger hover effect
+        },
+        removeHoverEffect() {
+            this.hoverType = null; // Remove hover effect
         },
         changePage(page) {
             if (page > 0 && page <= this.totalPages) {

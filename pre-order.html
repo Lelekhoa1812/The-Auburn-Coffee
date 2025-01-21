@@ -40,6 +40,7 @@
         <div class="row mt-4" id="menuSection">
             <div class="col-md-3">
                 <!-- SearchBar -->
+                <p class="searchtext me-2">Looking after something in mind?</p>
                 <div class="search-bar mt-3">
                     <input
                         type="text"
@@ -74,7 +75,14 @@
                 <h4>Filter by Type</h4>
                 <ul class="nav flex-column">
                     <li v-for="type in uniqueTypes" :key="type" class="nav-item">
-                        <a href="#" class="nav-link" :class="{ active: selectType.includes(type) }" @click.prevent="toggleType(type)">
+                        <a
+                            href="#"
+                            class="nav-link"
+                            :class="{ active: selectType.includes(type), 'hover-effect': hoverType === type }"
+                            @mouseover="addHoverEffect(type)"
+                            @mouseleave="removeHoverEffect()"
+                            @click.prevent="toggleType(type)"
+                        >
                             {{ type }}
                         </a>
                     </li>
