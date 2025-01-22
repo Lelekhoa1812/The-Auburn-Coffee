@@ -1,3 +1,4 @@
+// All Vue.js main app with algorithms
 const app = Vue.createApp({
     data() {
         return {
@@ -63,6 +64,7 @@ const app = Vue.createApp({
             isStudent: false,
             pageSize: 6,
             currentPage: 1,
+            hoverItem: null, // Track which item is hovered
             milks: [
                 { label: 'Full Cream', value: 'full cream' },
                 { label: 'Skinny Milk', value: 'skinny milk' },
@@ -159,6 +161,7 @@ const app = Vue.createApp({
             const syrupExtra = ["vanilla syrup", "caramel syrup", "almond syrup", "honey", "sweetener"].includes(item.syrup) ? 0.5 : 0.0;
             return basePrice + milkExtra + syrupExtra;
         },
+        // Add that item on btn click with alert checker
         addItemToOrder(item) {
             // Alerts 
             if ((item.type === 'Coffee' || item.type === 'Chocolate Drinks' || item.type === 'Teas') && !item.size) {
@@ -184,6 +187,7 @@ const app = Vue.createApp({
                 total_price: price * item.quantity
             });
         },
+        // Toggle side bar (Filter by Type)
         toggleType(type) {
             if (this.selectType.includes(type)) {
                 this.selectType = this.selectType.filter((t) => t !== type);
@@ -197,14 +201,33 @@ const app = Vue.createApp({
         removeHoverEffect() {
             this.hoverType = null; // Remove hover effect
         },
+        // Handle hover for add item btn
+        handleHover(itemName) {
+            console.log(`${itemName} on hover.`);
+            this.hoverItem = itemName; // Set hoverItem to the name of the hovered button's item
+        },
+        handleLeave() {
+            this.hoverItem = null; // Reset hoverItem on mouse leave
+        },
+        // Pagination logics
         changePage(page) {
             if (page > 0 && page <= this.totalPages) {
                 this.currentPage = page;
             }
         },
-        // filterItemsBySearch() {
-        //     this.currentPage = 1; // Reset to the first page on new search
-        // },
+        // Remove all order item (return empty list) on btn click
+        cancelOrder() {
+            if (confirm("Are you sure you want to cancel the entire order?")) {
+                const summary = document.querySelector('#orderSummary');
+                if (summary) {
+                    summary.classList.add('fade-out');
+                    setTimeout(() => {
+                        this.order = [];
+                    }, 500); // Match the CSS transition duration
+                }
+            }
+        },        
+        // Send complete order json body to MongoDB
         async completeOrder() {
             const totalPrice = this.order.reduce((acc, item) => acc + item.total_price, 0);
             const orderData = {

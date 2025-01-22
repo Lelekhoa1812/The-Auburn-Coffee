@@ -4,6 +4,7 @@ body {
     margin: 0; /* Remove margin for consistent scaling */
     padding: 0; /* Remove padding for consistent scaling */
 }
+
 /* Top NavBar */
 .navbar {
     display: flex;
@@ -24,6 +25,7 @@ body {
     max-width: fit-content;
     border-radius: 50%;
 }
+
 /* Side NavBar */
 h1, h4 {
     color: rgb(144, 100, 18);
@@ -70,6 +72,7 @@ h1:hover {
     color: white; /* Change text color to white for contrast */
     z-index: 2; /* Keep text above the pseudo-element */
 }
+
 /* Body */
 .container {
     background-color: white;
@@ -86,6 +89,7 @@ h1:hover {
     margin-bottom: 20px;
     height: 480px;
 }
+
 /* Each item tags */
 .menu-item img {
     border-radius: 5px;
@@ -114,6 +118,7 @@ h1:hover {
     background-color: #e0c3a3;
     color: #5a3315;
 }
+
 /* Add this item btn */
 .btn-primary {
     color: #fff;
@@ -124,18 +129,21 @@ h1:hover {
     justify-content: center; /* Center children horizontally */
     overflow: hidden; /* Prevent child animations spilling out */
     gap: 10px; /* Set initial gap between icon and text */
+    user-select: none; /* Disable text selection */
 }
 .btn-primary:hover {
     color: #281100;
     background-color: #e0c3a3;
     border-color: #8b4513;
 }
+
 /* Image styling */
 #plus {
     width: 35px;
     height: 35px;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Smooth transform and fade */
 }
+
 /* Text styling */
 #additemtext {
     display: inline-block;
@@ -152,6 +160,7 @@ h1:hover {
 .btn-primary:hover #plus {
     transform: scale(1.2) translateX(90px); /* Zoom and move */
 }
+
 /* Pagination */
 .pagination {
     margin-top: 20px;
@@ -202,6 +211,7 @@ h1:hover {
     background-color: rgb(209, 182, 133);
     color: rgb(66, 43, 1);
 }
+
 /* Form controls */
 .header-form-control {
     display: block;
@@ -244,6 +254,7 @@ h1:hover {
     border-radius: .25rem;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
+
 /* Order Summary section */
 .order-summary-container {
     margin-top: 20px;
@@ -294,6 +305,11 @@ h1:hover {
     justify-content: space-between;
     gap: 10px;
 }
+.order-summary-container.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
 /* For customized and motion effect student checkbox */
 .student-checkbox {
     display: flex;
@@ -387,7 +403,6 @@ margin-top: 0; /* Adjust margin if necessary */
     width: 43%;
 }
 
-
 /* Responsive Styles for Tablet Screens (768px to 1024px) */
 @media (max-width: 1024px) {
     .menu-item {
@@ -407,7 +422,6 @@ margin-top: 0; /* Adjust margin if necessary */
         padding: 6px 12px;
     }
 }
-
 
 /* Responsive Styles for Mobile Screens (Up to 767px) */
 @media (max-width: 767px) {
@@ -434,6 +448,9 @@ margin-top: 0; /* Adjust margin if necessary */
     .menu-item img {
         width: 80px; /* Adjust size for better fit */
         height: 80px;
+    }
+    .menu-item img:hover {
+        transform: scale(1.3);
     }
     .menu-item h5 {
         font-size: 18px; /* Adjust item name font */
@@ -500,6 +517,9 @@ margin-top: 0; /* Adjust margin if necessary */
         width: 80px; /* Adjust size for better fit */
         height: 80px;
     }
+    .menu-item img:hover {
+        transform: scale(1.3);
+    }
     .menu-item h5 {
         font-size: 18px; /* Adjust item name font */
     }
@@ -514,11 +534,14 @@ margin-top: 0; /* Adjust margin if necessary */
         font-size: 12px; /* Smaller font */
     }
     #additemtext {
-        font-size: 16px;
+        font-size: 0px;
     }
     #plus {
-        width: 30px;
-        height: 30px;
+        width: 28px;
+        height: 28px;
+    }
+    .btn-primary:hover #plus {
+        transform: scale(1.2);
     }
     .search-bar {
         width: 190px; /* Center the search bar */
@@ -536,7 +559,7 @@ margin-top: 0; /* Adjust margin if necessary */
         flex-wrap: wrap; /* Stack buttons */
     }
     .pagination .page-link {
-        font-size: 9px; /* Smaller font for buttons */
+        font-size: 8px; /* Smaller font for buttons */
         padding: 5px 10px;
     }
 }
