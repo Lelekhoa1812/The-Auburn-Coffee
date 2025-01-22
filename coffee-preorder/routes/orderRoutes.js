@@ -1,23 +1,35 @@
 const express = require('express');
-const Order = require('../models/order');
 const router = express.Router();
+const Order = require('../models/order'); // Import Order model
+
+let currentOrderId = 1; // Simulate auto-increment (better to use a database sequence)
 
 router.post('/add', async (req, res) => {
     try {
-        const newOrder = new Order(req.body);
-        await newOrder.save();
-        res.status(201).json({ message: 'Order added successfully', order: newOrder });
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to add order', error });
-    }
-});
+        const { customer_name, order_eta, order_time, total_price, order_notice, registered_staff } = req.body;
 
-router.get('/all', async (req, res) => {
-    try {
-        const orders = await Order.find();
-        res.status(200).json(orders);
+        // Validate required fields
+        if (!customer_name || !order_time || total_price === undefined) {
+            return res.status(400).json({ message: 'Missing required fields.' });
+        }
+
+        // Auto-increment `order_id`
+        const newOrder = new Order({
+            order_id: currentOrderId++,
+            customer_name,
+            order_eta,
+            order_time,
+            order_status: 'Pending',
+            total_price,
+            order_notice,
+            registered_staff: registered_staff || 0,
+        });
+
+        const savedOrder = await newOrder.save();
+        res.status(201).json(savedOrder); // Return saved order
     } catch (error) {
-        res.status(500).json({ message: 'Failed to retrieve orders', error });
+        console.error('Error adding order:', error);
+        res.status(500).json({ message: 'Server error while adding order.' });
     }
 });
 

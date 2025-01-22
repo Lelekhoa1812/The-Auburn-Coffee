@@ -1,4 +1,3 @@
-// All Vue.js main app with algorithms
 const app = Vue.createApp({
     data() {
         return {
@@ -57,14 +56,6 @@ const app = Vue.createApp({
                 { "name": "Decaf Coffee", "image": "shot.png", "type" : "Extras", "price" : "0.5"},
                 { "name": "Extra Syrup", "image": "syrup.jpeg", "type" : "Extras", "price" : "0.5"}
             ],
-            order: [], // Stores the user's selected items
-            customerName: '',
-            etaInput: '',
-            orderNotice: '',
-            isStudent: false,
-            pageSize: 6,
-            currentPage: 1,
-            hoverItem: null, // Track which item is hovered
             milks: [
                 { label: 'Full Cream', value: 'full cream' },
                 { label: 'Skinny Milk', value: 'skinny milk' },
@@ -80,7 +71,16 @@ const app = Vue.createApp({
                 { label: 'Almond Syrup', value: 'almond syrup' },
                 { label: 'Honey', value: 'honey' },
                 { label: 'Equal Sweetener', value: 'sweetener' }
-            ]
+            ],
+            order: [], // Stores the user's selected items
+            customerName: '',
+            etaInput: '',
+            orderNotice: '',
+            isStudent: false,
+            showModal: true, // Ensure name modal is displayed initially
+            hoverItem: null, // Track which item is hovered
+            pageSize: 6,
+            currentPage: 1
         };
     },
     computed: {
@@ -94,7 +94,7 @@ const app = Vue.createApp({
         },
         filteredItems() {
             const query = this.searchQuery.toLowerCase();
-            console.log("Query: ", query)
+            // console.log("Query: ", query)
             let items = this.items;
             // Filter by side navbar
             if (this.selectType.length > 0) {
@@ -111,6 +111,14 @@ const app = Vue.createApp({
         },
     },
     methods: {
+        // Close modal and proceed if customer name is entered
+        startOrder() {
+            if (!this.customerName.trim()) {
+                alert("Please enter your name before proceeding to pre-order.");
+                return;
+            }
+            this.showModal = false;
+        },
         isSizeSelectable(item) {
             return ['Coffee', 'Chocolate Drinks', 'Teas'].includes(item.type);
         },
@@ -203,7 +211,7 @@ const app = Vue.createApp({
         },
         // Handle hover for add item btn
         handleHover(itemName) {
-            console.log(`${itemName} on hover.`);
+            // console.log(`${itemName} on hover.`);
             this.hoverItem = itemName; // Set hoverItem to the name of the hovered button's item
         },
         handleLeave() {
@@ -229,37 +237,59 @@ const app = Vue.createApp({
         },        
         // Send complete order json body to MongoDB
         async completeOrder() {
+            if (!this.customerName.trim()) {
+                alert("Your name cannot be empty. Please reload the page and input your name again!");
+                return;
+            }
+            if (!this.etaInput.trim()) {
+                alert("Please provide an estimated time of arrival. E.g., 10:30 AM or In the next 5 mins.");
+                return;
+            }
             const totalPrice = this.order.reduce((acc, item) => acc + item.total_price, 0);
             const orderData = {
                 customer_name: this.customerName,
                 order_time: new Date().toLocaleString(),
-                order_eta: this.etaInput || null,
+                order_eta: this.etaInput,
                 order_status: 'Pending',
                 total_price: totalPrice,
                 order_notice: this.orderNotice || null,
             };
-
+            // Try to send the JSON body to API before routing it to MongoDB
             try {
-                const orderResponse = await fetch('http://localhost:5000/api/orders/add', {
+                const orderResponse = await fetch('http://localhost:5002/api/orders/add', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(orderData),
                 });
+                if (!orderResponse.ok) {
+                    throw new Error(`Order creation failed: ${orderResponse.statusText}`);
+                }
                 const order = await orderResponse.json();
-
+                // For each item in the order list, split and post them as in a json array to item table MongoDB
                 for (const item of this.order) {
-                    const itemData = { ...item, order_id: order.order_id };
-                    await fetch('http://localhost:5000/api/items/add', {
+                    const itemData = {
+                        order_id: order.order_id,
+                        item_name: item.name,
+                        item_size: item.size || null,
+                        item_quantity: item.quantity,
+                        item_price: item.item_price,
+                    };
+                    // Await and post item
+                    const itemResponse = await fetch('http://localhost:5002/api/items/add', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(itemData),
                     });
+                    if (!itemResponse.ok) {
+                        throw new Error(`Item addition failed: ${itemResponse.statusText}`);
+                    }
                 }
-
+                // Show complete message
                 alert('Order completed successfully!');
                 this.order = [];
             } catch (error) {
                 console.error('Error completing order:', error);
+                alert('There was an issue completing your order. Please try again.');
             }
         }
     },

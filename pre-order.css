@@ -5,6 +5,78 @@ body {
     padding: 0; /* Remove padding for consistent scaling */
 }
 
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Container */
+.modal-container {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Drop shadow */
+    max-width: 400px;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out; /* Smooth fade-in effect */
+}
+
+/* Name Modal at the initial */
+.modal-container h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    color: #6B4226; /* Coffee brown */
+    margin-bottom: 20px;
+}
+.modal-container p {
+    font-size: 16px;
+    color: #4D2B1A;
+    margin-bottom: 20px;
+}
+.modal-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #D3C3A3; /* Light brown border */
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+.modal-button {
+    background-color: #351b09; /* Coffee brown */
+    color: rgb(229, 229, 229);
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.modal-button:hover {
+    background-color: rgb(130, 88, 61); 
+    color: rgb(10, 7, 36);
+}
+/* Modal Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 /* Top NavBar */
 .navbar {
     display: flex;
