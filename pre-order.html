@@ -161,7 +161,12 @@
                 </thead>
                 <tbody>
                     <tr v-for="item in order" :key="item.name">
-                        <td>{{ item.name }}</td>
+                        <!-- Item description -->
+                        <td>
+                            {{ item.name }}
+                            <span v-if="item.milk"> ({{ item.milk }})</span>
+                            <span v-if="item.syrup"> ({{ item.syrup }})</span>
+                        </td>
                         <td>{{ item.quantity }}</td>
                         <td>${{ item.total_price.toFixed(2) }}</td>
                     </tr>
@@ -171,7 +176,7 @@
                 <p>Order Total: <span>${{ order.reduce((acc, item) => acc + item.total_price, 0).toFixed(2) }}</span></p>
             </div>
             <div class="order-summary-actions">
-                <button class="btn btn-secondary" @click="currentPage = 1">Back</button>
+                <button class="btn btn-secondary" @click="currentPage = 1">Cancel</button>
                 <button class="btn btn-primary complete-btn" @click="completeOrder">Confirm Order</button>
             </div>
         </div>

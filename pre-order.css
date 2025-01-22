@@ -435,6 +435,9 @@ margin-top: 0; /* Adjust margin if necessary */
         width: 80px; /* Adjust size for better fit */
         height: 80px;
     }
+    .menu-item h5 {
+        font-size: 18px; /* Adjust item name font */
+    }
     .menu-item select,
     .menu-item input[type="number"],
     .btn-primary {
@@ -498,11 +501,11 @@ margin-top: 0; /* Adjust margin if necessary */
         height: 80px;
     }
     .menu-item h5 {
-        font-size: 20px; /* Adjust item name font */
+        font-size: 18px; /* Adjust item name font */
     }
     .menu-item select,
     .menu-item input[type="number"],
-    .btn-primary {
+    .btn-primary #complete-btn {
         width: 95%; /* Full width for small screens */
         margin: 0 auto; /* Center-align */
     }
