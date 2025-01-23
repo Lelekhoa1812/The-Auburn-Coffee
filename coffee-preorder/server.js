@@ -20,6 +20,7 @@ app.use(cors(corsOptions));
 // All routers here
 const orderRoutes = require('./routes/orderRoutes');
 const itemRoutes = require('./routes/itemRoutes');
+const staffRoutes = require('./routes/staffRoutes');
 
 // Prepare json body to be saved on MongoDB
 app.use(bodyParser.json());
@@ -31,6 +32,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 // Routing to order, item endpoints
 app.use('/api/orders', orderRoutes);
 app.use('/api/items', itemRoutes);
+app.use('/api/staff', staffRoutes);
 
 // Port on execution
 const PORT = process.env.PORT || 5002;

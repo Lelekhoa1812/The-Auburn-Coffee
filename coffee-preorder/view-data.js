@@ -1,4 +1,6 @@
 // Basic script to view data saved on MongoDB with NodeJS
+// cd coffee-preorder
+// node view-data.js
 require('dotenv').config();
 const mongoose = require('mongoose');
 
@@ -15,9 +17,11 @@ async function viewData() {
     try {
         const orders = await mongoose.connection.db.collection('orders').find().toArray();
         const items = await mongoose.connection.db.collection('items').find().toArray();
+        const staffs = await mongoose.connection.db.collection('staffs').find().toArray();
         // Extra log if applied with a basic UI
         console.log('Orders:', orders);
         console.log('Items:', items);
+        console.log('Staffs:', staffs);
         // Close connection after fetching the data
         mongoose.connection.close();
     } catch (err) {

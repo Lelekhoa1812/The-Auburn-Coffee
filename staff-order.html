@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Order Management</title>
+    <link rel="stylesheet" href="staff-order.css">
+</head>
+<body>
+    <!-- Login/Register Modal -->
+    <div class="modal-overlay" id="loginRegisterModal">
+        <div class="modal-wrapper">
+            <!-- Login Section -->
+            <div class="modal-section login-section" id="loginSection">
+                <h2>LOGIN</h2>
+                <div class="modal-content">
+                    <input type="text" id="staffName" placeholder="Your staff account name" class="modal-input">
+                    <input type="number" id="staffPin" placeholder="Your 6-digit staff pin" class="modal-input">
+                    <button id="loginBtn" class="modal-button">Login</button>
+                    <button id="showRegisterBtn" class="modal-button">Register My Staff Account</button>
+                </div>
+            </div>
+
+            <!-- Register Section -->
+            <div class="modal-section register-section collapsed" id="registerSection">
+                <h3>REGISTER</h3>
+                <div class="modal-content">
+                    <input type="text" id="newStaffName" placeholder="Your staff account name" class="modal-input">
+                    <input type="number" id="newStaffPin" placeholder="Your 6-digit staff pin" class="modal-input">
+                    <button id="createAccountBtn" class="modal-button">Create My Staff Account</button>
+                    <button id="showLoginBtn" class="modal-button">Back to Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Page -->
+    <header>
+        <h1>Auburn Coffee Staff Management</h1>
+        <button id="manageAccountBtn" class="modal-button">Manage My Account</button>
+    </header>
+    <main>
+        <h2>Current Orders</h2>
+        <div id="ordersContainer"></div>
+    </main>
+
+    <script src="staff-order.js"></script>
+</body>
+</html>

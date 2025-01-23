@@ -18,7 +18,6 @@ body {
     align-items: center;
     z-index: 1000;
 }
-
 /* Modal Container */
 .modal-container {
     background-color: #fff;
@@ -29,7 +28,6 @@ body {
     text-align: center;
     animation: fadeIn 0.5s ease-in-out; /* Smooth fade-in effect */
 }
-
 /* Name Modal at the initial */
 .modal-container h2 {
     font-family: 'Poppins', sans-serif;
