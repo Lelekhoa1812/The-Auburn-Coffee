@@ -91,3 +91,9 @@
     height: 20px;
     cursor: pointer;
 }
+@media (max-width: 380px) {
+    .header-right a {
+        font-size: 12px;
+        margin-right: 10px;
+    }
+}
