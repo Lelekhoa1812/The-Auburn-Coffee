@@ -7,6 +7,7 @@
     <link rel="website icon" type="png" href="image/icon.png" >
     <title>Pre Order Page</title>
     <link rel="stylesheet" href="pre-order.css">
+    <link rel="stylesheet" href="problem.css">
 </head>
 <body>
     <header>
@@ -15,6 +16,10 @@
                 <img src="products/auburn.jpg" alt="logo">
                 <h1>The Auburn Coffee</h1>
             </a>
+            <div class="header-right">
+                <img src="image/problem.png" alt="Problem Icon" id="problemIcon">
+                <a href="#" id="problemLink">Report a problem?</a>
+            </div>
         </nav>
     </header>
     <main id="app" class="container">
@@ -25,6 +30,18 @@
                 <p>Please enter your name to start your order.</p>
                 <input type="text" v-model="customerName" placeholder="Enter your name" class="modal-input">
                 <button @click="startOrder" class="modal-button">Start My Order</button>
+            </div>
+        </div>
+        <!-- Problem Modal -->
+        <div class="modal-overlay2" id="problemModal">
+            <div class="modal-container2">
+                <button class="close-button" id="closeModal">&times;</button>
+                <img src="image/problem.png" alt="Problem Icon" class="modal-icon">
+                <h3>We are sorry for any inconvenience</h3>
+                <p>
+                    Our website is still under development. If you experience any issues, please share your feedback via 
+                    <a href="about.html">this link</a>. Thank you for your support, glad to see from you soon! The Auburn Coffee staff team.
+                </p>
             </div>
         </div>
         <!-- Header -->
@@ -199,5 +216,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="vue.js"></script>
     <script src="pre-order.js"></script>
+    <script src="problem.js"></script>
 </body>
 </html>

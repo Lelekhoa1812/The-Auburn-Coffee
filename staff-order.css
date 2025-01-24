@@ -72,10 +72,12 @@ h1, h2, h3 {
 }
 .modal-section.collapsed h2 {
     transform: rotate(90deg);
+    color: #d9c6ba;
     writing-mode: horizontal-tb;
 }
 .modal-section.collapsed h3 {
     transform: rotate(270deg);
+    color: #d9c6ba;
     writing-mode: horizontal-tb;
 }
 /* Modal Content */

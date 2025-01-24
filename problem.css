@@ -1,0 +1,93 @@
+/* Modal Overlay */
+.modal-overlay2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+}
+/* Modal Visibility */
+.modal-overlay2.show {
+    display: flex;
+    opacity: 1;
+}
+.header-right a {
+    color: #351b09;
+    text-decoration: none;
+    font-size: 16px;
+    margin-left: 5px;
+    margin-right: 20px;
+}
+/* Add hover effect for the problem link */
+.header-right a:hover {
+    text-decoration: underline;
+    color: rgb(18, 129, 144);
+}
+/* Modal Container */
+.modal-container2 {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Drop shadow */
+    max-width: 400px;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out; /* Smooth fade-in effect */
+    position: relative; /* Ensure close button aligns properly */
+    z-index: 1010; /* Ensure modal content is above overlay */
+}
+/* Modal Icon */
+.modal-icon {
+    width: 50px;
+    margin-bottom: 15px;
+}
+
+/* Modal Title and Text */
+.modal-container2 h3 {
+    color: #351b09;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+.modal-container2 p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+/* Modal Link */
+.modal-container2 a {
+    color: #007bff;
+    text-decoration: none;
+}
+.modal-container2 a:hover {
+    text-decoration: underline;
+}
+/* Close Button */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #3a1c08; /* Coffee brown */
+    cursor: pointer;
+}
+.close-button:hover {
+    color: #a12c1f; /* Red on hover */
+}
+/* Ensure no parent hides the close button */
+.modal-container2,
+.modal-overlay2 {
+    overflow: visible;
+}
+/* Problem Link */
+.header-right img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
