@@ -7,6 +7,20 @@ header {
     color: #FFF7E6;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+header .header-button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: rgb(204, 188, 158);
+    color: rgb(50, 27, 2);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+header .header-button:hover {
+    background-color: #351b09;
+    color: white;
+}
+
 /* Body */
 body {
     font-family: 'Poppins', sans-serif;
@@ -34,7 +48,6 @@ h1, h2, h3 {
     align-items: center;
     z-index: 1000;
 }
-
 /* Modal Wrapper */
 .modal-wrapper {
     display: flex;
@@ -43,7 +56,6 @@ h1, h2, h3 {
     border-radius: 10px;
     overflow: hidden;
 }
-
 /* Modal Section */
 .modal-section {
     flex: 1;
@@ -54,6 +66,12 @@ h1, h2, h3 {
     align-items: center;
     background-color: rgb(251, 249, 233);
     padding: 20px;
+}
+.hidden {
+    display: none !important; /* Completely remove from DOM visibility */
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none; /* Disable interaction */
 }
 .modal-section.collapsed {
     flex: 0.1;
@@ -107,4 +125,39 @@ h1, h2, h3 {
 }
 .modal-button:hover {
     background-color: #6B4226;
+}
+
+/* Order containers */
+.orders-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+.order-card {
+    background-color: #fff5e1; /* Light coffee background */
+    border: 1px solid #d3c3a3; /* Light brown border */
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+.order-card h3 {
+    font-size: 18px;
+    color: #583216;
+    margin-left: 40px;
+}
+.item-card {
+    background-color: #faf3e6; /* Slightly lighter background for items */
+    border: 1px solid #d3c3a3;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.item-card p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #4d2b1a;
 }
