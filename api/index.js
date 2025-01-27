@@ -8,6 +8,7 @@ const app = express();
 // CORS Configuration
 const cors = require('cors');
 const corsOptions = {
+    // origin: 'http://localhost:8000', // Allow requests from local server on port 8000
     origin: 'https://the-auburn-coffee.vercel.app', // Allow requests from this origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'],       // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
@@ -44,9 +45,6 @@ app.use(async (req, res, next) => {
         res.status(500).json({ error: 'Database connection failed' });
     }
 });
-
-// Serve static files from the "static" directory for Frontend
-// app.use('/static', express.static(path.join(__dirname, '../static')));
 
 // API Routes
 const orderRoutes = require('./routes/orderRoutes');
