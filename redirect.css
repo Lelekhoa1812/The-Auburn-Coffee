@@ -6,7 +6,7 @@ body {
     align-items: flex-start; /* Keeps the container at the top while centering horizontally */
     height: 100vh;
     font-family: 'Raleway', sans-serif;
-    background-image: url('image/coffee_motion.gif');
+    background-image: url('static/image/coffee_motion.gif');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
