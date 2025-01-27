@@ -68,5 +68,5 @@ Accessible via: https://lelekhoa1812.github.io/The-Auburn-Coffee/
 ---
 
 **Direct Access to Vercel server:**
-[Main Page](https://the-auburn-coffee.vercel.app/)  
+[Main Page](https://the-auburn-coffee.vercel.app/home.html)  
 [For Rating and Feedback Statistics](https://the-auburn-coffee.vercel.app/statistics.html)  
