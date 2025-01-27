@@ -259,7 +259,7 @@ const app = Vue.createApp({
             const BASE_URL = window.location.origin.includes("localhost")
             // ? "http://localhost:5002/api" // Local dev environment on NodeJS
             ? "http://localhost:3000/api" // Local dev environment by Vercel
-            : "https://the-auburn-coffee.vercel.app/api";
+            : "auburn-coffee-backend.vercel.app/api";
 
             // Try to send the JSON body to API before routing it to MongoDB
             try {

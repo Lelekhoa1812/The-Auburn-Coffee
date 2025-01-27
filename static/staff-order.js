@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const BASE_URL = window.location.origin.includes("localhost")
     // ? "http://localhost:5002/api" // Local dev environment on NodeJS
     ? "http://localhost:3000/api" // Local dev environment by Vercel
-    : "https://the-auburn-coffee.vercel.app/api";
+    : "auburn-coffee-backend.vercel.app/api";
 
     // Login
     document.getElementById("loginBtn").addEventListener("click", async () => {

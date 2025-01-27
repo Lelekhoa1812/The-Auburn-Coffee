@@ -1,6 +1,12 @@
+# All Server-side
+api/.vercel
+api/.env
+api/.env.local
+api/.vercel.json
+api/node_modules
+# All Client-side
+static/.vercel
+static/vercel.json
+# Others
 NOTICE.md
-.vercel
-.env
-vercel.json
-node_modules
-.env*.local
+
