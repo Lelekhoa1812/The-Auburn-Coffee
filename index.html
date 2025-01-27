@@ -6,7 +6,7 @@
     <title>Redirecting...</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Raleway:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="redirect.css">
-    <link rel="website icon" type="png" href="image/icon.png">
+    <link rel="website icon" type="png" href="static/image/icon.png">
 </head>
 <body>
     <div class="redirect-container">
@@ -18,7 +18,7 @@
 
         const redirectTimeout = setTimeout(() => {
             // Show timeout message and sad coffee GIF
-            document.body.style.backgroundImage = "url('image/sad_coffee.gif')";
+            document.body.style.backgroundImage = "url('static/image/sad_coffee.gif')";
             document.body.style.backgroundSize = "cover";
             document.getElementById("redirectMessage").textContent =
                 "Connection timeout to the server, please check your connection and try again...";
