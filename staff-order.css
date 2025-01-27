@@ -143,14 +143,14 @@ h1, h2, h3 {
     margin-bottom: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
 }
-.order-card h3 {
+.order-card h4 {
     font-size: 18px;
     color: #583216;
-    margin-left: 40px;
+    text-align: center;
 }
 .item-card {
     background-color: #faf3e6; /* Slightly lighter background for items */
-    border: 1px solid #d3c3a3;
+    border: 1px solid #634b1c;
     border-radius: 8px;
     padding: 10px;
     margin: 10px 0;

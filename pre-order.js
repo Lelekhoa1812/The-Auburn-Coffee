@@ -254,15 +254,15 @@ const app = Vue.createApp({
                 total_price: totalPrice,
                 order_notice: this.orderNotice || null,
             };
-            // Base endpoint prefix on Vercel app deployment
-            // const BASE_URL = 'https://the-auburn-coffee.vercel.app/api';
-            // Base endpoint prefix on local app deployment
-            // const BASE_URL = 'http://localhost:5002/api';
-            const BASE_URL = '/api';
+            
+            // Dynamic endpoint prefix on Vercel and local app deployment
+            const BASE_URL = window.location.origin.includes("localhost")
+            // ? "http://localhost:5002/api" // Local dev environment on NodeJS
+            ? "http://localhost:3000/api" // Local dev environment by Vercel
+            : "https://the-auburn-coffee.vercel.app/api";
 
             // Try to send the JSON body to API before routing it to MongoDB
             try {
-                // const orderResponse = await fetch('http://localhost:5002/api/orders/add', {
                 const orderResponse = await fetch(`${BASE_URL}/orders/add`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -282,7 +282,6 @@ const app = Vue.createApp({
                         item_price: item.item_price,
                     };
                     // Await and post item
-                    // const itemResponse = await fetch('http://localhost:5002/api/items/add', {
                     const itemResponse = await fetch(`${BASE_URL}/items/add`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },

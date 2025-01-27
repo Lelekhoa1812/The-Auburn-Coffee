@@ -1,13 +1,16 @@
 {
   "name": "coffee-preorder",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {
+    "node": "22.x"
+  },
   "keywords": [],
-  "author": "",
+  "author": "Khoa Le <binkhoa1812@gmail.com>",
   "license": "ISC",
   "description": "",
   "dependencies": {

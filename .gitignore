@@ -1,4 +1,6 @@
 NOTICE.md
 .vercel
 .env
+vercel.json
 node_modules
+.env*.local

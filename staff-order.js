@@ -15,11 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("showRegisterBtn").addEventListener("click", () => toggleSection(false));
     document.getElementById("showLoginBtn").addEventListener("click", () => toggleSection(true));
     
-    // Base endpoint prefix on Vercel app deployment
-    // const BASE_URL = 'https://the-auburn-coffee.vercel.app/api';
-    // Base endpoint prefix on local app deployment
-    // const BASE_URL = 'http://localhost:5002/api';
-    const BASE_URL = '/api';
+    // Dynamic endpoint prefix on Vercel and local app deployment
+    const BASE_URL = window.location.origin.includes("localhost")
+    // ? "http://localhost:5002/api" // Local dev environment on NodeJS
+    ? "http://localhost:3000/api" // Local dev environment by Vercel
+    : "https://the-auburn-coffee.vercel.app/api";
 
     // Login
     document.getElementById("loginBtn").addEventListener("click", async () => {
@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         // Connect to DB and post staff login credential data as JSON
         try {
-            // const response = await fetch("http://localhost:5002/api/staff/login", {
             const response = await fetch(`${BASE_URL}/staff/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -63,7 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         // Connect to DB and register new account
         try {
-            // const response = await fetch("http://localhost:5002/api/staff/register", {
             const response = await fetch(`${BASE_URL}/staff/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -86,13 +84,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Loading orders details post login
     async function loadOrders() {
         try {
-            // const response = await fetch("http://localhost:5002/api/orders/with-items"); // endpoint fetching all orders with matching items
             const response = await fetch(`${BASE_URL}/orders/with-items`);
             // Catch error when cannot connecting to DB
             if (!response.ok) {
                 throw new Error(`Failed to fetch orders: ${response.status} ${response.statusText}`);
             }
             const orders = await response.json();
+            console.log("Orders with items:", orders); // Debugging line
             displayOrders(orders);
             // Error when loading response from DB
         } catch (error) {
@@ -114,30 +112,38 @@ document.addEventListener("DOMContentLoaded", () => {
         }    
         ordersContainer.innerHTML = ""; // Clear existing order content
         // Fetch all order and create HTML template
+        // Loop through each order
         orders.forEach(order => {
             const orderDiv = document.createElement("div");
             orderDiv.classList.add("order-card");
-            let itemsHTML = ""; // Clear existing item content
-            // Inner Item HTML template
-            order.items.forEach(item => {
-                itemsHTML += `
-                    <div class="item-card">
-                        <p>Item: ${item.item_name}</p>
-                        <p>Size: ${item.item_size || "N/A"}</p>
-                        <p>Quantity: ${item.item_quantity}</p>
-                        <p>Price: $${item.item_price.toFixed(2)}</p>
-                    </div>`;
-            });
+            // Ensure items exist and create their HTML template
+            let itemsHTML = "";
+            if (order.items && order.items.length > 0) {
+                order.items.forEach(item => {
+                    itemsHTML += `
+                        <div class="item-card">
+                            <p><strong>Item:</strong> ${item.item_name}</p>
+                            <p><strong>Size:</strong> ${item.item_size || "N/A"}</p>
+                            <p><strong>Quantity:</strong> ${item.item_quantity}</p>
+                            <p><strong>Price:</strong> $${item.item_price.toFixed(2)}</p>
+                        </div>`;
+                });
+            } else { // Casing no item fetched for this order
+                itemsHTML = `<p>No items available for this order.</p>`;
+            }
             // Order HTML template
             orderDiv.innerHTML = `
-                <h3>Customer Name: ${order.customer_name}</h3>
-                <p>Estimate Arrival: ${order.order_eta || "Not provided"}</p>
-                <p>Order Time: ${order.order_time}</p>
-                <p>Status: ${order.order_status}</p>
-                <p>Total Price: $${order.total_price.toFixed(2)}</p>
-                <p>Notice: ${order.order_notice || "No additional notes"}</p>
+                <h4>Customer Name: ${order.customer_name}</h4>
+                <p><strong>Estimate Arrival:</strong> ${order.order_eta || "Not provided"}</p>
+                <p><strong>Order Time:</strong> ${order.order_time}</p>
+                <p><strong>Status:</strong> ${order.order_status}</p>
+                <p><strong>Total Price:</strong> $${order.total_price.toFixed(2)}</p>
+                <p><strong>Notice:</strong> ${order.order_notice || "No additional notes"}</p>
+                <div class="items-section">
+                    ${itemsHTML}
+                </div>
             `;
-            // Append all child to the order container 
+            // Append all child to the order container
             ordersContainer.appendChild(orderDiv);
         });
     }    

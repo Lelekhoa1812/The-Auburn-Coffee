@@ -32,23 +32,25 @@ router.post('/add', async (req, res) => {
     }
 });
 
-// Fetch all orders with their items
-router.get("/with-items", async (req, res) => {
+// Fetch all orders with their associated items
+router.get('/with-items', async (req, res) => {
     try {
-        const orders = await Order.aggregate([
+        const ordersWithItems = await Order.aggregate([
             {
                 $lookup: {
-                    from: "items", // MongoDB collection for items
-                    localField: "order_id",
-                    foreignField: "order_id",
-                    as: "items"
-                }
-            }
+                    from: 'items', // MongoDB collection name for the Item model
+                    localField: 'order_id',
+                    foreignField: 'order_id',
+                    as: 'items', // Name of the field where items will be embedded
+                },
+            },
         ]);
-        res.status(200).json(orders);
+        // Status 200 returns item matching order_id
+        console.log('Orders with Items:', ordersWithItems); // Debug item JSON that is obtained
+        res.status(200).json(ordersWithItems);
     } catch (error) {
-        console.error("Error fetching orders with items:", error);
-        res.status(500).json({ message: "Server error while fetching orders with items." });
+        console.error('Error fetching orders with items:', error);
+        res.status(500).json({ message: 'Server error while fetching orders with items.' });
     }
 });
 
