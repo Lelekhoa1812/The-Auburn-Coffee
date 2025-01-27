@@ -26,6 +26,7 @@ Auburn Coffee 2.0/
 │   ├── package-lock.json
 ## OTHERS
 │   ├── view-data.js       # Fetch all data in MongoDB
+│   ├── clear-table.js     # Clear all data from a given MongoDB table
 # REDIRECTION
 ├── index.html             # Redirection
 ├── redirect.css
