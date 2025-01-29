@@ -65,4 +65,104 @@ router.get("/", async (req, res) => {
     }
 });
 
+// Update an existing order (Fixing undefined order_id issue), this route could also add new item
+router.put('/update/:order_id', async (req, res) => {
+    try {
+        const orderId = parseInt(req.params.order_id);
+        const { customer_name, order_eta, order_time, total_price, order_notice, order_status, registered_staff, items } = req.body;
+
+        // Update the order details
+        const updatedOrder = await Order.findOneAndUpdate(
+            { order_id: orderId },
+            { customer_name, order_eta, order_time, total_price, order_notice, order_status, registered_staff },
+            { new: true }
+        );
+        if (!updatedOrder) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+        // Update items in the order
+        if (items && items.length > 0) {
+            for (const item of items) {
+                if (item.item_id) {
+                    // Update existing item
+                    await Item.findOneAndUpdate(
+                        { item_id: item.item_id },
+                        { order_id: orderId, item_name: item.item_name, item_size: item.item_size, item_quantity: item.item_quantity, item_price: item.item_price },
+                        { new: true }
+                    );
+                } else {
+                    // Add new item if it doesn't have an `item_id`
+                    const newItem = new Item({
+                        item_id: Math.floor(Math.random() * 100000), // Generate a unique item_id
+                        order_id: orderId,
+                        item_name: item.item_name,
+                        item_size: item.item_size || null,
+                        item_quantity: item.item_quantity,
+                        item_price: item.item_price,
+                    });
+                    await newItem.save();
+                }
+            }
+        }
+        res.status(200).json({ message: "Order and items updated successfully", updatedOrder });
+    } catch (error) {
+        console.error("Error updating order and items:", error);
+        res.status(500).json({ message: "Server error while updating order and items." });
+    }
+});
+
+
+// Edit Order: Change status to "Editing"
+router.put('/:order_id/edit', async (req, res) => {
+    try {
+        const updatedOrder = await Order.findOneAndUpdate(
+            { order_id: parseInt(req.params.order_id) },
+            { order_status: "Editing" },
+            { new: true }
+        );
+        if (!updatedOrder) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+        res.status(200).json(updatedOrder);
+    } catch (error) {
+        console.error("Error setting order to editing:", error);
+        res.status(500).json({ message: "Server error while editing order." });
+    }
+});
+
+// Confirm Order (Set to "Pending")
+router.put('/:order_id/confirm', async (req, res) => {
+    try {
+        const updatedOrder = await Order.findOneAndUpdate(
+            { order_id: parseInt(req.params.order_id) },
+            { order_status: "Pending" },
+            { new: true }
+        );
+        if (!updatedOrder) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+        res.status(200).json(updatedOrder);
+    } catch (error) {
+        console.error("Error confirming order:", error);
+        res.status(500).json({ message: "Server error while confirming order." });
+    }
+});
+
+// Delete an order and associated items
+router.delete('/delete/:order_id', async (req, res) => {
+    try {
+        const orderId = parseInt(req.params.order_id);
+        const deletedOrder = await Order.findOneAndDelete({ order_id: orderId });
+        if (!deletedOrder) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+        // Delete all items associated with this order
+        await Item.deleteMany({ order_id: orderId });
+        res.status(200).json({ message: "Order and related items deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting order:", error);
+        res.status(500).json({ message: "Server error while deleting order." });
+    }
+});
+
 module.exports = router;

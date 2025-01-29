@@ -16,11 +16,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("showLoginBtn").addEventListener("click", () => toggleSection(true));
     
     // Dynamic endpoint prefix on Vercel and local app deployment
-    const BASE_URL = window.location.origin.includes("localhost")
-    // ? "http://localhost:5002/api" // Local dev environment on NodeJS
-    ? "http://localhost:3000/api" // Local dev environment by Vercel
-    : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend
+    // const BASE_URL = window.location.origin.includes("localhost")
+    // // ? "http://localhost:5002/api" // Local dev environment on NodeJS
+    // ? "http://localhost:3000/api" // Local dev environment by Vercel
+    // : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend
 
+    const BASE_URL = "http://localhost:3000/api";
+
+    // Initialize empty staff name utility that is updated upon login
     // Login
     document.getElementById("loginBtn").addEventListener("click", async () => {
         const staffName = document.getElementById("staffName").value.trim();
@@ -41,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                     const loginRegisterModal = document.getElementById("loginRegisterModal");
                     loginRegisterModal.style.display = "none"; // Hide modal when login successfully
+                    displayStaffName(staffName) // Display welcome message to staff
                     loadOrders();
             } else {
                 alert("Invalid login credentials.");
@@ -50,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Error logging in. Please try again.");
         }
     });
- 
     // Register
     document.getElementById("createAccountBtn").addEventListener("click", async () => {
         const newStaffName = document.getElementById("newStaffName").value.trim();
@@ -81,6 +84,23 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Error creating account. Please try again.");
         }
     });
+
+    // Dynamically show the staff name after login
+    function displayStaffName(staffName) {
+        const staffContainer = document.getElementById("staff-container");
+        staffContainer.innerHTML = ""; // Clear existing staff content
+        // Staff welcome div (only show when staff name not null)
+        if (staffName.trim()) {
+            const staffDiv = document.createElement("div");
+            staffDiv.classList.add("staff-card");
+            staffDiv.innerHTML = `
+                <h2>Welcome back to the Auburn Coffee, ${staffName}!</h2>
+                <h2>Taking your current orders now:</h2>
+                `;
+            staffContainer.appendChild(staffDiv);
+        }
+    }
+
     // Loading orders details post login
     async function loadOrders() {
         try {
@@ -112,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }    
         ordersContainer.innerHTML = ""; // Clear existing order content
         // Fetch all order and create HTML template
-        // Loop through each order
+        // Order HTML template, loop through each order
         orders.forEach(order => {
             const orderDiv = document.createElement("div");
             orderDiv.classList.add("order-card");

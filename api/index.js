@@ -8,8 +8,8 @@ const app = express();
 // CORS Configuration
 const cors = require('cors');
 const corsOptions = {
-    // origin: 'http://localhost:8000', // Allow requests from local server on port 8000
-    origin: 'https://the-auburn-coffee.vercel.app', // Allow requests from this origin
+    origin: 'http://localhost:3001', // Allow requests from local server on port 3001 (Vercel local alternative)
+    // origin: 'https://the-auburn-coffee.vercel.app', // Allow requests from this origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'],       // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
 };

@@ -196,6 +196,8 @@ h1:hover {
     background-color: #8b4513;
     border-color: #e0c3a3;
     display: flex;
+    width: 100%;
+    border-radius: 10px;
     justify-content: center; /* Center children horizontally */
     overflow: hidden; /* Prevent child animations spilling out */
     gap: 10px; /* Set initial gap between icon and text */
@@ -203,17 +205,15 @@ h1:hover {
 }
 .btn-primary:hover {
     color: #281100;
-    background-color: #e0c3a3;
+    background-color: #ece3d9;
     border-color: #8b4513;
 }
-
 /* Image styling */
 #plus {
     width: 35px;
     height: 35px;
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Smooth transform and fade */
 }
-
 /* Text styling */
 #additemtext {
     display: inline-block;
@@ -221,6 +221,7 @@ h1:hover {
     font-size: 18px;
     transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
     color: #fff;
+    margin-left: 5px;
 }
 /* Add hover effect for the parent container */
 .btn-primary:hover #additemtext {
@@ -229,6 +230,11 @@ h1:hover {
 }
 .btn-primary:hover #plus {
     transform: scale(1.2) translateX(90px); /* Zoom and move */
+}
+#buttonContent {
+    align-items: center;
+    text-align: center;
+    height: 40px;
 }
 
 /* Pagination */
@@ -378,6 +384,47 @@ h1:hover {
 .order-summary-container.fade-out {
     opacity: 0;
     transition: opacity 0.5s ease-out;
+}
+.order-status {
+    text-align: left;
+    font-size: 1.2rem;
+    color: #5a3315;
+}
+.edit-order {
+    background-color: #fefefe;
+    display: flex;
+    border-radius: 10px;
+    text-align: center;
+    justify-content: center;
+    padding: 8px 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    border: 1px solid #8b4513;
+    gap: 10px; /* Adds spacing between text and icon */
+    font-size: 1.3rem;
+    color: #4b2002;
+    transition: background-color 0.2s;
+
+}
+.edit-order:hover {
+    background-color: #7f2814;
+    color: #fbfbfb;
+}
+/* Default edit.gif (static image) */
+.edit-order img {
+    width: 30px;
+    height: 30px;
+    transition: transform 0.3s ease-in-out;
+    opacity: 1;
+}
+.edit-order p {
+    margin-left: 10px;
+    margin-bottom: 0;
+}
+/* Animate only on hover */
+.edit-order:hover img {
+    transform: scale(1.2);
+    opacity: 1;
 }
 
 /* For customized and motion effect student checkbox */
@@ -533,6 +580,8 @@ margin-top: 0; /* Adjust margin if necessary */
     }
     #additemtext {
         font-size: 16px;
+        margin-bottom: 0;
+        margin-top: 0;
     }
     #plus {
         width: 30px;
@@ -540,7 +589,7 @@ margin-top: 0; /* Adjust margin if necessary */
     }
     /* Center-align the search bar and header inputs */
     .search-bar {
-        width: 90%; /* Match the width of other inputs */
+        width: 30%; /* Match the width of other inputs */
         margin: 0 auto 10px; /* Center it and add spacing below */
     }
     .searchtext {
@@ -613,9 +662,10 @@ margin-top: 0; /* Adjust margin if necessary */
     .btn-primary:hover #plus {
         transform: scale(1.2);
     }
+    /* Center-align the search bar and header inputs */
     .search-bar {
-        width: 190px; /* Center the search bar */
-        margin-bottom: 10px; /* Add spacing below */
+        width: 50%; /* Match the width of other inputs */
+        margin: 0 auto 10px; /* Center it and add spacing below */
     }
     .searchtext {
         font-size: 14px;

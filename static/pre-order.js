@@ -78,7 +78,10 @@ const app = Vue.createApp({
             orderNotice: '',
             isStudent: false,
             showModal: true, // Ensure name modal is displayed initially
+            currentOrderId: null, // Store current order ID
             hoverItem: null, // Track which item is hovered
+            isSubmitting: false,  // Prevent multiple clicks during request
+            orderStatus: "New Order", // Default state before confirmation
             pageSize: 6,
             currentPage: 1
         };
@@ -109,6 +112,14 @@ const app = Vue.createApp({
         uniqueTypes() {
             return [...new Set(this.items.map(item => item.type))];
         },
+        // Calculate total worth for an order by sum(item_price * quantity)
+        orderTotal() {
+            return this.order.reduce((acc, item) => acc + item.total_price, 0).toFixed(2);
+        },
+        // Assert if an order is editable if it is in Editing state
+        canEditOrder() {
+            return this.orderStatus === "Pending" || this.orderStatus === "Editing";
+        }
     },
     methods: {
         // Close modal and proceed if customer name is entered
@@ -209,6 +220,15 @@ const app = Vue.createApp({
         removeHoverEffect() {
             this.hoverType = null; // Remove hover effect
         },
+        getURL() {
+            // Dynamic endpoint prefix on Vercel and local app deployment
+            // const BASE_URL = window.location.origin.includes("localhost")
+            // // ? "http://localhost:5002/api" // Local dev environment on NodeJS
+            // ? "http://localhost:3000/api" // Local dev environment by Vercel
+            // : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend            
+            const BASE_URL = "http://localhost:3000/api";
+            return BASE_URL;
+        },
         // Handle hover for add item btn
         handleHover(itemName) {
             // console.log(`${itemName} on hover.`);
@@ -223,18 +243,41 @@ const app = Vue.createApp({
                 this.currentPage = page;
             }
         },
-        // Remove all order item (return empty list) on btn click
-        cancelOrder() {
+        // Send DELETE request to backend to cancel the order
+        async cancelOrder() {
+            // Send Delete request
             if (confirm("Are you sure you want to cancel the entire order?")) {
+                try {
+                    const response = await fetch(`${this.getURL()}/orders/delete/${this.currentOrderId}`, {
+                        method: 'DELETE',
+                    });
+                    if (!response.ok) {
+                        throw new Error("Failed to cancel order.");
+                    }
+                }
+                // Cannot connect to DB
+                catch (error) {
+                    console.error('Error cancelling order:', error);
+                    alert('There was an issue cancelling your order. Please try again.');
+                } 
+                // Close order summary table
                 const summary = document.querySelector('#orderSummary');
                 if (summary) {
                     summary.classList.add('fade-out');
                     setTimeout(() => {
                         this.order = [];
+                        this.orderStatus = "New Order";
+                        this.currentOrderId = null;            
                     }, 500); // Match the CSS transition duration
                 }
             }
-        },        
+        },   
+        // Mark order as editable
+        editOrder() {
+            if (this.orderStatus === "Pending") {
+                this.orderStatus = "Editing";
+            }
+        }, 
         // Send complete order json body to MongoDB
         async completeOrder() {
             if (!this.customerName.trim()) {
@@ -245,6 +288,11 @@ const app = Vue.createApp({
                 alert("Please provide an estimated time of arrival. E.g., 10:30 AM or In the next 5 mins.");
                 return;
             }
+            if (this.isSubmitting) {
+                console.warn("Request already in progress."); 
+                return; // Prevent multiple clicks
+            }
+            this.isSubmitting = true; // Lock the button to prevent multiple submissions    
             const totalPrice = this.order.reduce((acc, item) => acc + item.total_price, 0);
             const orderData = {
                 customer_name: this.customerName,
@@ -254,26 +302,44 @@ const app = Vue.createApp({
                 total_price: totalPrice,
                 order_notice: this.orderNotice || null,
             };
-            
-            // Dynamic endpoint prefix on Vercel and local app deployment
-            const BASE_URL = window.location.origin.includes("localhost")
-            // ? "http://localhost:5002/api" // Local dev environment on NodeJS
-            ? "http://localhost:3000/api" // Local dev environment by Vercel
-            : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend
-            
+            BASE_URL = this.getURL();
             // Try to send the JSON body to API before routing it to MongoDB
             try {
-                const orderResponse = await fetch(`${BASE_URL}/orders/add`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderData),
-                });
-                if (!orderResponse.ok) {
-                    throw new Error(`Order creation failed: ${orderResponse.statusText}`);
+                // Attempt to dynamically Create or Update a query to API based on the order status
+                let response;
+                if (this.orderStatus === "New Order") {
+                    response = await fetch(`${BASE_URL}/orders/add`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(orderData),
+                    });
+                } else if (this.orderStatus === "Editing") {
+                    // Assert null order
+                    if (!this.currentOrderId) {
+                        alert("No order found to update.");
+                        return;
+                    }
+                    else if (this.currentOrderId) {
+                        response = await fetch(`${BASE_URL}/orders/update/${this.currentOrderId}`, {  // <-- Correct Update URL
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(orderData),
+                        });
+                    }
                 }
-                const order = await orderResponse.json();
+                // Request failed either by invalid orderStatus or connection error
+                if (!response.ok) {
+                    throw new Error(`Request failed: ${response.statusText}`);
+                }
+                const order = await response.json();
+                this.currentOrderId = order.order_id;  // Store order ID for future updates
+                this.orderStatus = "Pending"; 
                 // For each item in the order list, split and post them as in a json array to item table MongoDB
                 for (const item of this.order) {
+                    if (!item.item_id) {
+                        console.error("Skipping item update: Missing item_id", item);
+                        continue; // Skip this item if it has no item_id
+                    }
                     const itemData = {
                         order_id: order.order_id,
                         item_name: item.name,
@@ -281,22 +347,34 @@ const app = Vue.createApp({
                         item_quantity: item.quantity,
                         item_price: item.item_price,
                     };
-                    // Await and post item
-                    const itemResponse = await fetch(`${BASE_URL}/items/add`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(itemData),
-                    });
+                    // Await and Post or Put item based on order status
+                    let itemResponse;
+                    if (this.orderStatus === "New Order") {
+                        itemResponse = await fetch(`${BASE_URL}/items/add`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(itemData),
+                        });
+                    } else {
+                        itemResponse = await fetch(`${BASE_URL}/items/update/${item.item_id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(itemData),
+                        });
+                    }
+                    // Cannot add or update item to DB
                     if (!itemResponse.ok) {
                         throw new Error(`Item addition failed: ${itemResponse.statusText}`);
                     }
                 }
                 // Show complete message
                 alert('Order completed successfully!');
-                this.order = [];
+                this.orderStatus = "Pending"; // Change order status after confirming
             } catch (error) {
                 console.error('Error completing order:', error);
                 alert('There was an issue completing your order. Please try again.');
+            } finally {
+                this.isSubmitting = false; // Unlock the button after completion
             }
         }
     },

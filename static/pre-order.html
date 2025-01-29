@@ -48,7 +48,7 @@
         <h1>Make Your Pre-order</h1>
         <div>
             <label for="etaInput">Your Estimate Arriving Time:</label>
-            <input type="text" id="etaInput" v-model="etaInput" class="header-form-control" placeholder="E.g., 10:30 AM or In the next 5 mins">
+            <input type="text" id="etaInput" v-model="etaInput" class="header-form-control" placeholder="E.g., 8:30 AM or In the next 5 mins">
             <label for="orderNotice" class="mt-3">Your Notice to Us:</label>
             <input type="text" id="orderNotice" v-model="orderNotice" class="header-form-control" placeholder="Add any notes on your order">
         </div>
@@ -148,11 +148,11 @@
                             @mouseleave="handleLeave"
                             @click="addItemToOrder(item)"
                         >
-                            <div id="buttonContent">
+                            <div id="buttonContent" class="buttonContent">
                                 <!-- Dynamically change the image based on hover state -->
                                 <img
                                     id="plus"
-                                    :src="hoverItem === item.name ? './image/accept.png' : './image/plus.png'"
+                                    :src="hoverItem === item.name ? './image/accept.gif' : './image/plus.png'"
                                     :key="hoverItem"
                                     alt="Add"
                                 />
@@ -201,14 +201,24 @@
                 </tbody>
             </table>
             <div class="order-summary-total">
-                <p>Order Total: <span>${{ order.reduce((acc, item) => acc + item.total_price, 0).toFixed(2) }}</span></p>
+                <!-- <p>Order Total: <span>${{ order.reduce((acc, item) => acc + item.total_price, 0).toFixed(2) }}</span></p> -->
+                <p>Order Total: <span>${{ orderTotal }}</span></p>
             </div>
+            <!-- Order Status Display -->
+            <div class="order-status">
+                <p>Order Status: {{ orderStatus }}</p>
+            </div>
+            <!-- Buttons Section -->
             <div class="order-summary-actions">
-                <button class="btn btn-secondary" @click="cancelOrder">Cancel</button>
-                <button class="btn btn-primary complete-btn" @click="completeOrder">Confirm Order</button>
+                <button v-if="orderStatus === 'New Order' || orderStatus === 'Editing'" class="btn btn-secondary" @click="cancelOrder">Cancel</button>
+                <button v-if="orderStatus === 'New Order' || orderStatus === 'Editing'" class="btn btn-primary complete-btn" @click="completeOrder" :disabled="isSubmitting">{{ isSubmitting ? "Processing..." : "Confirm Order" }}</button>
+                <!-- Edit Order Button -->
+                <div v-if="orderStatus === 'Pending'" class="edit-order" @click="editOrder">
+                    <p>Edit Order</p>
+                    <img id="edit" src="image/edit.gif" class="edit-icon" alt="Edit Order">
+                </div>
             </div>
         </div>
-
         <!-- Add New Order Section
         <button id="addOrderButton" class="btn btn-success mt-4">Add New Order</button> -->
     </main>
