@@ -20,7 +20,7 @@ const app = Vue.createApp({
                 { "name": "Iced Coffee", "image": "iced.jpeg", "type" : "Coffee", "pricelarge" : "6.5", "pricemedium" : "6.0", "pricesmall" : "5.5" },
                 { "name": "Hot Vietnamese Coffee", "image": "hotvn.jpeg", "type" : "Coffee", "pricelarge" : "6.5", "pricemedium" : "6.0", "pricesmall" : "5.5" },
                 { "name": "Iced Vietnamese Coffee", "image": "icevn.jpeg", "type" : "Coffee", "pricelarge" : "7.0", "pricemedium" : "6.5", "pricesmall" : "6.0" },
-                { "name": "Muffin", "image": "muffin.jpg", "type" : "Snacks", "price" : "4.7"},
+                { "name": "Muffin", "image": "muffin.jpg", "type" : "Snacks", "price" : "4.5"},
                 { "name": "Lemon Tart", "image": "tart.jpg", "type" : "Snacks", "price" : "3.0"},
                 { "name": "Gippsland Yogurt", "image": "yogurt.jpeg", "type" : "Snacks", "price" : "4.7"},
                 { "name": "Cheesy Crackers", "image": "cracker.jpeg", "type" : "Snacks", "price" : "4.7"},
@@ -278,6 +278,29 @@ const app = Vue.createApp({
                 this.orderStatus = "Editing";
             }
         }, 
+        // Fetch item in an order before updating
+        async fetchOrderItems() {
+            if (!this.currentOrderId) return;
+            // Connect to DB to get all item with order_id
+            try {
+                const response = await fetch(`${this.getURL()}/items/by-order/${this.currentOrderId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch order items');
+                }
+                const items = await response.json();
+                // Assign fetched items to the current order
+                this.order = items.map(item => ({
+                    item_id: item.item_id,
+                    name: item.item_name,
+                    size: item.item_size,
+                    quantity: item.item_quantity,
+                    item_price: item.item_price,
+                    total_price: item.item_price * item.item_quantity,
+                }));
+            } catch (error) {
+                console.error("Error fetching order items:", error);
+            }
+        },        
         // Send complete order json body to MongoDB
         async completeOrder() {
             if (!this.customerName.trim()) {
@@ -285,7 +308,7 @@ const app = Vue.createApp({
                 return;
             }
             if (!this.etaInput.trim()) {
-                alert("Please provide an estimated time of arrival. E.g., 10:30 AM or In the next 5 mins.");
+                alert("Please provide an estimated time of arrival. E.g., 8:30 AM or In the next 5 mins.");
                 return;
             }
             if (this.isSubmitting) {
@@ -301,6 +324,15 @@ const app = Vue.createApp({
                 order_status: 'Pending',
                 total_price: totalPrice,
                 order_notice: this.orderNotice || null,
+                // item object
+                items: this.order.map(item => ({
+                    item_id: item.item_id || null, // Ensure `item_id` is passed correctly
+                    order_id: this.currentOrderId,
+                    item_name: item.name,
+                    item_size: item.size || null,
+                    item_quantity: item.quantity,
+                    item_price: item.item_price
+                }))
             };
             BASE_URL = this.getURL();
             // Try to send the JSON body to API before routing it to MongoDB
@@ -313,19 +345,22 @@ const app = Vue.createApp({
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(orderData),
                     });
+                    // Re-fetch order items to prevent clearing the order summary table**
+                    await this.fetchOrderItems(); 
                 } else if (this.orderStatus === "Editing") {
                     // Assert null order
                     if (!this.currentOrderId) {
                         alert("No order found to update.");
                         return;
                     }
-                    else if (this.currentOrderId) {
-                        response = await fetch(`${BASE_URL}/orders/update/${this.currentOrderId}`, {  // <-- Correct Update URL
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(orderData),
-                        });
-                    }
+                    // //Fetch existing order items before updating**
+                    // await this.fetchOrderItems();
+                    // Send order update with all item
+                    response = await fetch(`${BASE_URL}/orders/update/${this.currentOrderId}`, {  
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(orderData),
+                    });
                 }
                 // Request failed either by invalid orderStatus or connection error
                 if (!response.ok) {
@@ -334,39 +369,42 @@ const app = Vue.createApp({
                 const order = await response.json();
                 this.currentOrderId = order.order_id;  // Store order ID for future updates
                 this.orderStatus = "Pending"; 
+                // Re-fetch order items to prevent clearing the order summary table**
+                await this.fetchOrderItems(); 
                 // For each item in the order list, split and post them as in a json array to item table MongoDB
-                for (const item of this.order) {
-                    if (!item.item_id) {
-                        console.error("Skipping item update: Missing item_id", item);
-                        continue; // Skip this item if it has no item_id
-                    }
-                    const itemData = {
-                        order_id: order.order_id,
-                        item_name: item.name,
-                        item_size: item.size || null,
-                        item_quantity: item.quantity,
-                        item_price: item.item_price,
-                    };
-                    // Await and Post or Put item based on order status
-                    let itemResponse;
-                    if (this.orderStatus === "New Order") {
-                        itemResponse = await fetch(`${BASE_URL}/items/add`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(itemData),
-                        });
-                    } else {
-                        itemResponse = await fetch(`${BASE_URL}/items/update/${item.item_id}`, {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(itemData),
-                        });
-                    }
-                    // Cannot add or update item to DB
-                    if (!itemResponse.ok) {
-                        throw new Error(`Item addition failed: ${itemResponse.statusText}`);
-                    }
-                }
+                // Commented now as we just send item as object with the orderData
+                // for (const item of this.order) {
+                //     if (!item.item_id) {
+                //         console.error("Skipping item update: Missing item_id", item);
+                //         continue; // Skip this item if it has no item_id
+                //     }
+                //     const itemData = {
+                //         order_id: order.order_id,
+                //         item_name: item.name,
+                //         item_size: item.size || null,
+                //         item_quantity: item.quantity,
+                //         item_price: item.item_price,
+                //     };
+                //     // Await and Post or Put item based on order status
+                //     let itemResponse;
+                //     if (this.orderStatus === "New Order") {
+                //         itemResponse = await fetch(`${BASE_URL}/items/add`, {
+                //             method: 'POST',
+                //             headers: { 'Content-Type': 'application/json' },
+                //             body: JSON.stringify(itemData),
+                //         });
+                //     } else {
+                //         itemResponse = await fetch(`${BASE_URL}/items/update/${item.item_id}`, {
+                //             method: 'PUT',
+                //             headers: { 'Content-Type': 'application/json' },
+                //             body: JSON.stringify(itemData),
+                //         });
+                //     }
+                //     // Cannot add or update item to DB
+                //     if (!itemResponse.ok) {
+                //         throw new Error(`Item addition failed: ${itemResponse.statusText}`);
+                //     }
+                // }
                 // Show complete message
                 alert('Order completed successfully!');
                 this.orderStatus = "Pending"; // Change order status after confirming
