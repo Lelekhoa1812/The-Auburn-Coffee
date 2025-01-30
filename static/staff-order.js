@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 throw new Error(`Failed to fetch orders: ${response.status} ${response.statusText}`);
             }
             const orders = await response.json();
-            console.log("Orders with items:", orders); // Debugging line
+            // console.log("Orders with items:", orders); // Debugging line
             displayOrders(orders);
             // Error when loading response from DB
         } catch (error) {
@@ -129,14 +129,14 @@ document.addEventListener("DOMContentLoaded", () => {
         'Editing': '#8c2b2b',
         'Received': '#7e136b',
         'Completed': '#124477',
-        'Awaiting': '#000000'
+        'Awaiting': '#000000',
+        'DEF': '#8c2b2b' // Set a custom color tag for other highlights
     };
 
     // Function to start blinking effect
     function startBlinkingEffect(orderStatusElement, orderStatus) {
-        let defaultColor = "#5a3315"; // Default color
+        let defaultColor = "#351b09"; // Default color
         let targetColor = statusColors[orderStatus] || defaultColor; // Get the corresponding color
-
         let toggle = false;
         setInterval(() => {
             orderStatusElement.style.color = toggle ? defaultColor : targetColor;
@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Order HTML template
             orderDiv.innerHTML = `
                 <h4>Customer Name: ${order.customer_name}</h4>
-                <p><strong>Estimate Arrival:</strong> ${order.order_eta || "Not provided"}</p>
+                <p><strong>Estimate Arrival:</strong> ${order.order_eta}</p>
                 <p><strong>Order Time:</strong> ${order.order_time}</p>
                 <p><strong>Status:</strong> 
                     <span class="order-status-text">${order.order_status}</span>
@@ -191,6 +191,8 @@ document.addEventListener("DOMContentLoaded", () => {
             // Start blinking effect for this order status
             const orderStatusElement = orderDiv.querySelector('.order-status-text');
             startBlinkingEffect(orderStatusElement, order.order_status);
+            // const orderETAElement = orderDiv.querySelector('.order-eta-text');
+            // startBlinkingEffect(orderETAElement, "DEF"); // Red color for default highlight
         });
     }    
 

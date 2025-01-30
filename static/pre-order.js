@@ -254,11 +254,11 @@ const app = Vue.createApp({
         },
         getURL() {
             // Dynamic endpoint prefix on Vercel and local app deployment
-            // const BASE_URL = window.location.origin.includes("localhost")
-            // // ? "http://localhost:5002/api" // Local dev environment on NodeJS
-            // ? "http://localhost:3000/api" // Local dev environment by Vercel
-            // : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend            
-            const BASE_URL = "http://localhost:3000/api";
+            const BASE_URL = window.location.origin.includes("localhost")
+            // ? "http://localhost:5002/api" // Local dev environment on NodeJS
+            ? "http://localhost:3000/api" // Local dev environment by Vercel
+            : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend            
+            // const BASE_URL = "http://localhost:3000/api";
             return BASE_URL;
         },
         // Handle hover for add item btn
@@ -304,12 +304,25 @@ const app = Vue.createApp({
                 }
             }
         },   
-        // Mark order as editable
-        editOrder() {
-            if (this.orderStatus === "Pending") {
-                this.orderStatus = "Editing";
+        // Change order to Editing status on endpoint
+        async editOrder() {
+            if (this.orderStatus !== "Pending") return;
+            // Connect to DB
+            try {
+                const response = await fetch(`${this.getURL()}/orders/${this.currentOrderId}/edit`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to update order status to Editing.');
+                }
+                const updatedOrder = await response.json();
+                this.orderStatus = updatedOrder.order_status;
+            } catch (error) {
+                console.error("Error updating order to Editing:", error);
+                alert("Error setting order to Editing. Please try again.");
             }
-        }, 
+        },        
         // Fetch item in an order before updating
         async fetchOrderItems() {
             if (!this.currentOrderId) return;
@@ -377,12 +390,10 @@ const app = Vue.createApp({
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(orderData),
                     });
-                    // Re-fetch order items to prevent clearing the order summary table**
-                    await this.fetchOrderItems(); 
                 } else if (this.orderStatus === "Editing") {
                     // Assert null order
                     if (!this.currentOrderId) {
-                        alert("No order found to update.");
+                        alert("No order found to edit.");
                         return;
                     }
                     // Send order update with all item
@@ -391,50 +402,29 @@ const app = Vue.createApp({
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(orderData),
                     });
+                    // Request failed either by invalid orderStatus or connection error
+                    if (!response.ok) {
+                        throw new Error(`Request failed: ${response.statusText}`);
+                    }
                 }
-                // Request failed either by invalid orderStatus or connection error
-                if (!response.ok) {
-                    throw new Error(`Request failed: ${response.statusText}`);
+                const order = await response.json(); // Send with await order request
+                // console.log("Order response:", order);
+                // Store order ID for future updates
+                if (order.order_id) { this.currentOrderId = order.order_id; } 
+                else if (order.updatedOrder.order_id) { this.currentOrderId = order.updatedOrder.order_id }
+                else {alert("Cannot get order data, please try again"); return; }
+                // After updating order, confirm order (set to Pending), connection to DB
+                const confirmResponse = await fetch(`${BASE_URL}/orders/${this.currentOrderId}/confirm`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                if (!confirmResponse.ok) {
+                    throw new Error(`Failed to confirm order: ${confirmResponse.statusText}`);
                 }
-                const order = await response.json();
-                this.currentOrderId = order.order_id;  // Store order ID for future updates
-                this.orderStatus = "Pending"; 
-                // Re-fetch order items to prevent clearing the order summary table**
+                const confirmedOrder = await confirmResponse.json(); // Send with await order confirmation request
+                this.orderStatus = confirmedOrder.order_status; // Update to Pending dynamically
+                // Re-fetch order items to prevent clearing the order summary table
                 await this.fetchOrderItems(); 
-                // For each item in the order list, split and post them as in a json array to item table MongoDB
-                // Commented now as we just send item as object with the orderData
-                // for (const item of this.order) {
-                //     if (!item.item_id) {
-                //         console.error("Skipping item update: Missing item_id", item);
-                //         continue; // Skip this item if it has no item_id
-                //     }
-                //     const itemData = {
-                //         order_id: order.order_id,
-                //         item_name: item.name,
-                //         item_size: item.size || null,
-                //         item_quantity: item.quantity,
-                //         item_price: item.item_price,
-                //     };
-                //     // Await and Post or Put item based on order status
-                //     let itemResponse;
-                //     if (this.orderStatus === "New Order") {
-                //         itemResponse = await fetch(`${BASE_URL}/items/add`, {
-                //             method: 'POST',
-                //             headers: { 'Content-Type': 'application/json' },
-                //             body: JSON.stringify(itemData),
-                //         });
-                //     } else {
-                //         itemResponse = await fetch(`${BASE_URL}/items/update/${item.item_id}`, {
-                //             method: 'PUT',
-                //             headers: { 'Content-Type': 'application/json' },
-                //             body: JSON.stringify(itemData),
-                //         });
-                //     }
-                //     // Cannot add or update item to DB
-                //     if (!itemResponse.ok) {
-                //         throw new Error(`Item addition failed: ${itemResponse.statusText}`);
-                //     }
-                // }
                 // Show complete message
                 alert('Order completed successfully!');
                 this.orderStatus = "Pending"; // Change order status after confirming

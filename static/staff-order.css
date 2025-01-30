@@ -164,3 +164,6 @@ h1, h2, h3 {
 .order-status-text {
     transition: color 0.4s ease-in-out;
 }
+.order-eta-text {
+    transition: color 0.4s ease-in-out;
+}
