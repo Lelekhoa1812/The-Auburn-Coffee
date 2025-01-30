@@ -205,8 +205,9 @@
                 <p>Order Total: <span>${{ orderTotal }}</span></p>
             </div>
             <!-- Order Status Display -->
-            <div class="order-status">
-                <p>Order Status: {{ orderStatus }}</p>
+            <div class="order-status-container">
+                <p class="order-status-text">Order Status:</p>
+                <p class="order-status-content" :style="{ color: currentOrderStatusColor }">{{ orderStatus }}</p>
             </div>
             <!-- Buttons Section -->
             <div class="order-summary-actions">

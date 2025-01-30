@@ -161,3 +161,6 @@ h1, h2, h3 {
     font-size: 14px;
     color: #4d2b1a;
 }
+.order-status-text {
+    transition: color 0.4s ease-in-out;
+}

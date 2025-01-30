@@ -16,12 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("showLoginBtn").addEventListener("click", () => toggleSection(true));
     
     // Dynamic endpoint prefix on Vercel and local app deployment
-    // const BASE_URL = window.location.origin.includes("localhost")
-    // // ? "http://localhost:5002/api" // Local dev environment on NodeJS
-    // ? "http://localhost:3000/api" // Local dev environment by Vercel
-    // : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend
-
-    const BASE_URL = "http://localhost:3000/api";
+    const BASE_URL = window.location.origin.includes("localhost")
+    // ? "http://localhost:5002/api" // Local dev environment on NodeJS
+    ? "http://localhost:3000/api" // Local dev environment by Vercel
+    : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend
+    // const BASE_URL = "http://localhost:3000/api";
 
     // Initialize empty staff name utility that is updated upon login
     // Login
@@ -122,6 +121,28 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     }
+
+    // Define status colors
+    const statusColors = {
+        'New Order': '#858b13',
+        'Pending': '#168275',
+        'Editing': '#8c2b2b',
+        'Received': '#7e136b',
+        'Completed': '#124477',
+        'Awaiting': '#000000'
+    };
+
+    // Function to start blinking effect
+    function startBlinkingEffect(orderStatusElement, orderStatus) {
+        let defaultColor = "#5a3315"; // Default color
+        let targetColor = statusColors[orderStatus] || defaultColor; // Get the corresponding color
+
+        let toggle = false;
+        setInterval(() => {
+            orderStatusElement.style.color = toggle ? defaultColor : targetColor;
+            toggle = !toggle;
+        }, 400); // Toggle color every 0.4s
+    }
     
     // Dynamic UI to display all order with HTML template when loaded
     function displayOrders(orders) {
@@ -156,7 +177,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 <h4>Customer Name: ${order.customer_name}</h4>
                 <p><strong>Estimate Arrival:</strong> ${order.order_eta || "Not provided"}</p>
                 <p><strong>Order Time:</strong> ${order.order_time}</p>
-                <p><strong>Status:</strong> ${order.order_status}</p>
+                <p><strong>Status:</strong> 
+                    <span class="order-status-text">${order.order_status}</span>
+                </p>
                 <p><strong>Total Price:</strong> $${order.total_price.toFixed(2)}</p>
                 <p><strong>Notice:</strong> ${order.order_notice || "No additional notes"}</p>
                 <div class="items-section">
@@ -165,6 +188,9 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
             // Append all child to the order container
             ordersContainer.appendChild(orderDiv);
+            // Start blinking effect for this order status
+            const orderStatusElement = orderDiv.querySelector('.order-status-text');
+            startBlinkingEffect(orderStatusElement, order.order_status);
         });
     }    
 

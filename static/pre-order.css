@@ -385,10 +385,17 @@ h1:hover {
     opacity: 0;
     transition: opacity 0.5s ease-out;
 }
-.order-status {
+.order-status-container {
     text-align: left;
+    gap: 3px; /* Adds spacing between texts */
     font-size: 1.2rem;
+    display: flex;
+}
+.order-status-text {
     color: #5a3315;
+}
+.order-status-content {
+    transition: color 0.4s ease-in-out; /* Smooth transition */
 }
 .edit-order {
     background-color: #fefefe;

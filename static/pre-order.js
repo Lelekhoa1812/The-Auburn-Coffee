@@ -82,6 +82,8 @@ const app = Vue.createApp({
             hoverItem: null, // Track which item is hovered
             isSubmitting: false,  // Prevent multiple clicks during request
             orderStatus: "New Order", // Default state before confirmation
+            currentOrderStatusColor: "#5a3315", // Default color
+            blinkInterval: null, // Set orderStatus blinking interval dynamically
             pageSize: 6,
             currentPage: 1
         };
@@ -119,6 +121,23 @@ const app = Vue.createApp({
         // Assert if an order is editable if it is in Editing state
         canEditOrder() {
             return this.orderStatus === "Pending" || this.orderStatus === "Editing";
+        },
+        // Define target color for each status
+        orderStatusColor() {
+            const statusColors = {
+                'New Order': '#858b13',
+                'Pending': '#168275',
+                'Editing': '#8c2b2b',
+                'Received': '#7e136b',
+                'Completed': '#124477',
+                'Awaiting': '#000000'
+            };
+            return statusColors[this.orderStatus] || '#5a3315'; // Default color if not matched
+        }
+    },
+    watch: {
+        orderStatus(newStatus) {
+            this.startBlinkingEffect();
         }
     },
     methods: {
@@ -219,6 +238,19 @@ const app = Vue.createApp({
         },
         removeHoverEffect() {
             this.hoverType = null; // Remove hover effect
+        },
+        // Blinking effect for order-status
+        startBlinkingEffect() {
+            if (this.blinkInterval) clearInterval(this.blinkInterval); // Clear previous interval
+            // Setter
+            let defaultColor = "#5a3315";
+            let targetColor = this.orderStatusColor;
+            let toggle = false;
+            // Set interval to toggle between default and target color
+            this.blinkInterval = setInterval(() => {
+                this.currentOrderStatusColor = toggle ? defaultColor : targetColor;
+                toggle = !toggle;
+            }, 400); // Toggle each 0.4s
         },
         getURL() {
             // Dynamic endpoint prefix on Vercel and local app deployment
@@ -353,8 +385,6 @@ const app = Vue.createApp({
                         alert("No order found to update.");
                         return;
                     }
-                    // //Fetch existing order items before updating**
-                    // await this.fetchOrderItems();
                     // Send order update with all item
                     response = await fetch(`${BASE_URL}/orders/update/${this.currentOrderId}`, {  
                         method: 'PUT',
@@ -416,6 +446,15 @@ const app = Vue.createApp({
             }
         }
     },
+    mounted() {
+        this.startBlinkingEffect(); // Start effect initially
+        setTimeout(() => {
+            app.orderStatus = "Editing";
+        }, 10000);
+    },
+    beforeUnmount() {
+        clearInterval(this.blinkInterval); // Prevent memory leaks
+    }
 });
 
 app.mount('#app');
