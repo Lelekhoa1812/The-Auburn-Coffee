@@ -135,9 +135,29 @@ const app = Vue.createApp({
             return statusColors[this.orderStatus] || '#5a3315'; // Default color if not matched
         }
     },
+    // Real-time binding of data to save data as item into localStorage, preventing refreshing of content when reload page
     watch: {
+        customerName(newName) {
+            localStorage.setItem("customerName", newName);
+        },
+        etaInput(newETA) {
+            localStorage.setItem("etaInput", newETA);
+        },
+        orderNotice(newNotice) {
+            localStorage.setItem("orderNotice", newNotice);
+        },
         orderStatus(newStatus) {
             this.startBlinkingEffect();
+            localStorage.setItem("orderStatus", newStatus);
+        },
+        currentOrderId(newId) {
+            localStorage.setItem("currentOrderId", newId);
+        },
+        order: {
+            handler(newOrder) {
+                localStorage.setItem("order", JSON.stringify(newOrder));
+            },
+            deep: true
         }
     },
     methods: {
@@ -254,16 +274,15 @@ const app = Vue.createApp({
         },
         getURL() {
             // Dynamic endpoint prefix on Vercel and local app deployment
-            const BASE_URL = window.location.origin.includes("localhost")
-            // ? "http://localhost:5002/api" // Local dev environment on NodeJS
-            ? "http://localhost:3000/api" // Local dev environment by Vercel
-            : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend            
-            // const BASE_URL = "http://localhost:3000/api";
+            // const BASE_URL = window.location.origin.includes("localhost")
+            // // ? "http://localhost:5002/api" // Local dev environment on NodeJS
+            // ? "http://localhost:3000/api" // Local dev environment by Vercel
+            // : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend            
+            const BASE_URL = "http://localhost:3000/api";
             return BASE_URL;
         },
         // Handle hover for add item btn
         handleHover(itemName) {
-            // console.log(`${itemName} on hover.`);
             this.hoverItem = itemName; // Set hoverItem to the name of the hovered button's item
         },
         handleLeave() {
@@ -273,6 +292,34 @@ const app = Vue.createApp({
         changePage(page) {
             if (page > 0 && page <= this.totalPages) {
                 this.currentPage = page;
+            }
+        },
+        // Use localStorage to save all current state and value in case of sudden window reloading, prevent data refreshing for better user experience
+        loadLocalStorage() {
+            const savedName = localStorage.getItem("customerName");
+            if (savedName) {
+                this.customerName = savedName;
+                this.showModal = false; // Hide modal since the name exists
+            }
+            const savedETA = localStorage.getItem("etaInput");
+            if (savedETA) {
+                this.etaInput = savedETA;
+            }
+            const savedNotice = localStorage.getItem("orderNotice");
+            if (savedNotice) {
+                this.orderNotice = savedNotice;
+            }
+            const savedOrderId = localStorage.getItem("currentOrderId");
+            if (savedOrderId) {
+                this.currentOrderId = savedOrderId;
+            }
+            const savedOrderStatus = localStorage.getItem("orderStatus");
+            if (savedOrderStatus) {
+                this.orderStatus = savedOrderStatus;
+            }
+            const savedOrder = localStorage.getItem("order");
+            if (savedOrder) {
+                this.order = JSON.parse(savedOrder);
             }
         },
         // Send DELETE request to backend to cancel the order
@@ -438,9 +485,7 @@ const app = Vue.createApp({
     },
     mounted() {
         this.startBlinkingEffect(); // Start effect initially
-        setTimeout(() => {
-            app.orderStatus = "Editing";
-        }, 10000);
+        this.loadLocalStorage(); // Load localStorage data when the app starts
     },
     beforeUnmount() {
         clearInterval(this.blinkInterval); // Prevent memory leaks
