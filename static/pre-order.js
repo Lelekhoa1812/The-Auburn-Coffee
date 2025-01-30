@@ -274,11 +274,11 @@ const app = Vue.createApp({
         },
         getURL() {
             // Dynamic endpoint prefix on Vercel and local app deployment
-            // const BASE_URL = window.location.origin.includes("localhost")
-            // // ? "http://localhost:5002/api" // Local dev environment on NodeJS
-            // ? "http://localhost:3000/api" // Local dev environment by Vercel
-            // : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend            
-            const BASE_URL = "http://localhost:3000/api";
+            const BASE_URL = window.location.origin.includes("localhost")
+            // ? "http://localhost:5002/api" // Local dev environment on NodeJS
+            ? "http://localhost:3000/api" // Local dev environment by Vercel
+            : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend            
+            // const BASE_URL = "http://localhost:3000/api";
             return BASE_URL;
         },
         // Handle hover for add item btn

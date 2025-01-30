@@ -122,6 +122,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Function to refresh order loader every 7 seconds (Polling)
+    function startPolling() {
+        loadOrders(); // Load initially
+        setInterval(() => {
+            loadOrders(); // Refresh orders every 7 seconds
+        }, 7000);
+    }
+    // Call polling when the page loads
+    startPolling();
+
     // Define status colors
     const statusColors = {
         'New Order': '#858b13',
