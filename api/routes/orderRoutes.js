@@ -75,7 +75,22 @@ router.post('/add', async (req, res) => {
 // Fetch all orders with their associated items
 router.get('/with-items', async (req, res) => {
     try {
+        // If specific date provided, only provide orders matching date parameter
+        const { date } = req.query;
+        let matchStage = {};
+        // Define match day (similar to T/F checker), setting date that are settled
+        if (date) {
+            const startOfDay = new Date(date);
+            startOfDay.setHours(0, 0, 0, 0);
+            const endOfDay = new Date(date);
+            endOfDay.setHours(23, 59, 59, 999);
+            matchStage = {
+                order_time: { $gte: startOfDay.toISOString(), $lte: endOfDay.toISOString() }
+            };
+        }
+        // Send orders fitting with items
         const ordersWithItems = await Order.aggregate([
+            { $match: matchStage }, // Filter by date if provided
             {
                 $lookup: {
                     from: 'items', // MongoDB collection name for the Item model

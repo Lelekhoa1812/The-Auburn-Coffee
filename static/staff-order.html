@@ -40,6 +40,20 @@
         <button id="manageAccountBtn" class="header-button">Manage My Account</button>
     </header>
     <main>
+        <!-- Radio button selecting order by today or all -->
+        <div class="order-filter">
+            <label class="radio-container">
+                <input type="radio" name="orderFilter" value="today" checked @change="fetchOrders('today')">
+                <span class="radio-button"></span>
+                Today Order
+            </label>
+            <label class="radio-container">
+                <input type="radio" name="orderFilter" value="all" @change="fetchOrders('all')">
+                <span class="radio-button"></span>
+                All Time Order
+            </label>
+        </div>
+        <!-- Staff and Order containers -->
         <div id="staff-container" class="staff-container"></div>
         <div id="orders-container" class="orders-container"></div>
     </main>

@@ -701,6 +701,7 @@ margin-top: 0; /* Adjust margin if necessary */
         padding: 5px 10px;
     }
 }
+
 @media (max-width: 380px) {
     header h1 {
         font-size: 1.2rem; /* Smaller header font */

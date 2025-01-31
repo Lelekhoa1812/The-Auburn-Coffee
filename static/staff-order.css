@@ -127,6 +127,67 @@ h1, h2, h3 {
     background-color: #6B4226;
 }
 
+/* Radio btn */
+/* Order Filter Container */
+.order-filter {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+/* Radio Button Container */
+.radio-container {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #5a3315; /* Coffee Brown */
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+/* Hidden Default Radio Input */
+.radio-container input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+/* Custom Radio Button */
+.radio-button {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 3px solid #8b5a2b; /* Dark Coffee */
+    border-radius: 50%;
+    margin-right: 8px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+/* Inner dot when selected */
+.radio-container input[type="radio"]:checked + .radio-button::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #d2a679; /* Lighter Coffee */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+/* Hover Effect */
+.radio-container:hover {
+    color: #8b5a2b; /* Dark Coffee */
+}
+.radio-container:hover .radio-button {
+    border-color: #d2a679; /* Lighter Coffee */
+}
+
+
 /* Order containers */
 .orders-container {
     display: flex;

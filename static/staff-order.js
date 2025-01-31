@@ -44,13 +44,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     const loginRegisterModal = document.getElementById("loginRegisterModal");
                     loginRegisterModal.style.display = "none"; // Hide modal when login successfully
                     displayStaffName(staffName) // Display welcome message to staff
-                    loadOrders();
+                    fetchOrders('today'); // Default: Fetch today's orders
             } else {
                 alert("Invalid login credentials.");
             }
         } catch (err) {
             console.error(err);
-            alert("Error logging in. Please try again.");
+            alert("No order has been made today.");
         }
     });
     // Register
@@ -101,9 +101,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Loading orders details post login
-    async function loadOrders() {
-        try {
-            const response = await fetch(`${BASE_URL}/orders/with-items`);
+    async function loadOrders(filter = 'today') {
+        let apiUrl = `${BASE_URL}/orders/with-items`;
+        // Search for today order only dynamically  
+        if (filter === 'today') {
+            const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+            apiUrl += `?date=${today}`;
+        }
+        try {                 
+            const response = await fetch(apiUrl);
             // Catch error when cannot connecting to DB
             if (!response.ok) {
                 throw new Error(`Failed to fetch orders: ${response.status} ${response.statusText}`);
@@ -117,17 +123,25 @@ document.addEventListener("DOMContentLoaded", () => {
             const ordersContainer = document.getElementById("orders-container");
             // Showing error message on UI when cannot loading any order
             if (ordersContainer) {
-                ordersContainer.innerHTML = `<p>Unable to load orders. Please try again later.</p>`;
+                ordersContainer.innerHTML = `<p>No order found today. Please try again later.</p>`;
             }
         }
     }
 
     // Function to refresh order loader every 7 seconds (Polling)
     function startPolling() {
-        loadOrders(); // Load initially
+        let currentFilter = 'today'; // Default filter
+        loadOrders(currentFilter); // Load initially
         setInterval(() => {
-            loadOrders(); // Refresh orders every 7 seconds
+            loadOrders(currentFilter); // Always use the current filter
         }, 7000);
+        // Update filter on radio button change
+        document.querySelectorAll('input[name="orderFilter"]').forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                currentFilter = event.target.value; // Update filter based on user selection
+                loadOrders(currentFilter); // Load new selection immediately
+            });
+        });
     }
     // Call polling when the page loads
     startPolling();
