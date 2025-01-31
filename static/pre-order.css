@@ -691,6 +691,16 @@ margin-top: 0; /* Adjust margin if necessary */
     }
 }
 
+@media (max-width: 390px) {
+    /* Pagination buttons */
+    .pagination {
+        flex-wrap: wrap; /* Stack buttons */
+    }
+    .pagination .page-link {
+        font-size: 6px; /* Smaller font for buttons */
+        padding: 5px 10px;
+    }
+}
 @media (max-width: 380px) {
     header h1 {
         font-size: 1.2rem; /* Smaller header font */

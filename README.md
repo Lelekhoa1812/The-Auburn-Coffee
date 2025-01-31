@@ -1,10 +1,34 @@
-# The-Auburn-Coffee
-Website to the Auburn Coffee's menu items and prices.
-The cafe locates at Auburn station, VIC 3123.
-We are happy to serve Victorian transport commuters as always and everyday, see you guys.
+# The Auburn Coffee ☕  
+*A seamless ordering experience for commuters and coffee lovers!*  
+
+The Auburn Coffee web application is built to provide a smooth and efficient ordering experience, allowing customers to browse the menu, pre-order drinks and food, and receive real-time updates on their orders. The staff at Auburn Coffee can manage and prepare orders efficiently with a dedicated staff dashboard.  
+
+🚆 Located at Auburn Station, VIC 3123, we serve commuters daily, ensuring that their coffee is ready the moment they arrive—just **grab and go!**  
 
 ---
-## Directory Setup
+
+## 🌟 Features Overview  
+### 🔹 Customer Features:  
+- **Home Page** 🏡: View the **full menu**, pricing, discounts, and available options. The interactive page includes **draggable animation** that smoothly redirects customers to the Pre-order page.  
+- **About Page** ℹ️: Learn about the café’s background, community values, and location. Customers can also **leave feedback and rate their experience**, which is stored in Firebase for future improvements.  
+- **Ingredient Page** 🥑🥛☕: Get insights into the high-quality ingredients used at Auburn Coffee, ensuring transparency and trust with customers.  
+- **Pre-Order Page** 🛍️: Customers can **place and modify** their orders in real-time, with direct data connection to staff preparing their drinks.  
+
+### 🔹 Staff Features:  
+- **Staff Order Page** 🏪: Designed for baristas, this page allows them to **track incoming orders in real-time** with details such as customer name, estimated arrival time, order details, and special notices.  
+- **Statistics Page** 📊: The collected **feedback and ratings** from customers are visualized using Firebase, allowing the café to analyze customer satisfaction trends.  
+
+---
+
+## 🛠️ Technology Stack  
+- **Frontend:** VueJS (for dynamic, reactive UI interactions)  
+- **Backend:** NodeJS hosted on Vercel (for efficient API handling)  
+- **Database:** MongoDB (for order and menu management)  
+- **Feedback & Ratings Storage:** Firebase  
+
+---
+
+## 📂 Project Directory Setup  
 ```plaintext
 Auburn Coffee 2.0/
 # BACKEND
@@ -55,7 +79,7 @@ Auburn Coffee 2.0/
 │   ├── staff-order.css
 │   ├── vercel.json        # Vercel configuration on client-side
 ## FIREBASE
-│   ├── firebaseInit.js    # Firebase server handling feedback and ratting
+│   ├── firebaseInit.js    # Firebase server handling feedback and rating
 ## OTHERS
 │   ├── statistics.html    # Fetch data from Firebase for business insight
 │   ├── vue.js             # Utilities of VueJS
@@ -63,11 +87,17 @@ Auburn Coffee 2.0/
 
 ---
 
-**Liam**, barista staff contribute to this.  
-Accessible via: https://lelekhoa1812.github.io/The-Auburn-Coffee/
+## 📌 **Live Demonstration**  
+🚀 Accessible via: [Auburn Coffee Web App](https://lelekhoa1812.github.io/The-Auburn-Coffee/)  
+
+### 🌐 **Direct Access to Vercel Hosting:**  
+- **🏠 [Main Page](https://the-auburn-coffee.vercel.app/home.html)** - Explore the menu and app overview  
+- **⭐ [Customer Feedback & Statistics](https://the-auburn-coffee.vercel.app/statistics.html)** - View customer insights  
+- **👨‍🍳 [Staff Order Dashboard](https://the-auburn-coffee.vercel.app/staff-order.html)** - Track live orders  
 
 ---
 
-**Direct Access to Vercel server:**
-[Main Page](https://the-auburn-coffee.vercel.app/home.html)  
-[For Rating and Feedback Statistics](https://the-auburn-coffee.vercel.app/statistics.html)  
+### 🤝 **Contributors**  
+**Liam**, a passionate barista at Auburn Coffee, contributed to building this web application to enhance the customer experience and optimize order management for the staff.  
+
+📍 *See you at Auburn Station!* 🚆 ☕
