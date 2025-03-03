@@ -97,4 +97,48 @@ router.put("/edit", async (req, res) => {
     }
 });
 
+// Increment user_streak when scanning QR Code or entering manually
+router.post("/increment", async (req, res) => {
+    const { user_code } = req.body;
+    try {
+        const user = await User.findOne({ user_code });
+        // User data not obtained
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        // Increment streak by 1
+        user.user_streak += 1;
+        await user.save();
+        res.status(200).json({ 
+            user_name: user.user_name, 
+            user_streak: user.user_streak 
+        });
+    // Broken request
+    } catch (error) {
+        console.error("Error updating user streak:", error);
+        res.status(500).json({ message: "Server error while updating streak." });
+    }
+});
+
+// Decrease user_streak by 10 when redeeming gift/freebie
+router.post("/decrement", async (req, res) => {
+    const { user_code } = req.body;
+    try {
+        const user = await User.findOne({ user_code });
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        if (user.user_streak < 10) {
+            return res.status(400).json({ message: "Not enough streak points to redeem." });
+        }
+
+        user.user_streak -= 10; // Deduct 10 points
+        await user.save();
+        
+        res.status(200).json(user); // Return updated user data
+    } catch (error) {
+        console.error("Error redeeming streak:", error);
+        res.status(500).json({ message: "Server error while redeeming streak." });
+    }
+});
+
 module.exports = router;

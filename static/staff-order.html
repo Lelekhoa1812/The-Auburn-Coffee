@@ -6,6 +6,7 @@
     <title>Staff Order Management</title>
     <link rel="website icon" type="png" href="image/icon.png" >
     <link rel="stylesheet" href="staff-order.css">
+    <link rel="stylesheet" href="qr-scanner.css">
 </head>
 <body>
     <!-- Login/Register Modal -->
@@ -59,7 +60,23 @@
         <div id="staff-container" class="staff-container"></div>
         <div id="orders-container" class="orders-container"></div>
     </main>
-
+    <!-- QR Modal and Toggle Button -->
+    <button class="qr-button" id="qrButton">Scan Loyalty QR Code</button>
+    <div id="qrModal" class="modal2">
+        <div class="modal2-content">
+            <span class="close2" onclick="closeQRModal()">&times;</span>
+            <h2>Scan customer loyalty QR code</h2>
+            <!-- Scan QR Code Button -->
+            <button id="scanQRCode" class="scan-qr-button">Scan QR Code</button>
+            <!-- OR Enter Manually -->
+            <p class="or-text">OR</p>
+            <!-- User Code Input -->
+            <input type="text" id="userCodeInput" class="user-code-input" placeholder="Enter User Code">
+            <!-- Submit Button -->
+            <button class="submit2" onclick="submitUserCode()">Submit</button>
+        </div>
+    </div>
+    <script src="qr-scanner.js"></script>
     <script src="staff-order.js"></script>
 </body>
 </html>

@@ -7,8 +7,9 @@ const app = express();
 
 // CORS Configuration
 const cors = require('cors');
+// Set origin allowance within an array/list 
 const origins_list = [
-    "http://localhost:3001",            // Local dev server
+    "http://localhost:3001",                 // Local dev server
     "https://the-auburn-coffee.vercel.app'", // Vercel frontend production domain
 ]
 const corsOptions = {
