@@ -1,23 +1,31 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
-const mongoose = require("mongoose"); // Import mongoose to use ObjectId
-
-let currentUserId = 1; // Simulate auto-increment (better to use a database sequence)
 
 // Function to generate a unique 4-character user code
 async function generateUniqueUserCode() {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let userCode;
     let isUnique = false;
-
     while (!isUnique) {
         userCode = Array.from({ length: 4 }, () => characters[Math.floor(Math.random() * characters.length)]).join("");
         const existingUser = await User.findOne({ user_code: userCode });
         if (!existingUser) isUnique = true; // Ensure uniqueness
     }
-
     return userCode;
+}
+
+// Function to generate a unique 4-number user id
+async function generateUniqueUserID() {
+    const characters = "0123456789";
+    let userID
+    let isUnique = false;
+    while (!isUnique) {
+        userID = Array.from({ length: 4 }, () => characters[Math.floor(Math.random() * characters.length)]).join("");
+        const existingUser = await User.findOne({ user_id: userID });
+        if (!existingUser) isUnique = true; // Ensure uniqueness
+    }
+    return userID;
 }
 
 // User Login
@@ -42,8 +50,9 @@ router.post("/register", async (req, res) => {
         }
         // Generate a unique user code
         const user_code = await generateUniqueUserCode();
+        const user_id = await generateUniqueUserID();
         const newUser = new User({
-            user_id: currentUserId++, 
+            user_id,
             user_name,
             user_pin,
             user_code, // Assign generated unique user code

@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
             // Attempt to match credential information
             if (response.ok) {
                     const loginRegisterModal = document.getElementById("loginRegisterModal");
-                    loginRegisterModal.style.display = "none"; // Hide modal when login successfully
                     const staffData = await response.json();
                     // Determine if the user is logging in as "staff" or "user"
                     const userRole = "staff"
@@ -53,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         pin: staffData.user_pin,
                         role: userRole
                     }));
+                    loginRegisterModal.style.display = "none"; // Hide modal when login successfully
                     displayStaffName(staffName) // Display welcome message to staff
                     fetchOrders('today'); // Default: Fetch today's orders
             } else {

@@ -1,9 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const Staff = require("../models/staff");
-const mongoose = require("mongoose"); // Import mongoose to use ObjectId
 
-let currentStaffId = 1; // Simulate auto-increment (better to use a database sequence)
+
+// Function to generate a unique 4-number staff id
+async function generateUniqueStaffID() {
+    const characters = "0123456789";
+    let staffID
+    let isUnique = false;
+    while (!isUnique) {
+        staffID = Array.from({ length: 4 }, () => characters[Math.floor(Math.random() * characters.length)]).join("");
+        const existingStaff = await Staff.findOne({ staff_id: staffID });
+        if (!existingStaff) isUnique = true; // Ensure uniqueness
+    }
+    return staffID;
+}
 
 // Staff Login
 router.post("/login", async (req, res) => {
@@ -25,7 +36,8 @@ router.post("/register", async (req, res) => {
         if (await Staff.findOne({ staff_name })) {
             return res.status(400).send("Staff name already exists");
         }
-        const newStaff = new Staff({ staff_id: currentStaffId++, staff_name, staff_pin });
+        const staff_id = await generateUniqueStaffID();
+        const newStaff = new Staff({ staff_id, staff_name, staff_pin });
         await newStaff.save();
         res.status(201).json(newStaff);
     } catch (err) {
