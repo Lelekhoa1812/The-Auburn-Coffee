@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
+const mongoose = require("mongoose"); // Import mongoose to use ObjectId
 
 let currentUserId = 1; // Simulate auto-increment (better to use a database sequence)
 
@@ -53,6 +54,37 @@ router.post("/register", async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send("Server error");
+    }
+});
+
+// Edit User Info
+router.put("/edit", async (req, res) => {
+    try {
+        const { id, user_name, user_pin } = req.body;
+        // Validate required fields
+        if (!id || !user_name || !user_pin) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+        // Check if the name already exists for a different user
+        const existingUser = await User.findOne({ user_name, user_id: { $ne: id } });
+        if (existingUser) {
+            return res.status(400).send("User name already exists for another user.");
+        }
+        // Find and update the user
+        const updatedUser = await User.findOneAndUpdate(
+            { user_id: id }, // Use `user_id` for filtration
+            { user_name, user_pin }, // Update name & PIN
+            { new: true } // Return the updated user
+        );
+        // Broken request
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        // Successful
+        res.status(200).json({ message: "User updated successfully", updatedUser });
+    } catch (err) {
+        console.error("Error updating user:", err);
+        res.status(500).json({ message: "Server error while updating user account" });
     }
 });
 

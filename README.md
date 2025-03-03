@@ -13,6 +13,8 @@ The Auburn Coffee web application is built to provide a smooth and efficient ord
 - **About Page** ℹ️: Learn about the café’s background, community values, and location. Customers can also **leave feedback and rate their experience**, which is stored in Firebase for future improvements.  
 - **Ingredient Page** 🥑🥛☕: Get insights into the high-quality ingredients used at Auburn Coffee, ensuring transparency and trust with customers.  
 - **Pre-Order Page** 🛍️: Customers can **place and modify** their orders in real-time, with direct data connection to staff preparing their drinks.  
+- **Account Management** ✏️: Customers and staffs can **edit their account info** whilst they can always change their name and pin number.  
+- **Survey and Freebie** 🎁: Occasional survey event can allow customers having a freebies after completing a short survey (Event not available now).  
 - **Loyalty Program** 🎟️: Customers can **create an account**, which generates a unique **QR code**. Staff members will **scan the QR code** each time a customer makes a purchase, adding to their loyalty streak. After **10 purchases**, the customer **earns a free drink** as a reward.
 
 ### 🔹 Staff Features:  

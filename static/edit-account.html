@@ -27,7 +27,7 @@
             <label for="editPin">PIN:</label>
             <div class="input-container">
                 <!-- Change type to password to visually display as ••• -->
-                <input type="text" id="editPin" readonly>
+                <input type="number" id="editPin" readonly>
                 <span class="edit-icon-wrapper">
                     <img src="image/edit.gif" class="edit-icon" onclick="toggleEditing('editPin')">
                 </span>
@@ -45,7 +45,7 @@
         // Load user info from localStorage
         document.addEventListener("DOMContentLoaded", () => {
             const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-            if (!userInfo) {
+            if (!userInfo || !userInfo.id) {
                 alert("No user info found. Please log in.");
                 window.history.back(); // Redirect to prev page
                 return;
@@ -64,7 +64,7 @@
             } else {
                 inputField.readOnly = true;
                 inputField.classList.remove("editable-active");
-                document.getElementById("saveChangesBtn").style.display = "none"; // Hide save button
+                // document.getElementById("saveChangesBtn").style.display = "none"; // Hide save button this
             }
         }
 
@@ -82,7 +82,11 @@
                 alert("Server failed, no id user, try again later!");
                 return;
             }
-
+            // Make sure data is valid
+            if (updatedPin.length !== 6) {
+                alert("Please provide a 6-digit pin only.");
+                return;
+            }
             // Base URL determined at local dev or production endpoint
             const BASE_URL = window.location.origin.includes("localhost")
                 ? "http://localhost:3000/api"

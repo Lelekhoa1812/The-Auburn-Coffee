@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Staff = require("../models/staff");
+const mongoose = require("mongoose"); // Import mongoose to use ObjectId
 
 let currentStaffId = 1; // Simulate auto-increment (better to use a database sequence)
 
@@ -32,5 +33,38 @@ router.post("/register", async (req, res) => {
         res.status(500).send("Server error");
     }
 });
+
+// Edit Staff Info
+router.put("/edit", async (req, res) => {
+    try {
+        const { id, staff_name, staff_pin } = req.body;
+
+        // Validate required fields
+        if (!id || !staff_name || !staff_pin) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+        // Check if the name already exists for a different staff
+        const existingStaff = await Staff.findOne({ staff_name, staff_id: { $ne: id } });
+        if (existingStaff) {
+            return res.status(400).send("Staff name already exists for another staff.");
+        }
+        // Find and update the staff
+        const updatedStaff = await Staff.findOneAndUpdate(
+            { staff_id: id }, // Use `staff_id` for filtration
+            { staff_name, staff_pin }, // Update name & PIN
+            { new: true } // Return the updated staff
+        );
+        // Broken request
+        if (!updatedStaff) {
+            return res.status(404).json({ message: "Staff not found" });
+        }
+        // Successful
+        res.status(200).json({ message: "Staff updated successfully", updatedStaff });
+    } catch (err) {
+        console.error("Error updating staff:", err);
+        res.status(500).json({ message: "Server error while updating staff account" });
+    }
+});
+
 
 module.exports = router;
