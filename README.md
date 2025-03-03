@@ -90,6 +90,9 @@ Auburn Coffee 2.0/
 ## EDIT-ACCOUNT
 │   ├── edit-account.html  # User and staff can edit their account info
 │   ├── edit-account.css 
+## LOYALTY_REDEMPTION
+│   ├── qr-scanner.js      # Modal handling qr-code scanner and loyalty redemption
+│   ├── qr-scanner.css 
 ## FIREBASE
 │   ├── firebaseInit.js    # Firebase server handling feedback and rating
 ## OTHERS
