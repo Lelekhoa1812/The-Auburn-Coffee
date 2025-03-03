@@ -13,10 +13,12 @@ The Auburn Coffee web application is built to provide a smooth and efficient ord
 - **About Page** ℹ️: Learn about the café’s background, community values, and location. Customers can also **leave feedback and rate their experience**, which is stored in Firebase for future improvements.  
 - **Ingredient Page** 🥑🥛☕: Get insights into the high-quality ingredients used at Auburn Coffee, ensuring transparency and trust with customers.  
 - **Pre-Order Page** 🛍️: Customers can **place and modify** their orders in real-time, with direct data connection to staff preparing their drinks.  
+- **Loyalty Program** 🎟️: Customers can **create an account**, which generates a unique **QR code**. Staff members will **scan the QR code** each time a customer makes a purchase, adding to their loyalty streak. After **10 purchases**, the customer **earns a free drink** as a reward.
 
 ### 🔹 Staff Features:  
 - **Staff Order Page** 🏪: Designed for baristas, this page allows them to **track incoming orders in real-time** with details such as customer name, estimated arrival time, order details, and special notices.  
 - **Statistics Page** 📊: The collected **feedback and ratings** from customers are visualized using Firebase, allowing the café to analyze customer satisfaction trends.  
+- **Loyalty System** 📷: Staff can **scan customer QR codes** to track their purchase streaks and reward loyal customers with **free drinks** after every 10 purchases.
 
 ---
 
@@ -33,15 +35,17 @@ The Auburn Coffee web application is built to provide a smooth and efficient ord
 Auburn Coffee 2.0/
 # BACKEND
 ├── api/
-│   ├── index.js           # Server on port 5002 or Vercel
+│   ├── index.js           # Server on port 3000 or Vercel
 │   ├── routes/
 │      ├── itemRoutes.js
 │      ├── orderRoutes.js
 │      ├── staffRoutes.js
+│      ├── userRoutes.js
 │   ├── models/
 │      ├── item.js
 │      ├── order.js
 │      ├── staff.js
+│      ├── user.js
 ## ENVIRONMENT
 │   ├── node_modules/
 │   ├── .env               # MongoDB environment
@@ -49,8 +53,8 @@ Auburn Coffee 2.0/
 │   ├── package.json
 │   ├── package-lock.json
 ## OTHERS
-│   ├── view-data.js       # Fetch all data in MongoDB
-│   ├── clear-table.js     # Clear all data from a given MongoDB table
+│   ├── view-data.js       # Fetch all collection with detailed data in MongoDB
+│   ├── clear-table.js     # Clear all collection from a given MongoDB table
 # REDIRECTION
 ├── index.html             # Redirection
 ├── redirect.css
@@ -77,6 +81,10 @@ Auburn Coffee 2.0/
 │   ├── staff-order.html
 │   ├── staff-order.js
 │   ├── staff-order.css
+## LOYALTY
+│   ├── loyalty.html
+│   ├── loyalty.js
+│   ├── loyalty.css
 ## FIREBASE
 │   ├── firebaseInit.js    # Firebase server handling feedback and rating
 ## OTHERS
