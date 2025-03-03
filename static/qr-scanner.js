@@ -1,3 +1,6 @@
+// QR code scanner module
+import QrScanner from 'https://unpkg.com/qr-scanner/qr-scanner.min.js';
+
 const qrButton = document.getElementById('qrButton');
 const scanQRCodeButton = document.getElementById('scanQRCode');
 const qrModal = document.getElementById('qrModal');

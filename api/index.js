@@ -8,14 +8,14 @@ const app = express();
 // CORS Configuration
 const cors = require('cors');
 // Set origin allowance within an array/list 
-const origins_list = [
-    "http://localhost:3001",                 // Local dev server
-    "https://the-auburn-coffee.vercel.app'", // Vercel frontend production domain
-]
+// const origins_list = [
+//     "http://localhost:3001",                 // Local dev server
+//     "https://the-auburn-coffee.vercel.app'", // Vercel frontend production domain
+// ]
 const corsOptions = {
     // origin: 'http://localhost:3001', // Allow requests from local server on port 3001 (Vercel local alternative)
-    // origin: 'https://the-auburn-coffee.vercel.app', // Allow requests from this origin
-    origin: origins_list,
+    origin: 'https://the-auburn-coffee.vercel.app', // Allow requests from this origin
+    // origin: origins_list,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],       // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
 };
