@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
             // Display the reward message in Modal 3
             const promotionMessage = `Thank you, ${customer.name} for completing this survey, please show this to our staff and get your ${customer.milk} ${customer.coffee} for free this morning!`;
             document.getElementById('promotionMessage').textContent = promotionMessage;
-
             document.getElementById('promotionModal3').style.display = 'block';
         }
         else {  // Deny open Modal 3 (Reward) and close Modal 2 if survey not completed

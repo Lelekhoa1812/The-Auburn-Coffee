@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 // node clear-table.js orders
 // node clear-table.js items
 // node clear-table.js staffs
+// node clear-table.js users
 
 // MongoDB connection string from .env
 const MONGO_URI = process.env.MONGO_URI;

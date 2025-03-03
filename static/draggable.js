@@ -1,6 +1,7 @@
 const draggableCircle = document.getElementById("draggableCircle");
 const tooltip = document.getElementById("tooltip");
 const preOrderButton = document.getElementById("preOrderButton");
+const qrButton = document.getElementById("qrButton");
 const browsingButton = document.getElementById("browsingButton");
 
 let isExpanded = true; // Initially expanded
@@ -109,6 +110,12 @@ document.addEventListener("touchend", endDrag);
 preOrderButton.addEventListener("click", (e) => {
     e.stopPropagation();
     window.location.href = "pre-order.html";
+});
+
+// Handle qr-loyalty button click
+qrButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    window.location.href = "loyalty.html";
 });
 
 // Handle browsing button click

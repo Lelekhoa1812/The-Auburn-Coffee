@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Loyalty Account</title>
+    <link rel="website icon" type="png" href="image/icon.png" >
+    <link rel="stylesheet" href="loyalty.css">
+</head>
+<body>
+    <!-- Login/Register Modal -->
+    <div class="modal-overlay" id="loginRegisterModal">
+        <div class="modal-wrapper">
+            <!-- Login Section -->
+            <div class="modal-section login-section" id="loginSection">
+                <h2>LOGIN</h2>
+                <div class="modal-content">
+                    <input type="text" id="userName" placeholder="Login to My Account" class="modal-input">
+                    <input type="number" id="userPin" placeholder="Your 6-digit pin" class="modal-input">
+                    <button id="loginBtn" class="modal-button">Login</button>
+                    <button id="showRegisterBtn" class="modal-button">Register My User Account</button>
+                </div>
+            </div>
+            <!-- Register Section -->
+            <div class="modal-section register-section collapsed" id="registerSection">
+                <h3>REGISTER</h3>
+                <div class="modal-content">
+                    <input type="text" id="newUserName" placeholder="Your User Account Name" class="modal-input">
+                    <input type="number" id="newUserPin" placeholder="Your 6-digit user pin" class="modal-input">
+                    <button id="createAccountBtn" class="modal-button">Create My User Account</button>
+                    <button id="showLoginBtn" class="modal-button">Back to Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Page -->
+    <header>
+        <h1>My Account</h1>
+        <button id="manageAccountBtn" class="header-button">Manage My Account</button>
+    </header>
+
+    <script src="loyalty.js"></script>
+</body>
+</html>

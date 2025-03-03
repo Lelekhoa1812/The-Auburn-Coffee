@@ -18,10 +18,12 @@ async function viewData() {
         const orders = await mongoose.connection.db.collection('orders').find().toArray();
         const items = await mongoose.connection.db.collection('items').find().toArray();
         const staffs = await mongoose.connection.db.collection('staffs').find().toArray();
+        const users = await mongoose.connection.db.collection('users').find().toArray();
         // Extra log if applied with a basic UI
         console.log('Orders:', orders);
         console.log('Items:', items);
         console.log('Staffs:', staffs);
+        console.log('Users:', users);
         // Close connection after fetching the data
         mongoose.connection.close();
     } catch (err) {

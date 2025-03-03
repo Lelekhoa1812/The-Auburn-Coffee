@@ -63,7 +63,7 @@ Auburn Coffee 2.0/
 │   ├── about.html
 │   ├── ingredient.html
 │   ├── app.js
-│   ├── modal.js
+│   ├── modal.js           # External events (survey, employment discount, freebies ☕)
 │   ├── draggable.js
 │   ├── index.css
 │   ├── draggable.css
@@ -77,12 +77,12 @@ Auburn Coffee 2.0/
 │   ├── staff-order.html
 │   ├── staff-order.js
 │   ├── staff-order.css
-│   ├── vercel.json        # Vercel configuration on client-side
 ## FIREBASE
 │   ├── firebaseInit.js    # Firebase server handling feedback and rating
 ## OTHERS
 │   ├── statistics.html    # Fetch data from Firebase for business insight
 │   ├── vue.js             # Utilities of VueJS
+│   ├── vercel.json        # Vercel configuration on client-side
 ```
 
 ---
