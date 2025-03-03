@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Dynamic endpoint prefix on Vercel and local app deployment
     const BASE_URL = window.location.origin.includes("localhost")
-    // ? "http://localhost:5002/api" // Local dev environment on NodeJS
     ? "http://localhost:3000/api" // Local dev environment by Vercel
     : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend
 
@@ -42,8 +41,17 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                     const loginRegisterModal = document.getElementById("loginRegisterModal");
                     const userData = await response.json();
-                    currentUserCode = userData.user_code; // Store user_code
+                    currentUserCode = userData.user_code;     // Store user_code
                     currentUserStreak = userData.user_streak; // Store user_streak
+                    // Determine if the user is logging in as "staff" or "user"
+                    const userRole = "user"
+                    // Save user info in localStorage (this is used when navigating to the edit account page)
+                    localStorage.setItem("userInfo", JSON.stringify({
+                        id: userData.user_id,
+                        name: userData.user_name,
+                        pin: userData.user_pin,
+                        role: userRole
+                    }));
                     loginRegisterModal.style.display = "none"; // Hide modal when login successfully
                     showQR(); // Fetch the user_code and display QR code
                 } else {
@@ -87,6 +95,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Show login section by default
     toggleSection(true);
+
+    // Navigate to Edit Account Page
+    document.getElementById("manageAccountBtn").addEventListener("click", () => {
+        window.location.href = "edit-account.html"; // Navigate to the account editing page
+    });
 
     // Function to display QR Code from user_code
     function showQR() {

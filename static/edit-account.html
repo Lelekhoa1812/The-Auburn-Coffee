@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit My Account</title>
+    <link rel="website icon" type="png" href="image/icon.png" >
+    <link rel="stylesheet" href="edit-account.css">
+</head>
+<body>
+    <div class="edit-container">
+        <h2>Edit My Account</h2>
+
+        <!-- User Name -->
+        <div class="editable-field">
+            <label for="editName">Name:</label>
+            <div class="input-container">
+                <input type="text" id="editName" readonly>
+                <span class="edit-icon-wrapper">
+                    <img src="image/edit.gif" class="edit-icon" onclick="toggleEditing('editName')">
+                </span>
+            </div>
+        </div>
+
+        <!-- User PIN -->
+        <div class="editable-field">
+            <label for="editPin">PIN:</label>
+            <div class="input-container">
+                <!-- Change type to password to visually display as ••• -->
+                <input type="text" id="editPin" readonly>
+                <span class="edit-icon-wrapper">
+                    <img src="image/edit.gif" class="edit-icon" onclick="toggleEditing('editPin')">
+                </span>
+            </div>
+        </div>
+
+        <div class="btn-div">
+            <!-- Save Button (Hidden by Default) -->
+            <button id="saveChangesBtn" class="save-btn" onclick="saveChanges()" style="display:none;">Save Changes</button>
+            <button onclick="goBack()" class="back-btn">Go Back</button>
+        </div>
+    </div>
+
+    <script>
+        // Load user info from localStorage
+        document.addEventListener("DOMContentLoaded", () => {
+            const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+            if (!userInfo) {
+                alert("No user info found. Please log in.");
+                window.history.back(); // Redirect to prev page
+                return;
+            }
+            document.getElementById("editName").value = userInfo.name;
+            document.getElementById("editPin").value = userInfo.pin;
+        });
+
+        // Toggle editing mode
+        function toggleEditing(fieldId) {
+            const inputField = document.getElementById(fieldId);
+            if (inputField.readOnly) {
+                inputField.readOnly = false;
+                inputField.classList.add("editable-active"); // Apply gradient effect
+                document.getElementById("saveChangesBtn").style.display = "block"; // Show save button
+            } else {
+                inputField.readOnly = true;
+                inputField.classList.remove("editable-active");
+                document.getElementById("saveChangesBtn").style.display = "none"; // Hide save button
+            }
+        }
+
+        // Save updated info
+        async function saveChanges() {
+            const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+            const updatedName = document.getElementById("editName").value.trim();
+            const updatedPin = document.getElementById("editPin").value.trim();
+            // Can't be null when updating
+            if (!updatedName || !updatedPin) {
+                alert("Please provide valid values.");
+                return;
+            }
+            if (!userInfo.id) {
+                alert("Server failed, no id user, try again later!");
+                return;
+            }
+
+            // Base URL determined at local dev or production endpoint
+            const BASE_URL = window.location.origin.includes("localhost")
+                ? "http://localhost:3000/api"
+                : "https://auburn-coffee-backend.vercel.app/api";
+            // Determine role endpoint
+            const editEndpoint = userInfo.role === "staff" ? "/staff/edit" : "/user/edit";
+            // Send update request to backend with destined endpoint matching role
+            try {
+                const response = await fetch(`${BASE_URL}${editEndpoint}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id: userInfo.id, user_name: updatedName, user_pin: updatedPin }),
+                });
+                // Successfully update user model
+                if (response.ok) {
+                    alert("Account updated successfully!");
+                    localStorage.setItem("userInfo", JSON.stringify({ id: userInfo.id, name: updatedName, pin: updatedPin, role: userInfo.role }));
+                    window.history.back(); // Redirect back
+                } else {
+                    alert("Failed to update account.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Server error! Please try again later.");
+            }
+        }
+
+        // Go back to previous page
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

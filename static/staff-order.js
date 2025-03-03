@@ -43,6 +43,16 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                     const loginRegisterModal = document.getElementById("loginRegisterModal");
                     loginRegisterModal.style.display = "none"; // Hide modal when login successfully
+                    const staffData = await response.json();
+                    // Determine if the user is logging in as "staff" or "user"
+                    const userRole = "staff"
+                    // Save user info in localStorage (this is used when navigating to the edit account page)
+                    localStorage.setItem("userInfo", JSON.stringify({
+                        id: staffData.staff_id,
+                        name: staffData.user_name,
+                        pin: staffData.user_pin,
+                        role: userRole
+                    }));
                     displayStaffName(staffName) // Display welcome message to staff
                     fetchOrders('today'); // Default: Fetch today's orders
             } else {
@@ -222,4 +232,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Show login section by default
     toggleSection(true);
+
+    // Navigate to Edit Account Page
+    document.getElementById("manageAccountBtn").addEventListener("click", () => {
+        window.location.href = "edit-account.html"; // Navigate to the account editing page
+    });
 });

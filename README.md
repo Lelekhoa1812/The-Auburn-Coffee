@@ -82,9 +82,12 @@ Auburn Coffee 2.0/
 │   ├── staff-order.js
 │   ├── staff-order.css
 ## LOYALTY
-│   ├── loyalty.html
+│   ├── loyalty.html       # User save their loyalty point
 │   ├── loyalty.js
 │   ├── loyalty.css
+## EDIT-ACCOUNT
+│   ├── edit-account.html  # User and staff can edit their account info
+│   ├── edit-account.css 
 ## FIREBASE
 │   ├── firebaseInit.js    # Firebase server handling feedback and rating
 ## OTHERS
