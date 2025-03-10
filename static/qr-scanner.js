@@ -57,6 +57,7 @@ async function scanQRCode() {
 }
 
 // Function to Submit User Code Manually
+document.getElementById("submitUserCodeButton").addEventListener("click", submitUserCode);
 function submitUserCode() {
     const userCode = userCodeInput.value.trim();
     if (!userCode) {
