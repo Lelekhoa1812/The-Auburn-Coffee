@@ -15,12 +15,49 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("showRegisterBtn").addEventListener("click", () => toggleSection(false));
     document.getElementById("showLoginBtn").addEventListener("click", () => toggleSection(true));
     
+    // Check if user info already stored to allow auto-login existing user
+    async function autoLogin(userName, userPin) {
+        try {
+            const response = await fetch(`${BASE_URL}/user/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_name: userName, user_pin: userPin }),
+            });
+            // Successful auto-login
+            if (response.ok) {
+                const userData = await response.json();
+                currentUserCode = userData.user_code;
+                currentUserStreak = userData.user_streak;
+                document.getElementById("loginRegisterModal").style.display = "none";
+                showQR();
+            } else {
+                // Clear corrupted credentials if login fails (prompt user to log manually)
+                localStorage.removeItem("userInfo");
+            }
+        } catch (err) {
+            console.error("Auto-login failed:", err);
+        }
+    }
+    
+    // Log out 
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("userInfo");
+        location.reload(); // Refresh page to trigger login modal again
+    });
+    
+    
     // Dynamic endpoint prefix on Vercel and local app deployment
     const BASE_URL = window.location.origin.includes("localhost")
     ? "http://localhost:3000/api" // Local dev environment by Vercel
     : "https://auburn-coffee-backend.vercel.app/api"; // Vercel backend
 
-    // Initialize empty user name utility that is updated upon login
+    // Auto-login (check if user info already stored per device browser)
+    const savedUserInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (savedUserInfo && savedUserInfo.name && savedUserInfo.pin) {
+        // Try to auto-login
+        autoLogin(savedUserInfo.name, savedUserInfo.pin);
+    }
+
     // Login
     document.getElementById("loginBtn").addEventListener("click", async () => {
         const userName = document.getElementById("userName").value.trim();

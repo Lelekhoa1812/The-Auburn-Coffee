@@ -123,3 +123,21 @@ h1, h2, h3 {
 .modal-button:hover {
     background-color: #6B4226;
 }
+
+/* Log out */
+#logoutBtn {
+    position: fixed;
+    right: 10px;
+    bottom: 20px;
+    background-color: rgb(144, 100, 18);
+    color: rgb(255, 238, 207);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+#logoutBtn:hover {
+    background-color: rgb(209, 182, 133);
+    color: rgb(66, 43, 1);
+}
