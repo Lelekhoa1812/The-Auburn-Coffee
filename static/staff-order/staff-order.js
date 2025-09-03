@@ -283,62 +283,117 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Membership Management Functions
+    // Membership Management (isolated)
     function openMembershipModal() {
-        // Ensure other modals are closed so membership modal is visible
         try { closeQRModal(); } catch (_) {}
         try { closeViewMenuModal(); } catch (_) {}
 
-        const modal = document.getElementById("membershipModal");
-        if (modal) {
-            // Bring membership modal to front
-            modal.style.zIndex = "1002";
-            modal.style.display = "block";
+        const overlay = document.getElementById('memOverlay');
+        if (overlay) {
+            overlay.style.display = 'flex';
             loadMembershipData();
         }
     }
 
     function closeMembershipModal() {
-        document.getElementById("membershipModal").style.display = "none";
+        const overlay = document.getElementById('memOverlay');
+        if (overlay) {
+            overlay.style.display = 'none';
+        }
     }
 
     async function loadMembershipData() {
+        const memList = document.getElementById('memList');
+        if (!memList) return;
+        
+        // Show loading state
+        memList.innerHTML = "<div class=\"mem-loading\">Loading membership data...</div>";
+        
         try {
             const response = await fetch(`${BASE_URL}/user`);
             if (response.ok) {
                 const users = await response.json();
-                displayMembershipList(users);
+                // Add a small delay for better UX
+                setTimeout(() => {
+                    renderMembershipList(users);
+                }, 300);
             } else {
-                document.getElementById("membershipList").innerHTML = "<p>Failed to load membership data.</p>";
+                memList.innerHTML = "<p class=\"mem-empty\">Failed to load membership data. Please try again.</p>";
             }
         } catch (error) {
             console.error("Error loading membership data:", error);
-            document.getElementById("membershipList").innerHTML = "<p>Error loading membership data.</p>";
+            memList.innerHTML = "<p class=\"mem-empty\">Error loading membership data. Please check your connection.</p>";
         }
     }
 
-    function displayMembershipList(users) {
-        const membershipList = document.getElementById("membershipList");
-        membershipList.innerHTML = "";
-        
-        users.forEach(user => {
-            const userCard = document.createElement("div");
-            userCard.className = "user-card";
-            userCard.innerHTML = `
-                <div class="user-info">
-                    <h3>${user.user_name}</h3>
-                    <p><strong>Loyalty Code:</strong> ${user.user_code}</p>
-                    <p><strong>Current Streak:</strong> ${user.user_streak || 0}</p>
+    function renderMembershipList(users) {
+        const memList = document.getElementById('memList');
+        if (!memList) return;
+        memList.innerHTML = '';
+
+        if (users.length === 0) {
+            memList.innerHTML = "<p class=\"mem-empty\">No members found.</p>";
+            return;
+        }
+
+        users.forEach((user, index) => {
+            const card = document.createElement('div');
+            card.className = 'mem-card';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            // Escape HTML to prevent issues with special characters
+            const userName = user.user_name ? user.user_name.replace(/[<>&"']/g, function(match) {
+                const escape = {
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '&': '&amp;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                };
+                return escape[match];
+            }) : 'Unknown User';
+            
+            const userCode = user.user_code || 'N/A';
+            const userStreak = user.user_streak || 0;
+            const userId = user.user_id || '';
+            
+            card.innerHTML = `
+                <div class="mem-user">
+                    <p class="mem-name" title="${userName}">${userName}</p>
+                    <p class="mem-code"><strong>Code:</strong> ${userCode}</p>
+                    <p class="mem-streak"><strong>Streak:</strong> ${userStreak}</p>
+                    <button class="mem-reset" data-user-id="${userId}">Reset Password</button>
                 </div>
-                <button class="reset-password-btn" onclick="resetUserPassword('${user.user_id}')">
-                    Reset Password
-                </button>
             `;
-            membershipList.appendChild(userCard);
+            memList.appendChild(card);
+
+            // Staggered animation for cards
+            setTimeout(() => {
+                card.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+
+        // Attach reset handlers
+        memList.querySelectorAll('.mem-reset').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const userId = e.currentTarget.getAttribute('data-user-id');
+                if (userId) resetUserPassword(userId);
+            });
         });
     }
 
     async function resetUserPassword(userId) {
+        // Find the button that was clicked
+        const resetBtn = document.querySelector(`[data-user-id="${userId}"]`);
+        if (resetBtn) {
+            const originalText = resetBtn.textContent;
+            resetBtn.textContent = "Resetting...";
+            resetBtn.disabled = true;
+            resetBtn.style.opacity = "0.7";
+        }
+
         try {
             const response = await fetch(`${BASE_URL}/user/reset-password`, {
                 method: "PUT",
@@ -347,19 +402,74 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             
             if (response.ok) {
-                alert("Password reset successfully to 123456");
-                loadMembershipData(); // Refresh the list
+                // Show success feedback
+                if (resetBtn) {
+                    resetBtn.textContent = "✓ Reset!";
+                    resetBtn.style.background = "linear-gradient(135deg, #28a745 0%, #20c997 100%)";
+                }
+                
+                // Show toast notification
+                showToast("Password reset successfully to 123456", "success");
+                
+                // Refresh the list after a short delay
+                setTimeout(() => {
+                    loadMembershipData();
+                }, 1500);
             } else {
-                alert("Failed to reset password");
+                throw new Error("Failed to reset password");
             }
         } catch (error) {
             console.error("Error resetting password:", error);
-            alert("Error resetting password");
+            
+            // Reset button state
+            if (resetBtn) {
+                resetBtn.textContent = originalText;
+                resetBtn.disabled = false;
+                resetBtn.style.opacity = "1";
+            }
+            
+            showToast("Error resetting password. Please try again.", "error");
         }
+    }
+
+    // Toast notification system
+    function showToast(message, type = "info") {
+        // Remove existing toast
+        const existingToast = document.querySelector('.mem-toast');
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `mem-toast mem-toast-${type}`;
+        toast.textContent = message;
+        
+        // Add to body
+        document.body.appendChild(toast);
+        
+        // Animate in
+        setTimeout(() => {
+            toast.classList.add('mem-toast-show');
+        }, 100);
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            toast.classList.remove('mem-toast-show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 3000);
     }
 
     // Make functions globally accessible
     window.closeMembershipModal = closeMembershipModal;
+    // Dedicated close button for isolated modal
+    const memCloseBtn = document.getElementById('memCloseBtn');
+    if (memCloseBtn) {
+        memCloseBtn.addEventListener('click', closeMembershipModal);
+    }
     window.resetUserPassword = resetUserPassword;
     window.closeQRModal = closeQRModal;
     window.closeViewMenuModal = closeViewMenuModal;
@@ -694,10 +804,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const viewMenuBtn = document.getElementById("viewMenuBtn");
     
     if (membershipBtn) {
-        membershipBtn.addEventListener("click", () => {
+        console.log('[Membership] Binding direct click listener');
+        membershipBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('[Membership] Button clicked');
             openMembershipModal();
         });
+    } else {
+        console.warn('[Membership] manageMembershipBtn not found at bind time');
     }
+
+    // Delegated fallback: ensures the modal opens even if initial binding failed
+    document.addEventListener('click', (evt) => {
+        const target = evt.target;
+        if (target && target.id === 'manageMembershipBtn') {
+            evt.preventDefault();
+            evt.stopPropagation();
+            console.log('[Membership] Delegated handler triggered');
+            openMembershipModal();
+        }
+    });
     
     if (viewMenuBtn) {
         viewMenuBtn.addEventListener("click", () => {

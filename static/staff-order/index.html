@@ -155,13 +155,15 @@
             </nav>
         </div>
     </div>
-    <!-- Membership Management Modal -->
-    <div id="membershipModal" class="modal2">
-        <div class="modal2-content membership-modal-content">
-            <span class="close2" onclick="closeMembershipModal()">&times;</span>
-            <h2>Customer Membership Management</h2>
-            <div id="membershipList" class="membership-list">
-                <!-- Customer list will be populated here -->
+    <!-- Membership Management Modal (isolated) -->
+    <div id="memOverlay" class="mem-overlay" style="display: none;">
+        <div class="mem-dialog" role="dialog" aria-modal="true" aria-labelledby="memTitle">
+            <button type="button" id="memCloseBtn" class="mem-close" aria-label="Close">&times;</button>
+            <h2 id="memTitle" class="mem-title">Customer Membership Management</h2>
+            <div id="memContent" class="mem-content">
+                <div id="memList" class="mem-list">
+                    <!-- Customer list will be populated here -->
+                </div>
             </div>
         </div>
     </div>
