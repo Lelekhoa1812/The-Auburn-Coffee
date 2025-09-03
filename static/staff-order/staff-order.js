@@ -96,6 +96,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Auto-start for staff access (temporarily disabled login)
     displayStaffName("Staff Member");
     loadOrders('today'); // Default: Fetch today's orders
+    
+    
 
     // Dynamically show the staff name after login
     function displayStaffName(staffName) {
@@ -241,221 +243,41 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "../edit-account/edit-account.html"; // Navigate to the account editing page
     });
 
-    // Enhanced Camera functionality for QR positioning
-    let isCameraActive = false;
+    // QR scanner will handle all camera functionality
 
-    // Show QR modal by default
+    // Show QR modal by default (only QR modal, not view menu modal)
     setTimeout(() => {
         const qrModal = document.getElementById("qrModal");
         if (qrModal) {
             qrModal.style.display = "block";
         }
+        
+        // Ensure view menu modal is hidden by default
+        const viewMenuModal = document.getElementById("viewMenuModal");
+        if (viewMenuModal) {
+            viewMenuModal.style.display = "none";
+        }
     }, 500);
 
-    // Enhanced camera functionality for QR positioning
-    document.getElementById("scanQRCode").addEventListener("click", () => {
-        if (!isCameraActive) {
-            startCamera();
-        } else {
-            stopCamera();
-        }
-    });
+    // QR scanner will handle all camera functionality
 
-    async function startCamera() {
-        try {
-            isCameraActive = true;
-            const scanButton = document.getElementById("scanQRCode");
-            scanButton.textContent = "Stop Camera";
-            scanButton.classList.add("scanning-active");
-            
-            // Show camera container
-            const cameraContainer = document.getElementById("cameraContainer");
-            cameraContainer.style.display = "block";
-            
-            // Get camera stream
-            stream = await navigator.mediaDevices.getUserMedia({ 
-                video: { 
-                    facingMode: 'environment', // Use back camera if available
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                } 
-            });
-            
-            // Set video source
-            const video = document.getElementById("qrVideo");
-            video.srcObject = stream;
-            await video.play();
-            
-            // Add visual feedback when camera is active
-            const scanningFrame = document.querySelector('.scanning-frame');
-            if (scanningFrame) {
-                scanningFrame.classList.add('camera-active');
-            }
-            
-            // Start automatic QR detection
-            startAutomaticQRDetection();
-            console.log('Camera started successfully');
-            
-        } catch (error) {
-            console.error("Error starting camera:", error);
-            alert("Unable to access camera. Please check camera permissions.");
-            stopCamera();
-        }
-    }
 
-    function stopCamera() {
-        isCameraActive = false;
-        const scanButton = document.getElementById("scanQRCode");
-        scanButton.textContent = "Start Camera";
-        scanButton.classList.remove("scanning-active");
-        
-        // Stop automatic QR detection
-        stopAutomaticQRDetection();
-        
-        // Stop camera stream
-        if (stream) {
-            stream.getTracks().forEach(track => track.stop());
-            stream = null;
-        }
-        
-        // Hide camera container
-        const cameraContainer = document.getElementById("cameraContainer");
-        if (cameraContainer) {
-            cameraContainer.style.display = "none";
-        }
-        
-        // Remove camera-active class
-        const scanningFrame = document.querySelector('.scanning-frame');
-        if (scanningFrame) {
-            scanningFrame.classList.remove('camera-active');
-        }
-        
-        // Reset scanning text
-        const scanningText = document.querySelector('.scanning-text');
-        if (scanningText) {
-            scanningText.textContent = "Position QR code within the frame";
-            scanningText.style.color = "#6B4226";
-            scanningText.style.fontWeight = "500";
-        }
-    }
 
-    // Automatic QR Detection
-    let qrDetectionInterval = null;
-    let isProcessingQR = false;
 
-    function startAutomaticQRDetection() {
-        if (qrDetectionInterval) {
-            clearInterval(qrDetectionInterval);
-        }
-        
-        // Check for QR codes every 500ms
-        qrDetectionInterval = setInterval(async () => {
-            if (!isCameraActive || isProcessingQR) return;
-            
-            await detectQRCode();
-        }, 500);
-        
-        console.log('Automatic QR detection started');
-    }
 
-    function stopAutomaticQRDetection() {
-        if (qrDetectionInterval) {
-            clearInterval(qrDetectionInterval);
-            qrDetectionInterval = null;
-        }
-        
-        isProcessingQR = false;
-        console.log('Automatic QR detection stopped');
-    }
 
-    async function detectQRCode() {
-        try {
-            isProcessingQR = true;
-            
-            const video = document.getElementById("qrVideo");
-            if (!video || !video.videoWidth || !video.videoHeight) {
-                isProcessingQR = false;
-                return;
-            }
-            
-            // Create canvas for frame capture
-            const canvas = document.createElement("canvas");
-            const context = canvas.getContext("2d");
-            
-            // Set canvas dimensions to match video
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            
-            // Draw the current video frame to canvas
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            // Convert canvas to blob
-            canvas.toBlob(async (blob) => {
-                try {
-                    // Create FormData for the image
-                    const formData = new FormData();
-                    formData.append('qr_image', blob, 'qr_code.png');
-                    
-                    // Call API to read QR code
-                    const response = await fetch(`${BASE_URL}/qr/read`, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    if (response.ok) {
-                        const result = await response.json();
-                        if (result.success && result.qr_data) {
-                            console.log('QR Code detected:', result.qr_data);
-                            
-                            // Stop automatic detection
-                            stopAutomaticQRDetection();
-                            
-                            // Process the QR code
-                            handleQRResult(result.qr_data);
-                            
-                            // Stop camera after successful detection
-                            stopCamera();
-                            
-                        } else {
-                            // No QR code found, continue scanning
-                            isProcessingQR = false;
-                        }
-                    } else {
-                        // API error, continue scanning
-                        isProcessingQR = false;
-                    }
-                } catch (error) {
-                    console.error('Error calling QR API:', error);
-                    isProcessingQR = false;
-                }
-            }, 'image/png');
-            
-        } catch (error) {
-            console.error('Error in QR detection:', error);
-            isProcessingQR = false;
-        }
-    }
-
-    function handleQRResult(data) {
-        console.log('QR Code processed:', data);
-        
-        // Show success message
-        alert(`✅ QR Code Successfully Detected!\n\nLoyalty Code: ${data}\n\nProcessing loyalty update...`);
-        
-        // Here you can add logic to process the loyalty code
-        // For example, update customer loyalty streak, etc.
-        
-        // You could also make an API call here to update the customer's loyalty
-        // updateCustomerLoyalty(data);
-    }
 
     // Handle manual user code submission
     function submitUserCode() {
         const userCode = document.getElementById('userCodeInput').value.trim();
         if (userCode) {
-            alert(`User code submitted: ${userCode}`);
-            // Here you can add logic to process the user code
-            document.getElementById('userCodeInput').value = '';
+            // Use the sendUserCode function from qr-scanner.js
+            if (typeof sendUserCode === 'function') {
+                sendUserCode(userCode);
+                document.getElementById('userCodeInput').value = '';
+            } else {
+                alert('QR scanner not loaded. Please refresh the page.');
+            }
         } else {
             alert('Please enter a user code');
         }
