@@ -366,7 +366,12 @@ async function scanQRCode() {
 			isScanning = false;
 			stopScanning();
 			if (!isSubmitting) {
-				sendUserCode(result);
+				const code = result && result.data ? String(result.data).trim() : '';
+				if (!code) {
+					console.log('[QR DEBUG] Decoded result missing data field, ignoring', result);
+					return;
+				}
+				sendUserCode(code);
 			}
 		}, {
 			highlightScanRegion: true,
@@ -457,13 +462,17 @@ async function sendUserCode(userCode) {
 	if (isSubmitting) return;
 	isSubmitting = true;
 	try {
+		const payload = { user_code: String(userCode || '').trim() };
+		console.log('[QR DEBUG] POST /user/increment payload:', payload);
 		const response = await fetch(`${BASE_URL}/user/increment`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ user_code: userCode }),
+			body: JSON.stringify(payload),
 		});
 		if (!response.ok) {
-			// Quietly stop submitting; do not alert immediately to avoid false error popups
+			let errorText = '';
+			try { errorText = await response.text(); } catch (e) {}
+			console.error('[QR DEBUG] increment failed', { status: response.status, body: errorText });
 			return;
 		}
 		const userData = await response.json();

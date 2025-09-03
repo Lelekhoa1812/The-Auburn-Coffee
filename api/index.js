@@ -62,6 +62,10 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/staff', staffRoutes);
 app.use('/api/user', userRoutes);
+
+// Alias to support both /api/user and /api/users paths
+app.use('/api/users', userRoutes);
+
 // Catch-all for Unknown API Routes
 app.use('/api', (req, res) => {
     res.status(404).json({ error: 'API route not found' });
@@ -70,6 +74,11 @@ app.use('/api', (req, res) => {
 // Debug Endpoint
 app.get('/debug', (req, res) => {
     res.json({ message: 'Debug endpoint works' });
+});
+
+// Test endpoint for user routes
+app.get('/api/test-users', (req, res) => {
+    res.json({ message: 'User routes are accessible', timestamp: new Date().toISOString() });
 });
 
 // Port on execution (for local deployment)

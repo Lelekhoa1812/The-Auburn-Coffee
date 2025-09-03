@@ -141,4 +141,41 @@ router.post("/decrement", async (req, res) => {
     }
 });
 
+// Reset user password (for staff management)
+router.put("/reset-password", async (req, res) => {
+    try {
+        const { user_id, new_pin } = req.body;
+        
+        if (!user_id || !new_pin) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+        
+        const updatedUser = await User.findOneAndUpdate(
+            { user_id: user_id },
+            { user_pin: new_pin },
+            { new: true }
+        );
+        
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        
+        res.status(200).json({ message: "Password reset successfully" });
+    } catch (err) {
+        console.error("Error resetting password:", err);
+        res.status(500).json({ message: "Server error while resetting password" });
+    }
+});
+
+// Get all users (for staff management)
+router.get("/", async (req, res) => {
+    try {
+        const users = await User.find({}).select('-user_pin'); // Exclude PIN for security
+        res.status(200).json(users);
+    } catch (err) {
+        console.error("Error fetching users:", err);
+        res.status(500).json({ message: "Server error while fetching users" });
+    }
+});
+
 module.exports = router;

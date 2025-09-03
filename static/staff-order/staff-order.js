@@ -285,9 +285,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Membership Management Functions
     function openMembershipModal() {
+        // Ensure other modals are closed so membership modal is visible
+        try { closeQRModal(); } catch (_) {}
+        try { closeViewMenuModal(); } catch (_) {}
+
         const modal = document.getElementById("membershipModal");
-        modal.style.display = "block";
-        loadMembershipData();
+        if (modal) {
+            // Bring membership modal to front
+            modal.style.zIndex = "1002";
+            modal.style.display = "block";
+            loadMembershipData();
+        }
     }
 
     function closeMembershipModal() {

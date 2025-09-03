@@ -1,0 +1,31 @@
+
+.membership-btn {
+    background-color: #8B4513 !important;
+    color: #FFF7E6 !important;
+}
+
+.membership-btn:hover {
+    background-color: #654321 !important;
+    color: #FFF7E6 !important;
+}
+
+/* Membership Modal Styles */
+#membershipModal {
+    display: none !important; /* Ensure it's hidden by default */
+}
+
+#membershipModal.active {
+    display: flex !important; /* Show only when active class is added */
+    justify-content: center;
+    align-items: center;
+}
+
+.membership-modal-content {
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.membership-list {
+    margin-top: 20px;
+}
