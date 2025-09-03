@@ -16,14 +16,6 @@ let isSubmitting = false; // prevent duplicate submissions
 document.addEventListener("DOMContentLoaded", () => {
     const modalContent = document.querySelector(".modal2-content");
     if (modalContent) {
-        // Ensure only one scroll container: use the modal content
-        // try {
-        //     const legacyContainers = document.querySelectorAll('.qr-scanner-container');
-        //     legacyContainers.forEach(el => el.parentElement && el.parentElement.removeChild(el));
-        //     modalContent.style.maxHeight = '80vh';
-        //     modalContent.style.overflowY = 'auto';
-        // } catch (e) {}
-
         modalContent.appendChild(userInfoContainer);
         
         // Create video streaming container with scanning corners
@@ -161,13 +153,18 @@ window.closeQRModal = closeQRModal;
 document.addEventListener('DOMContentLoaded', () => {
     const waitForQrScanner = () => {
         if (typeof QrScanner !== 'undefined') {
+            console.log('[QR DEBUG] QrScanner UMD detected:', QrScanner ? 'OK' : 'MISSING');
+            // Optional: check camera capability via library
+            try {
+                QrScanner.hasCamera().then(v => console.log('[QR DEBUG] QrScanner.hasCamera():', v)).catch(e => console.log('[QR DEBUG] hasCamera error:', e));
+                QrScanner.listCameras().then(list => console.log('[QR DEBUG] QrScanner.listCameras():', list)).catch(e => console.log('[QR DEBUG] listCameras error:', e));
+            } catch (e) {}
             if (qrButton) {
                 qrButton.addEventListener('click', openQRModal);
             }
             if (scanQRCodeButton) {
                 scanQRCodeButton.addEventListener('click', scanQRCode);
             }
-            // Do NOT attach submitUserCode click listener here; we rely on inline onclick to avoid duplicates
         } else {
             setTimeout(waitForQrScanner, 100);
         }
@@ -180,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (scanQRCodeButton) {
             scanQRCodeButton.addEventListener('click', scanQRCode);
         }
-        // No submitUserCode listener here either
     }
 });
 
@@ -204,11 +200,11 @@ function stopScanning() {
     const previewVideo = document.getElementById('qrPreviewVideo');
     const scanVideo = document.getElementById('qrScanVideo');
     if (currentScanner) {
-        try { currentScanner.stop(); } catch (e) {}
+        try { currentScanner.stop(); console.log('[QR DEBUG] QrScanner.stop() called'); } catch (e) {}
         currentScanner = null;
     }
     if (currentStream) {
-        try { currentStream.getTracks().forEach(t => t.stop()); } catch (e) {}
+        try { currentStream.getTracks().forEach(t => t.stop()); console.log('[QR DEBUG] MediaStream tracks stopped'); } catch (e) {}
         currentStream = null;
     }
     if (previewVideo) {
@@ -241,6 +237,7 @@ async function scanQRCode() {
                 height: { ideal: 720, min: 480 }
             } 
         });
+        console.log('[QR DEBUG] MediaStream acquired');
         currentStream = stream;
         const previewVideo = document.getElementById("qrPreviewVideo");
         const scanVideo = document.getElementById("qrScanVideo");
@@ -251,13 +248,15 @@ async function scanQRCode() {
         previewVideo.srcObject = stream;
         scanVideo.srcObject = stream;
         await Promise.all([
-            previewVideo.play().catch(() => {}),
-            scanVideo.play().catch(() => {})
+            previewVideo.play().then(()=>console.log('[QR DEBUG] previewVideo.play() ok')).catch(e=>console.log('[QR DEBUG] previewVideo.play() error', e)),
+            scanVideo.play().then(()=>console.log('[QR DEBUG] scanVideo.play() ok')).catch(e=>console.log('[QR DEBUG] scanVideo.play() error', e))
         ]);
         isScanning = true;
         setScanButtonState(true);
+        console.log('[QR DEBUG] Creating QrScanner instance');
         // Use hidden scan video for decoding to avoid interfering with preview
         const qrScanner = new QrScanner(scanVideo, result => {
+            console.log('[QR DEBUG] onDecode fired with result:', result);
             // On successful scan, stop scanning and process once
             stopScanning();
             if (!isSubmitting) {
@@ -269,8 +268,12 @@ async function scanQRCode() {
             overlay: null
         });
         currentScanner = qrScanner;
-        qrScanner.start();
+        console.log('[QR DEBUG] QrScanner instance created');
+        qrScanner.start()
+            .then(()=> console.log('[QR DEBUG] QrScanner.start() resolved - scanning active'))
+            .catch(e=> console.log('[QR DEBUG] QrScanner.start() error', e));
     } catch (error) {
+        console.log('[QR DEBUG] scanQRCode error:', error);
         alert("Unable to access camera. Please enter user code manually.");
         stopScanning();
     }
