@@ -64,13 +64,32 @@
         <div id="orders-container" class="orders-container"></div>
     </main>
     <!-- QR Modal and Toggle Button -->
-    <button class="qr-button" id="qrButton">Scan Loyalty QR Code</button>
+    <button class="qr-button" id="qrButton">Scan QR</button>
     <div id="qrModal" class="modal2">
         <div class="modal2-content">
             <span class="close2" onclick="closeQRModal()">&times;</span>
             <h2>Scan customer loyalty QR code</h2>
+            
+            <!-- Camera Video Element -->
+            <div id="cameraContainer" class="camera-container" style="display: none;">
+                <video id="qrVideo" class="qr-video" autoplay muted playsinline></video>
+                <div class="scanning-overlay">
+                    <div class="scanning-frame">
+                        <div class="scanning-line"></div>
+                        <div class="scanning-corners">
+                            <div class="corner top-left"></div>
+                            <div class="corner top-right"></div>
+                            <div class="corner bottom-left"></div>
+                            <div class="corner bottom-right"></div>
+                        </div>
+                    </div>
+                    <p class="scanning-text">Position QR code within the frame</p>
+                </div>
+            </div>
+            
             <!-- Scan QR Code Button -->
-            <button id="scanQRCode" class="scan-qr-button">Scan QR Code</button>
+            <button id="scanQRCode" class="scan-qr-button">Start Camera</button>
+            
             <!-- OR Enter Manually -->
             <p class="or-text">OR</p>
             <!-- User Code Input -->
@@ -138,9 +157,8 @@
         </div>
     </div>
 
-    <!-- Include the QR Scanner Library -->
-    <script src="https://unpkg.com/qr-scanner/qr-scanner.min.js"></script>
-    <script type="module" src="../qr/qr-scanner.js"></script>
+    <!-- Include the Staff Order Script -->
+    <!-- <script type="module" src="../qr/qr-scanner.js"></script> -->
     <script src="staff-order.js"></script>
 </body>
 </html>

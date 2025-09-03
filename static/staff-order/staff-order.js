@@ -241,9 +241,8 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "../edit-account/edit-account.html"; // Navigate to the account editing page
     });
 
-    // Enhanced QR Scanner functionality
-    let qrScanner = null;
-    let isScanning = false;
+    // Enhanced Camera functionality for QR positioning
+    let isCameraActive = false;
 
     // Show QR modal by default
     setTimeout(() => {
@@ -253,111 +252,201 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }, 500);
 
-    // Enhanced QR scanning with visual feedback
+    // Enhanced camera functionality for QR positioning
     document.getElementById("scanQRCode").addEventListener("click", () => {
-        if (!isScanning) {
-            startQRScanning();
+        if (!isCameraActive) {
+            startCamera();
         } else {
-            stopQRScanning();
+            stopCamera();
         }
     });
 
-    function startQRScanning() {
-        isScanning = true;
-        const scanButton = document.getElementById("scanQRCode");
-        scanButton.textContent = "Stop Scanning";
-        scanButton.classList.add("scanning-active");
-        
-        // Create scanning container
-        const scanningContainer = document.createElement("div");
-        scanningContainer.id = "scanningContainer";
-        scanningContainer.className = "scanning-container";
-        scanningContainer.innerHTML = `
-            <div class="scanning-frame">
-                <div class="scanning-line"></div>
-                <div class="scanning-corners">
-                    <div class="corner top-left"></div>
-                    <div class="corner top-right"></div>
-                    <div class="corner bottom-left"></div>
-                    <div class="corner bottom-right"></div>
-                </div>
-                <video id="qrVideo" class="qr-video"></video>
-            </div>
-            <p class="scanning-text">Position QR code within the frame</p>
-        `;
-        
-        document.querySelector("#qrModal .modal2-content").appendChild(scanningContainer);
-        
-        // Initialize QR scanner with the video element
-        if (typeof QrScanner !== 'undefined') {
-            const videoElement = document.getElementById("qrVideo");
-            if (videoElement) {
-                console.log('Video element found, initializing QR scanner...');
-                
-                // Set video element properties
-                videoElement.setAttribute('autoplay', '');
-                videoElement.setAttribute('muted', '');
-                videoElement.setAttribute('playsinline', '');
-                
-                qrScanner = new QrScanner(
-                    videoElement,
-                    result => {
-                        console.log('QR Code detected:', result.data);
-                        handleQRResult(result.data);
-                    },
-                    { 
-                        returnDetailedScanResult: true,
-                        highlightScanRegion: true,
-                        highlightCodeOutline: true
-                    }
-                );
-                
-                console.log('Starting QR scanner...');
-                qrScanner.start().then(() => {
-                    console.log('QR Scanner started successfully');
-                    // Add visual feedback when camera is active
-                    const scanningFrame = document.querySelector('.scanning-frame');
-                    if (scanningFrame) {
-                        scanningFrame.classList.add('camera-active');
-                    }
-                }).catch(err => {
-                    console.error('Failed to start camera:', err);
-                    alert('Camera access denied. Please allow camera permissions and try again.');
-                });
-            } else {
-                console.error('Video element not found');
+    async function startCamera() {
+        try {
+            isCameraActive = true;
+            const scanButton = document.getElementById("scanQRCode");
+            scanButton.textContent = "Stop Camera";
+            scanButton.classList.add("scanning-active");
+            
+            // Show camera container
+            const cameraContainer = document.getElementById("cameraContainer");
+            cameraContainer.style.display = "block";
+            
+            // Get camera stream
+            stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    facingMode: 'environment', // Use back camera if available
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                } 
+            });
+            
+            // Set video source
+            const video = document.getElementById("qrVideo");
+            video.srcObject = stream;
+            await video.play();
+            
+            // Add visual feedback when camera is active
+            const scanningFrame = document.querySelector('.scanning-frame');
+            if (scanningFrame) {
+                scanningFrame.classList.add('camera-active');
             }
-        } else {
-            console.error('QrScanner library not loaded');
+            
+            // Start automatic QR detection
+            startAutomaticQRDetection();
+            console.log('Camera started successfully');
+            
+        } catch (error) {
+            console.error("Error starting camera:", error);
+            alert("Unable to access camera. Please check camera permissions.");
+            stopCamera();
         }
     }
 
-    function stopQRScanning() {
-        isScanning = false;
+    function stopCamera() {
+        isCameraActive = false;
         const scanButton = document.getElementById("scanQRCode");
-        scanButton.textContent = "Scan QR Code";
+        scanButton.textContent = "Start Camera";
         scanButton.classList.remove("scanning-active");
         
-        if (qrScanner) {
-            qrScanner.stop();
+        // Stop automatic QR detection
+        stopAutomaticQRDetection();
+        
+        // Stop camera stream
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
         }
         
-        // Remove camera active class
+        // Hide camera container
+        const cameraContainer = document.getElementById("cameraContainer");
+        if (cameraContainer) {
+            cameraContainer.style.display = "none";
+        }
+        
+        // Remove camera-active class
         const scanningFrame = document.querySelector('.scanning-frame');
         if (scanningFrame) {
             scanningFrame.classList.remove('camera-active');
         }
         
-        const scanningContainer = document.getElementById("scanningContainer");
-        if (scanningContainer) {
-            scanningContainer.remove();
+        // Reset scanning text
+        const scanningText = document.querySelector('.scanning-text');
+        if (scanningText) {
+            scanningText.textContent = "Position QR code within the frame";
+            scanningText.style.color = "#6B4226";
+            scanningText.style.fontWeight = "500";
+        }
+    }
+
+    // Automatic QR Detection
+    let qrDetectionInterval = null;
+    let isProcessingQR = false;
+
+    function startAutomaticQRDetection() {
+        if (qrDetectionInterval) {
+            clearInterval(qrDetectionInterval);
+        }
+        
+        // Check for QR codes every 500ms
+        qrDetectionInterval = setInterval(async () => {
+            if (!isCameraActive || isProcessingQR) return;
+            
+            await detectQRCode();
+        }, 500);
+        
+        console.log('Automatic QR detection started');
+    }
+
+    function stopAutomaticQRDetection() {
+        if (qrDetectionInterval) {
+            clearInterval(qrDetectionInterval);
+            qrDetectionInterval = null;
+        }
+        
+        isProcessingQR = false;
+        console.log('Automatic QR detection stopped');
+    }
+
+    async function detectQRCode() {
+        try {
+            isProcessingQR = true;
+            
+            const video = document.getElementById("qrVideo");
+            if (!video || !video.videoWidth || !video.videoHeight) {
+                isProcessingQR = false;
+                return;
+            }
+            
+            // Create canvas for frame capture
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+            
+            // Set canvas dimensions to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // Draw the current video frame to canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Convert canvas to blob
+            canvas.toBlob(async (blob) => {
+                try {
+                    // Create FormData for the image
+                    const formData = new FormData();
+                    formData.append('qr_image', blob, 'qr_code.png');
+                    
+                    // Call API to read QR code
+                    const response = await fetch(`${BASE_URL}/qr/read`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success && result.qr_data) {
+                            console.log('QR Code detected:', result.qr_data);
+                            
+                            // Stop automatic detection
+                            stopAutomaticQRDetection();
+                            
+                            // Process the QR code
+                            handleQRResult(result.qr_data);
+                            
+                            // Stop camera after successful detection
+                            stopCamera();
+                            
+                        } else {
+                            // No QR code found, continue scanning
+                            isProcessingQR = false;
+                        }
+                    } else {
+                        // API error, continue scanning
+                        isProcessingQR = false;
+                    }
+                } catch (error) {
+                    console.error('Error calling QR API:', error);
+                    isProcessingQR = false;
+                }
+            }, 'image/png');
+            
+        } catch (error) {
+            console.error('Error in QR detection:', error);
+            isProcessingQR = false;
         }
     }
 
     function handleQRResult(data) {
-        stopQRScanning();
-        alert(`QR Code scanned: ${data}`);
+        console.log('QR Code processed:', data);
+        
+        // Show success message
+        alert(`✅ QR Code Successfully Detected!\n\nLoyalty Code: ${data}\n\nProcessing loyalty update...`);
+        
         // Here you can add logic to process the loyalty code
+        // For example, update customer loyalty streak, etc.
+        
+        // You could also make an API call here to update the customer's loyalty
+        // updateCustomerLoyalty(data);
     }
 
     // Handle manual user code submission
@@ -385,7 +474,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function loadMembershipData() {
         try {
-            const response = await fetch(`${BASE_URL}/users`);
+            const response = await fetch(`${BASE_URL}/user`);
             if (response.ok) {
                 const users = await response.json();
                 displayMembershipList(users);
