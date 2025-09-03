@@ -8,6 +8,10 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6); /* Dark background */
+}
+
+/* When modal is active, show as flex */
+.modal2.active {
     display: flex;
     justify-content: center;
     align-items: center;

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Order Management</title>
+    <link rel="website icon" type="png" href="../image/icon.png" >
+    <link rel="stylesheet" href="staff-order.css">
+    <link rel="stylesheet" href="../qr/qr-scanner.css">
+</head>
+<body>
+    <!-- Login/Register Modal - TEMPORARILY DISABLED FOR SIMPLICITY -->
+    <!-- <div class="modal-overlay" id="loginRegisterModal">
+        <div class="modal-wrapper">
+            <!-- Login Section -->
+            <!-- <div class="modal-section login-section" id="loginSection"> -->
+                <!-- <h2>LOGIN</h2> -->
+                <!-- <div class="modal-content"> -->
+                    <!-- <input type="text" id="staffName" placeholder="Your staff account name" class="modal-input"> -->
+                    <!-- Change type to password to visually display as ••• -->
+                    <!-- <input type="number" id="staffPin" placeholder="Your 6-digit staff pin" class="modal-input"> -->
+                    <!-- <button id="loginBtn" class="modal-button">Login</button> -->
+                    <!-- <button id="showRegisterBtn" class="modal-button">Register My Staff Account</button> -->
+                <!-- </div> -->
+            <!-- </div> -->
+            <!-- Register Section -->
+            <!-- <div class="modal-section register-section collapsed" id="registerSection"> -->
+                <!-- <h3>REGISTER</h3> -->
+                <!-- <div class="modal-content"> -->
+                    <!-- <input type="text" id="newStaffName" placeholder="Your staff account name" class="modal-input"> -->
+                    <!-- Change type to password to visually display as ••• -->
+                    <!-- <input type="number" id="newStaffPin" placeholder="Your 6-digit staff pin" class="modal-input"> -->
+                    <!-- <button id="createAccountBtn" class="modal-button">Create My Staff Account</button> -->
+                    <!-- <button id="showLoginBtn" class="modal-button">Back to Login</button> -->
+                <!-- </div> -->
+            <!-- </div> -->
+        <!-- </div> -->
+    <!-- </div>  -->
+
+    <!-- Main Page -->
+    <header>
+        <h1>Auburn Coffee Staff Order Management</h1>
+        <div class="header-buttons">
+            <button id="manageAccountBtn" class="header-button">Manage My Account</button>
+            <button id="manageMembershipBtn" class="header-button membership-btn">Manage Membership</button>
+        </div>
+    </header>
+    <main>
+        <!-- Radio button selecting order by today or all -->
+        <div class="order-filter">
+            <label class="radio-container">
+                <input type="radio" name="orderFilter" value="today" checked @change="fetchOrders('today')">
+                <span class="radio-button"></span>
+                Today Order
+            </label>
+            <label class="radio-container">
+                <input type="radio" name="orderFilter" value="all" @change="fetchOrders('all')">
+                <span class="radio-button"></span>
+                All Time Order
+            </label>
+        </div>
+        <!-- Staff and Order containers -->
+        <div id="staff-container" class="staff-container"></div>
+        <div id="orders-container" class="orders-container"></div>
+    </main>
+    <!-- QR Modal and Toggle Button -->
+    <button class="qr-button" id="qrButton">Scan Loyalty QR Code</button>
+    <div id="qrModal" class="modal2">
+        <div class="modal2-content">
+            <span class="close2" onclick="closeQRModal()">&times;</span>
+            <h2>Scan customer loyalty QR code</h2>
+            <!-- Scan QR Code Button -->
+            <button id="scanQRCode" class="scan-qr-button">Scan QR Code</button>
+            <!-- OR Enter Manually -->
+            <p class="or-text">OR</p>
+            <!-- User Code Input -->
+            <input type="text" id="userCodeInput" class="user-code-input" placeholder="Enter User Code">
+            <!-- Submit Button -->
+            <button id="submitUserCodeButton" class="submit2" onclick="submitUserCode()">Submit</button>
+        </div>
+    </div>
+    <!-- Membership Management Modal -->
+    <div id="membershipModal" class="modal2">
+        <div class="modal2-content membership-modal-content">
+            <span class="close2" onclick="closeMembershipModal()">&times;</span>
+            <h2>Customer Membership Management</h2>
+            <div id="membershipList" class="membership-list">
+                <!-- Customer list will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the QR Scanner Library -->
+    <script src="https://unpkg.com/qr-scanner/qr-scanner.min.js"></script>
+    <script type="module" src="../qr/qr-scanner.js"></script>
+    <script src="staff-order.js"></script>
+</body>
+</html>

@@ -135,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Navigate to Edit Account Page
     document.getElementById("manageAccountBtn").addEventListener("click", () => {
-        window.location.href = "edit-account.html"; // Navigate to the account editing page
+        window.location.href = "../edit-account/edit-account.html"; // Navigate to the account editing page
     });
 
     // Function to display QR Code from user_code

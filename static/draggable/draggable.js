@@ -109,13 +109,13 @@ document.addEventListener("touchend", endDrag);
 // Handle pre-order button click
 preOrderButton.addEventListener("click", (e) => {
     e.stopPropagation();
-    window.location.href = "pre-order.html";
+    window.location.href = "../pre-order/pre-order.html";
 });
 
 // Handle qr-loyalty button click
 qrButton.addEventListener("click", (e) => {
     e.stopPropagation();
-    window.location.href = "loyalty.html";
+    window.location.href = "../loyalty/loyalty.html";
 });
 
 // Handle browsing button click
