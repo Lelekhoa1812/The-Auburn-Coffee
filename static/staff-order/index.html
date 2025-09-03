@@ -79,6 +79,54 @@
             <button id="submitUserCodeButton" class="submit2" onclick="submitUserCode()">Submit</button>
         </div>
     </div>
+
+    <!-- View Menu Button -->
+    <button class="view-menu-button" id="viewMenuBtn">View Menu</button>
+
+    <!-- View Menu Modal -->
+    <div id="viewMenuModal" class="modal2">
+        <div class="modal2-content view-menu-modal-content">
+            <span class="close2" onclick="closeViewMenuModal()">&times;</span>
+            <h2>Menu Items</h2>
+            <div class="menu-container">
+                <div class="menu-filters">
+                    <div class="search-bar">
+                        <input type="text" id="menuSearchInput" class="search-input" placeholder="Search for items...">
+                    </div>
+                    <div class="type-filters">
+                        <label class="filter-label">Filter by Type:</label>
+                        <div id="typeFilters" class="filter-buttons">
+                            <!-- Type filter buttons will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-table-container">
+                    <table class="menu-table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Item</th>
+                                <th>Price</th>
+                                <th>Size</th>
+                                <th>Milk</th>
+                                <th>Syrup</th>
+                            </tr>
+                        </thead>
+                        <tbody id="menuTableBody">
+                            <!-- Menu items will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Pagination - Now outside the scrollable area -->
+            <nav aria-label="Menu Pagination" class="menu-pagination-nav">
+                <ul class="pagination justify-content-center" id="menuPagination">
+                    <!-- Pagination will be populated here -->
+                </ul>
+            </nav>
+        </div>
+    </div>
     <!-- Membership Management Modal -->
     <div id="membershipModal" class="modal2">
         <div class="modal2-content membership-modal-content">
